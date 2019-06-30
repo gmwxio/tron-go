@@ -24,6 +24,9 @@ func (cm *buildAdlAst) Run() error {
 	}
 	tr, bl, ts, err1 := adl.BuildAdlAST(string(by))
 	_, _, _ = tr, bl, ts
+	if err1.Error() != nil {
+		return fmt.Errorf("build err '%v'", err1.Error())
+	}
 	// fmt.Printf("%v\n", tr)
 	// if err != nil {
 	// 	return err
@@ -31,8 +34,8 @@ func (cm *buildAdlAst) Run() error {
 	err2 := adl.WalkADL(tr, &AdlWiListener{})
 	// fmt.Printf("%v\n", bl)
 	// fmt.Printf("%v\n", ts)
-	if err1 != nil || err2 != nil {
-		return fmt.Errorf("build err '%v' and/or walk err '%v'", err1, err2)
+	if err2.Error() != nil {
+		return fmt.Errorf("walk err '%v'", err2.Error())
 	}
 	return nil
 }

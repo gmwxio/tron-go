@@ -6,7 +6,7 @@ import (
 	"github.com/wxio/tron-go/internal/ctree"
 )
 
-func WalkADL(tr ctree.Tree, list antlr.ParseTreeListener) error {
+func WalkADL(tr ctree.Tree, list antlr.ParseTreeListener) errs {
 	var tttype *TTType
 	var tts antlr.TokenStream = ctree.NewTreeTokenSource(tr, tttype)
 	p := walker.NewAdlWi(tts)
@@ -14,15 +14,19 @@ func WalkADL(tr ctree.Tree, list antlr.ParseTreeListener) error {
 	p.SetTokenStream(tts)
 	p.RemoveErrorListeners()
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	el := &antlrEL{}
+	el := &lexErr{}
 	p.AddErrorListener(el)
 	p.BuildParseTrees = true
 	jv := p.Adl()
 	antlr.ParseTreeWalkerDefault.Walk(list, jv)
-	return el.err
+	errs := errs{
+		parserErr: el.err,
+		warnings:  el.warning,
+	}
+	return errs
 }
 
-func VisitADL(tr ctree.Tree, vi antlr.ParseTreeVisitor) error {
+func VisitADL(tr ctree.Tree, vi antlr.ParseTreeVisitor) errs {
 	var tttype *TTType
 	var tts antlr.TokenStream = ctree.NewTreeTokenSource(tr, tttype)
 	p := walker.NewAdlWi(tts)
@@ -30,9 +34,13 @@ func VisitADL(tr ctree.Tree, vi antlr.ParseTreeVisitor) error {
 	p.SetTokenStream(tts)
 	p.RemoveErrorListeners()
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	el := &antlrEL{}
+	el := &lexErr{}
 	p.AddErrorListener(el)
 	ctx := p.Adl()
 	ctx.Visit(vi)
-	return el.err
+	errs := errs{
+		parserErr: el.err,
+		warnings:  el.warning,
+	}
+	return errs
 }
