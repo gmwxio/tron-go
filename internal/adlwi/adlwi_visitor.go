@@ -13,6 +13,7 @@ type AdlWiHandlers struct {
 	Module             func(ctx IModuleContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	ImportModule       func(ctx IImportModuleContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	ImportScopedModule func(ctx IImportScopedModuleContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
+	ImportError        func(ctx IImportErrorContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Struct             func(ctx IStructContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Union              func(ctx IUnionContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Type               func(ctx ITypeContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
@@ -21,6 +22,7 @@ type AdlWiHandlers struct {
 	DeclAnno           func(ctx IDeclAnnoContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	FieldAnno          func(ctx IFieldAnnoContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	TypeParamError     func(ctx ITypeParamErrorContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
+	TLDError           func(ctx ITLDErrorContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Field              func(ctx IFieldContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Annotation         func(ctx IAnnotationContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	TypeExpr_          func(ctx ITypeExpr_Context, this *AdlWiHandlers, args ...interface{}) (result interface{})
@@ -32,6 +34,7 @@ type AdlWiHandlers struct {
 	JsonFloat          func(ctx IJsonFloatContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	JsonArray          func(ctx IJsonArrayContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	JsonObj            func(ctx IJsonObjContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
+	JsonError          func(ctx IJsonErrorContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 }
 
 // A complete Visitor for a parse tree produced by AdlWi.
@@ -42,6 +45,7 @@ type AdlWiVisitor interface {
 	ModuleContextVisitor
 	ImportModuleContextVisitor
 	ImportScopedModuleContextVisitor
+	ImportErrorContextVisitor
 	StructContextVisitor
 	UnionContextVisitor
 	TypeContextVisitor
@@ -50,6 +54,7 @@ type AdlWiVisitor interface {
 	DeclAnnoContextVisitor
 	FieldAnnoContextVisitor
 	TypeParamErrorContextVisitor
+	TLDErrorContextVisitor
 	FieldContextVisitor
 	AnnotationContextVisitor
 	TypeExpr_ContextVisitor
@@ -61,6 +66,7 @@ type AdlWiVisitor interface {
 	JsonFloatContextVisitor
 	JsonArrayContextVisitor
 	JsonObjContextVisitor
+	JsonErrorContextVisitor
 }
 
 type AdlContextVisitor interface {
@@ -77,6 +83,9 @@ type ImportModuleContextVisitor interface {
 }
 type ImportScopedModuleContextVisitor interface {
 	VisitImportScopedModule(ctx IImportScopedModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+}
+type ImportErrorContextVisitor interface {
+	VisitImportError(ctx IImportErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
 type StructContextVisitor interface {
 	VisitStruct(ctx IStructContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
@@ -101,6 +110,9 @@ type FieldAnnoContextVisitor interface {
 }
 type TypeParamErrorContextVisitor interface {
 	VisitTypeParamError(ctx ITypeParamErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+}
+type TLDErrorContextVisitor interface {
+	VisitTLDError(ctx ITLDErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
 type FieldContextVisitor interface {
 	VisitField(ctx IFieldContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
@@ -134,4 +146,7 @@ type JsonArrayContextVisitor interface {
 }
 type JsonObjContextVisitor interface {
 	VisitJsonObj(ctx IJsonObjContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+}
+type JsonErrorContextVisitor interface {
+	VisitJsonError(ctx IJsonErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }

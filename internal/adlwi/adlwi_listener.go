@@ -28,6 +28,9 @@ type AdlWiListener interface {
 	ImportScopedModuleEntryListener
 	ImportScopedModuleExitListener
 
+	ImportErrorEntryListener
+	ImportErrorExitListener
+
 	StructEntryListener
 	StructExitListener
 
@@ -51,6 +54,9 @@ type AdlWiListener interface {
 
 	TypeParamErrorEntryListener
 	TypeParamErrorExitListener
+
+	TLDErrorEntryListener
+	TLDErrorExitListener
 
 	FieldEntryListener
 	FieldExitListener
@@ -78,6 +84,9 @@ type AdlWiListener interface {
 
 	JsonObjEntryListener
 	JsonObjExitListener
+
+	JsonErrorEntryListener
+	JsonErrorExitListener
 }
 
 //
@@ -136,6 +145,14 @@ type ImportScopedModuleEntryListener interface {
 }
 type ImportScopedModuleExitListener interface {
 	ExitImportScopedModule(c *ImportScopedModuleContext)
+}
+
+// From Rule 'import_'
+type ImportErrorEntryListener interface {
+	EnterImportError(c *ImportErrorContext)
+}
+type ImportErrorExitListener interface {
+	ExitImportError(c *ImportErrorContext)
 }
 
 // From Rule 'tld'
@@ -200,6 +217,14 @@ type TypeParamErrorEntryListener interface {
 }
 type TypeParamErrorExitListener interface {
 	ExitTypeParamError(c *TypeParamErrorContext)
+}
+
+// From Rule 'tld'
+type TLDErrorEntryListener interface {
+	EnterTLDError(c *TLDErrorContext)
+}
+type TLDErrorExitListener interface {
+	ExitTLDError(c *TLDErrorContext)
 }
 
 // From Rule 'nameBody'
@@ -272,4 +297,12 @@ type JsonObjEntryListener interface {
 }
 type JsonObjExitListener interface {
 	ExitJsonObj(c *JsonObjContext)
+}
+
+// From Rule 'jsonVal'
+type JsonErrorEntryListener interface {
+	EnterJsonError(c *JsonErrorContext)
+}
+type JsonErrorExitListener interface {
+	ExitJsonError(c *JsonErrorContext)
 }

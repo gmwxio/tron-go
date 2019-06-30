@@ -8,14 +8,14 @@ import (
 
 	"github.com/golang/glog"
 	antlr "github.com/wxio/goantlr"
-	parser "github.com/wxio/tron-go/adllp"
+	parser "github.com/wxio/tron-go/internal/adllp"
 	"github.com/wxio/tron-go/internal/ctree"
 )
 
 func BuildAdlAST(str string) (ctree.Tree, *antlr.BaseLexer, antlr.TokenStream, error) {
 	el := &antlrEL{}
 	tbl := &ADLBuildListener{
-		debug: true,
+		// debug: true,
 	}
 	is := antlr.NewInputStream(str)
 	lexer := parser.NewAdlL(is)
@@ -32,12 +32,8 @@ func BuildAdlAST(str string) (ctree.Tree, *antlr.BaseLexer, antlr.TokenStream, e
 	if el.err != nil {
 		return nil, nil, nil, el.err
 	}
-	fmt.Printf("--------%v %v\n", el.err, tbl.errToks)
+	// fmt.Printf("--------%v %+v\n", el.err, tbl.errToks)
 	antlr.ParseTreeWalkerDefault.Walk(tbl, ctx)
-	// if tbl.err != "" {
-	// 	return nil, lexer.BaseLexer, stream, fmt.Errorf("ERROR:%v", tbl.err)
-	// }
-	// return nil, nil, nil, nil
 	var errToks error
 	if len(tbl.errToks) != 0 {
 		errToks = fmt.Errorf("%v", tbl.errToks)
@@ -47,10 +43,11 @@ func BuildAdlAST(str string) (ctree.Tree, *antlr.BaseLexer, antlr.TokenStream, e
 
 type ADLBuildListener struct {
 	*antlr.BaseParseTreeVisitor
-	bldr    ctree.WalkableBuilder
-	adl     *ADL
-	errToks []interface{}
-	debug   bool
+	bldr     ctree.WalkableBuilder
+	adl      *ADL
+	errToks  []interface{}
+	warnings []interface{}
+	debug    bool
 }
 
 // EnterEveryRule is called when any rule is entered.
@@ -61,29 +58,28 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 		v.adl = &ADL{}
 	case *parser.ModuleStatementContext:
 		if ctx.GetKw().GetText() != "module" {
-			v.bldr.AddNode(
-				ctx.GetKw(), parser.AdlPERROR, Error{
-					Expected: []string{"module"}, Received: ctx.GetKw().GetText()},
-			)
+			et := Error{Expected: []string{"module"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		} else {
-			v.bldr.AddNode(
-				ctx.GetKw(), parser.AdlPModule, Module{
-					Name: strings.Join(tokens2strings(ctx.GetName()), ".")},
-			)
+			v.bldr.AddNode(ctx.GetKw(), parser.AdlPModule, Module{
+				Name: strings.Join(tokens2strings(ctx.GetName()), ".")})
 		}
 		v.bldr.Down()
 	case *parser.ImportModuleNameContext:
 		if ctx.GetKw().GetText() != "import" {
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, Error{
-				Expected: []string{"import"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"import"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		} else {
 			path := strings.Join(tokens2strings(ctx.GetA()), ".")
 			v.bldr.AddNode(ctx.GetKw(), parser.AdlPImportModule, Import{ModuleName: &path})
 		}
 	case *parser.ImportScopedNameContext:
 		if ctx.GetKw().GetText() != "import" {
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, Error{
-				Expected: []string{"import"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"import"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		} else {
 			toks := ctx.GetA()
 			v.bldr.AddNode(ctx.GetKw(), parser.AdlPImportScopedName, Import{ScopedName: &ScopedName{
@@ -109,8 +105,9 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 				Union: &Name{},
 			}})
 		default:
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, Error{
-				Expected: []string{"struct", "union"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"struct", "union"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		}
 		v.bldr.Down()
 	case *parser.TypeOrNewtypeContext:
@@ -122,8 +119,9 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 			v.bldr.AddNode(ctx.GetKw(), parser.AdlPNewtype, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
 				Newtype: &NewType{}}})
 		default:
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, Error{
-				Expected: []string{"type", "newtype"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"type", "newtype"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		}
 		v.bldr.Down()
 	case *parser.TypeParameterContext:
@@ -141,8 +139,9 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 		case "annotation":
 			v.bldr.AddNode(ctx.GetStart(), parser.AdlPModuleAnno, ctx.GetA().GetText())
 		default:
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-				Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		}
 		v.bldr.Down()
 	case *parser.DeclAnnotationContext:
@@ -153,8 +152,9 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 				ctx.GetB().GetText(),
 			})
 		default:
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-				Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		}
 		v.bldr.Down()
 	case *parser.FieldAnnotationContext:
@@ -166,8 +166,9 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 				ctx.GetC().GetText(),
 			})
 		default:
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-				Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		}
 		v.bldr.Down()
 	case *parser.FieldStatementContext:
@@ -185,24 +186,29 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 		case "null":
 			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonNull, nil)
 		default:
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-				Expected: []string{"true", "false", "null"}, Received: ctx.GetKw().GetText()})
+			et := Error{Expected: []string{"true", "false", "null"}, Received: ctx.GetKw().GetText()}
+			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
 		}
 	case *parser.NumberStatementContext:
 		i, err := strconv.ParseInt(ctx.GetN().GetText(), 10, 64)
 		if err == nil {
 			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonInt, i)
 		} else {
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-				Expected: []string{"<number>"}, Received: ctx.GetN().GetText()})
+			et := Error{Expected: []string{"<number>"}, Received: ctx.GetN().GetText()}
+			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
+
 		}
 	case *parser.FloatStatementContext:
 		i, err := strconv.ParseFloat(ctx.GetF().GetText(), 64)
 		if err == nil {
 			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonFloat, i)
 		} else {
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-				Expected: []string{"<float>"}, Received: ctx.GetF().GetText()})
+			et := Error{Expected: []string{"<float>"}, Received: ctx.GetF().GetText()}
+			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.errToks = append(v.errToks, et)
+
 		}
 	case *parser.ArrayStatementContext:
 		v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonArray, JsonArray{}).Down()
@@ -210,8 +216,10 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 		v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonObj, JsonObj{}).Down()
 		// rules name occur on errors
 	case *parser.Top_level_statementContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, Error{
-			Expected: []string{"@|struct|union|annotation"}, Received: ctx.GetStart().GetText()})
+		et := Error{Expected: []string{"@|struct|union|annotation"}, Received: ctx.GetStart().GetText()}
+		v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+		v.errToks = append(v.errToks, et)
+
 	// case *parser.ErrorTypeParamContext:
 	// 	n := &ErrorNode{
 	// 		MyToken:  MyToken{Token: ctx.GetStart(), TType: parser.ADLParserERROR},
@@ -267,6 +275,10 @@ func (v *ADLBuildListener) ExitEveryRule(ctx antlr.ParserRuleContext) {
 }
 
 func (v *ADLBuildListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
+	if strings.HasPrefix(msg, "reportAttemptingFullContext") { // TODO remove NewDiagnosticErrorListener and move warning to ReportAmbiguity etc. when getDecisionDescription is make public
+		v.warnings = append(v.warnings, fmt.Sprintf("At %d:%d <%s>", line, column, msg))
+		return
+	}
 	t, ok := offendingSymbol.(antlr.Token)
 	if !ok && e != nil {
 		t = e.GetOffendingToken()

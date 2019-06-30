@@ -22,13 +22,19 @@ func (cm *buildAdlAst) Run() error {
 	if err != nil {
 		return err
 	}
-	tr, bl, ts, err := adl.BuildAdlAST(string(by))
+	tr, bl, ts, err1 := adl.BuildAdlAST(string(by))
 	_, _, _ = tr, bl, ts
-	fmt.Printf("%v\n", tr)
-	adl.WalkADL(tr, &AdlWiListener{})
+	// fmt.Printf("%v\n", tr)
+	// if err != nil {
+	// 	return err
+	// }
+	err2 := adl.WalkADL(tr, &AdlWiListener{})
 	// fmt.Printf("%v\n", bl)
 	// fmt.Printf("%v\n", ts)
-	return err
+	if err1 != nil || err2 != nil {
+		return fmt.Errorf("build err '%v' and/or walk err '%v'", err1, err2)
+	}
+	return nil
 }
 
 type AdlWiListener struct {
@@ -38,15 +44,15 @@ type AdlWiListener struct {
 
 func (s *AdlWiListener) VisitTerminal(node antlr.TerminalNode) {
 	s.tokCount++
-	fmt.Printf("%d%s  >>%v\n", s.tokCount, s.intend, node)
+	// fmt.Printf("%d%s  >>%v\n", s.tokCount, s.intend, node)
 }
 func (s *AdlWiListener) VisitErrorNode(node antlr.ErrorNode) {
 	s.tokCount++
-	fmt.Printf("%d Error %v\n", s.tokCount, node)
+	// fmt.Printf("%d Error %v\n", s.tokCount, node)
 }
 func (s *AdlWiListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 	s.tokCount++
-	fmt.Printf("%d%s>>%T\n", s.tokCount, s.intend, ctx)
+	// fmt.Printf("%d%s>>%T\n", s.tokCount, s.intend, ctx)
 	s.intend += "\t"
 }
 func (s *AdlWiListener) ExitEveryRule(ctx antlr.ParserRuleContext) {

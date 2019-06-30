@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	antlr "github.com/wxio/goantlr"
-	walker "github.com/wxio/tron-go/adlwi"
+	walker "github.com/wxio/tron-go/internal/adlwi"
 )
 
 type TTType struct{}
@@ -45,7 +45,8 @@ type Error struct {
 }
 
 type antlrEL struct {
-	err error
+	err     error
+	warning error
 }
 
 func (d *antlrEL) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
@@ -55,13 +56,13 @@ func (d *antlrEL) SyntaxError(recognizer antlr.Recognizer, offendingSymbol inter
 func (d *antlrEL) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
 	sta := recognizer.GetTokenStream().Get(startIndex)
 	sto := recognizer.GetTokenStream().Get(stopIndex)
-	d.err = fmt.Errorf("%v:%v ReportAmbiguity rec:%v dfs:%v start:%d stop:%d, exact:%v, ambigAlts:%v config:%v\n", sta, sto, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs)
+	d.warning = fmt.Errorf("%v:%v ReportAmbiguity rec:%v dfs:%v start:%d stop:%d, exact:%v, ambigAlts:%v config:%v\n", sta, sto, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs)
 }
 
 func (d *antlrEL) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
-	d.err = fmt.Errorf("ReportAttemptingFullContext rec:%v dfs:%v start:%d stop:%d, conflictingAlts:%v config:%v\n", recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs)
+	d.warning = fmt.Errorf("ReportAttemptingFullContext rec:%v dfs:%v start:%d stop:%d, conflictingAlts:%v config:%v\n", recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs)
 }
 
 func (d *antlrEL) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
-	d.err = fmt.Errorf("ReportContextSensitivity rec:%v dfs:%v start:%d stop:%d, config:%v\n", recognizer, dfa, startIndex, stopIndex, configs)
+	d.warning = fmt.Errorf("ReportContextSensitivity rec:%v dfs:%v start:%d stop:%d, config:%v\n", recognizer, dfa, startIndex, stopIndex, configs)
 }

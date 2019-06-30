@@ -54,6 +54,9 @@ package adlw1 // AdlWi
 //var _ adlw1.ImportScopedModuleEntryListener = &AdlWiListener{}
 //var _ adlw1.ImportScopedModuleExitListener = &AdlWiListener{}
 
+//var _ adlw1.ImportErrorEntryListener = &AdlWiListener{}
+//var _ adlw1.ImportErrorExitListener = &AdlWiListener{}
+
 //var _ adlw1.StructEntryListener = &AdlWiListener{}
 //var _ adlw1.StructExitListener = &AdlWiListener{}
 
@@ -77,6 +80,9 @@ package adlw1 // AdlWi
 
 //var _ adlw1.TypeParamErrorEntryListener = &AdlWiListener{}
 //var _ adlw1.TypeParamErrorExitListener = &AdlWiListener{}
+
+//var _ adlw1.TLDErrorEntryListener = &AdlWiListener{}
+//var _ adlw1.TLDErrorExitListener = &AdlWiListener{}
 
 //var _ adlw1.FieldEntryListener = &AdlWiListener{}
 //var _ adlw1.FieldExitListener = &AdlWiListener{}
@@ -110,6 +116,9 @@ package adlw1 // AdlWi
 
 //var _ adlw1.JsonObjEntryListener = &AdlWiListener{}
 //var _ adlw1.JsonObjExitListener = &AdlWiListener{}
+
+//var _ adlw1.JsonErrorEntryListener = &AdlWiListener{}
+//var _ adlw1.JsonErrorExitListener = &AdlWiListener{}
 
 //type AdlWiListener struct {
 //}
@@ -172,6 +181,9 @@ package adlw1 // AdlWi
 //func (s *AdlWiListener) EnterImportScopedModule(ctx adlw1.*adlw1.ImportScopedModuleContext) {}
 //func (s *AdlWiListener) ExitImportScopedModule(ctx adlw1.*adlw1.ImportScopedModuleContext) {}
 
+//func (s *AdlWiListener) EnterImportError(ctx adlw1.*adlw1.ImportErrorContext) {}
+//func (s *AdlWiListener) ExitImportError(ctx adlw1.*adlw1.ImportErrorContext) {}
+
 //func (s *AdlWiListener) EnterStruct(ctx adlw1.*adlw1.StructContext) {}
 //func (s *AdlWiListener) ExitStruct(ctx adlw1.*adlw1.StructContext) {}
 
@@ -195,6 +207,9 @@ package adlw1 // AdlWi
 
 //func (s *AdlWiListener) EnterTypeParamError(ctx adlw1.*adlw1.TypeParamErrorContext) {}
 //func (s *AdlWiListener) ExitTypeParamError(ctx adlw1.*adlw1.TypeParamErrorContext) {}
+
+//func (s *AdlWiListener) EnterTLDError(ctx adlw1.*adlw1.TLDErrorContext) {}
+//func (s *AdlWiListener) ExitTLDError(ctx adlw1.*adlw1.TLDErrorContext) {}
 
 //func (s *AdlWiListener) EnterField(ctx adlw1.*adlw1.FieldContext) {}
 //func (s *AdlWiListener) ExitField(ctx adlw1.*adlw1.FieldContext) {}
@@ -228,3 +243,6 @@ package adlw1 // AdlWi
 
 //func (s *AdlWiListener) EnterJsonObj(ctx adlw1.*adlw1.JsonObjContext) {}
 //func (s *AdlWiListener) ExitJsonObj(ctx adlw1.*adlw1.JsonObjContext) {}
+
+//func (s *AdlWiListener) EnterJsonError(ctx adlw1.*adlw1.JsonErrorContext) {}
+//func (s *AdlWiListener) ExitJsonError(ctx adlw1.*adlw1.JsonErrorContext) {}
