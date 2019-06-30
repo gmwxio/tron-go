@@ -13,14 +13,14 @@ import (
 )
 
 func BuildAdlAST(str string) (ctree.Tree, *antlr.BaseLexer, antlr.TokenStream, error) {
-	errListener := &errorListener{}
+	el := &antlrEL{}
 	tbl := &ADLBuildListener{
-		// debug: true,
+		debug: true,
 	}
 	is := antlr.NewInputStream(str)
 	lexer := parser.NewAdlL(is)
 	lexer.RemoveErrorListeners()
-	lexer.AddErrorListener(errListener)
+	lexer.AddErrorListener(el)
 
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	p := parser.NewAdlP(stream)
@@ -29,13 +29,20 @@ func BuildAdlAST(str string) (ctree.Tree, *antlr.BaseLexer, antlr.TokenStream, e
 	p.AddErrorListener(tbl)
 	p.BuildParseTrees = true
 	ctx := p.Adl()
-	fmt.Println("--------")
+	if el.err != nil {
+		return nil, nil, nil, el.err
+	}
+	fmt.Printf("--------%v %v\n", el.err, tbl.errToks)
 	antlr.ParseTreeWalkerDefault.Walk(tbl, ctx)
 	// if tbl.err != "" {
 	// 	return nil, lexer.BaseLexer, stream, fmt.Errorf("ERROR:%v", tbl.err)
 	// }
 	// return nil, nil, nil, nil
-	return tbl.bldr.Build(), lexer.BaseLexer, stream, nil
+	var errToks error
+	if len(tbl.errToks) != 0 {
+		errToks = fmt.Errorf("%v", tbl.errToks)
+	}
+	return tbl.bldr.Build(), lexer.BaseLexer, stream, errToks
 }
 
 type ADLBuildListener struct {
@@ -127,7 +134,7 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 	case *parser.TypeExprPrimOrParamContext:
 		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeExprPrimOrParam, ctx.GetB().GetText())
 	case *parser.TypeExprTypeExprContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeExprPrimOrParam, ctx.GetB().GetText())
+		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeExprTypeExpr, ctx.GetB().GetText())
 		v.bldr.Down()
 	case *parser.ModuleAnnotationContext:
 		switch ctx.GetKw().GetText() {
@@ -257,27 +264,6 @@ func (v *ADLBuildListener) ExitEveryRule(ctx antlr.ParserRuleContext) {
 	default:
 		glog.Warningf("Unhandled in <ExitEveryRule case %T:\n", ctx)
 	}
-}
-
-type errorListener struct {
-}
-
-func (d *errorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
-	panic("line " + strconv.Itoa(line) + ":" + strconv.Itoa(column) + " " + msg)
-}
-
-func (d *errorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
-	// panic("ReportAmbiguity")
-	fmt.Printf("ReportAmbiguity rec:%v dfs:%v start:%d stop:%d, exact:%v, ambigAlts:%v config:%v\n", recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs)
-}
-
-func (d *errorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
-	//	panic("ReportAttemptingFullContext")
-	fmt.Printf("ReportAttemptingFullContext rec:%v dfs:%v start:%d stop:%d, conflictingAlts:%v config:%v\n", recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs)
-}
-
-func (d *errorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
-	// panic("ReportContextSensitivity")
 }
 
 func (v *ADLBuildListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
