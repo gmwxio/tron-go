@@ -14,6 +14,8 @@ github.com/posener/complete v1.2.2-0.20190308074557-af07aa5181b3 h1:GqpA1/5oN1Ng
 github.com/posener/complete v1.2.2-0.20190308074557-af07aa5181b3/go.mod h1:6gapUrK/U1TAN7ciCoNRIdVC5sbdBTUh1DKN0g6uH7E=
 github.com/wxio/goantlr v0.0.0-20190305104207-374a84528c8e h1:kN3YauMQO0M0w5tu1HmAMAciWR84RsMBV5ZCvPbrwWs=
 github.com/wxio/goantlr v0.0.0-20190305104207-374a84528c8e/go.mod h1:eiJFRvVqhWHHFL/xCfD4vM4MdC3wErF6uAGNU/arMh4=
+github.com/wxio/goantlr v0.0.0-20190624051626-116617327c90 h1:U2UY8hkFmO/LInC8kncQOv4CofNTM93/LLUkEVaH/Qk=
+github.com/wxio/goantlr v0.0.0-20190624051626-116617327c90/go.mod h1:pLdPrFDy+6XIrueD5DWjVFLHOb4+bmIL4ukIOruRtAg=
 github.com/wxio/tron v0.0.0-20190627152724-d8407701ac60 h1:A5Jr5BtoLfYJ/wE2guzriwGQAvHydtOPxY33jg/ISJs=
 github.com/wxio/tron v0.0.0-20190627152724-d8407701ac60/go.mod h1:GNjcCFWPn7AZuklY7Ej4EzIXyYIxvk1V/KwcadBS0BA=
 github.com/wxio/wxb v0.0.1 h1:0lNsziQCBF6ql2ZV7htf5dwquMjDNJAwFEiwEp0Hv8g=

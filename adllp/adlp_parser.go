@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 )
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/wxio/goantlr"
 
 // Suppress unused import errors
 var _ = fmt.Printf
@@ -14,127 +14,111 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 52, 269,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 56, 237,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
-	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2,
-	3, 2, 3, 2, 3, 3, 7, 3, 29, 10, 3, 12, 3, 14, 3, 32, 11, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 7, 3, 38, 10, 3, 12, 3, 14, 3, 41, 11, 3, 3, 3, 3, 3, 7, 3,
-	45, 10, 3, 12, 3, 14, 3, 48, 11, 3, 3, 3, 7, 3, 51, 10, 3, 12, 3, 14, 3,
-	54, 11, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 4, 3, 4, 3, 4, 7, 4, 63, 10, 4, 12,
-	4, 14, 4, 66, 11, 4, 3, 4, 3, 4, 5, 4, 70, 10, 4, 3, 4, 3, 4, 3, 5, 3,
-	5, 3, 5, 3, 5, 5, 5, 78, 10, 5, 3, 6, 7, 6, 81, 10, 6, 12, 6, 14, 6, 84,
-	11, 6, 3, 6, 3, 6, 3, 6, 5, 6, 89, 10, 6, 3, 6, 3, 6, 7, 6, 93, 10, 6,
-	12, 6, 14, 6, 96, 11, 6, 3, 6, 3, 6, 3, 6, 7, 6, 101, 10, 6, 12, 6, 14,
-	6, 104, 11, 6, 3, 6, 3, 6, 3, 6, 5, 6, 109, 10, 6, 3, 6, 3, 6, 3, 6, 5,
-	6, 114, 10, 6, 3, 6, 3, 6, 5, 6, 118, 10, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3,
-	6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3,
-	6, 3, 6, 3, 6, 3, 6, 5, 6, 140, 10, 6, 3, 7, 3, 7, 3, 7, 3, 7, 7, 7, 146,
-	10, 7, 12, 7, 14, 7, 149, 11, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 7, 7, 156,
-	10, 7, 12, 7, 14, 7, 159, 11, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 6,
-	7, 167, 10, 7, 13, 7, 14, 7, 168, 3, 7, 3, 7, 5, 7, 173, 10, 7, 3, 8, 3,
-	8, 3, 8, 3, 8, 5, 8, 179, 10, 8, 3, 8, 3, 8, 3, 8, 5, 8, 184, 10, 8, 7,
-	8, 186, 10, 8, 12, 8, 14, 8, 189, 11, 8, 3, 8, 3, 8, 3, 9, 3, 9, 3, 9,
-	3, 9, 7, 9, 197, 10, 9, 12, 9, 14, 9, 200, 11, 9, 3, 9, 3, 9, 3, 10, 3,
-	10, 3, 10, 3, 10, 3, 10, 7, 10, 209, 10, 10, 12, 10, 14, 10, 212, 11, 10,
-	3, 10, 3, 10, 5, 10, 216, 10, 10, 3, 11, 7, 11, 219, 10, 11, 12, 11, 14,
-	11, 222, 11, 11, 3, 11, 3, 11, 5, 11, 226, 10, 11, 3, 11, 3, 11, 3, 11,
-	5, 11, 231, 10, 11, 3, 11, 3, 11, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3,
-	12, 3, 12, 3, 12, 7, 12, 243, 10, 12, 12, 12, 14, 12, 246, 11, 12, 5, 12,
-	248, 10, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3,
-	12, 7, 12, 259, 10, 12, 12, 12, 14, 12, 262, 11, 12, 5, 12, 264, 10, 12,
-	3, 12, 5, 12, 267, 10, 12, 3, 12, 2, 2, 13, 2, 4, 6, 8, 10, 12, 14, 16,
-	18, 20, 22, 2, 2, 2, 298, 2, 24, 3, 2, 2, 2, 4, 30, 3, 2, 2, 2, 6, 58,
-	3, 2, 2, 2, 8, 77, 3, 2, 2, 2, 10, 139, 3, 2, 2, 2, 12, 172, 3, 2, 2, 2,
-	14, 174, 3, 2, 2, 2, 16, 192, 3, 2, 2, 2, 18, 203, 3, 2, 2, 2, 20, 220,
-	3, 2, 2, 2, 22, 266, 3, 2, 2, 2, 24, 25, 5, 4, 3, 2, 25, 26, 7, 2, 2, 3,
-	26, 3, 3, 2, 2, 2, 27, 29, 5, 8, 5, 2, 28, 27, 3, 2, 2, 2, 29, 32, 3, 2,
-	2, 2, 30, 28, 3, 2, 2, 2, 30, 31, 3, 2, 2, 2, 31, 33, 3, 2, 2, 2, 32, 30,
-	3, 2, 2, 2, 33, 34, 7, 20, 2, 2, 34, 39, 7, 20, 2, 2, 35, 36, 7, 13, 2,
-	2, 36, 38, 7, 20, 2, 2, 37, 35, 3, 2, 2, 2, 38, 41, 3, 2, 2, 2, 39, 37,
-	3, 2, 2, 2, 39, 40, 3, 2, 2, 2, 40, 42, 3, 2, 2, 2, 41, 39, 3, 2, 2, 2,
-	42, 46, 7, 3, 2, 2, 43, 45, 5, 6, 4, 2, 44, 43, 3, 2, 2, 2, 45, 48, 3,
-	2, 2, 2, 46, 44, 3, 2, 2, 2, 46, 47, 3, 2, 2, 2, 47, 52, 3, 2, 2, 2, 48,
-	46, 3, 2, 2, 2, 49, 51, 5, 10, 6, 2, 50, 49, 3, 2, 2, 2, 51, 54, 3, 2,
-	2, 2, 52, 50, 3, 2, 2, 2, 52, 53, 3, 2, 2, 2, 53, 55, 3, 2, 2, 2, 54, 52,
-	3, 2, 2, 2, 55, 56, 7, 4, 2, 2, 56, 57, 7, 10, 2, 2, 57, 5, 3, 2, 2, 2,
-	58, 59, 7, 20, 2, 2, 59, 64, 7, 20, 2, 2, 60, 61, 7, 13, 2, 2, 61, 63,
-	7, 20, 2, 2, 62, 60, 3, 2, 2, 2, 63, 66, 3, 2, 2, 2, 64, 62, 3, 2, 2, 2,
-	64, 65, 3, 2, 2, 2, 65, 69, 3, 2, 2, 2, 66, 64, 3, 2, 2, 2, 67, 68, 7,
-	13, 2, 2, 68, 70, 7, 17, 2, 2, 69, 67, 3, 2, 2, 2, 69, 70, 3, 2, 2, 2,
-	70, 71, 3, 2, 2, 2, 71, 72, 7, 10, 2, 2, 72, 7, 3, 2, 2, 2, 73, 74, 7,
-	18, 2, 2, 74, 75, 7, 20, 2, 2, 75, 78, 5, 22, 12, 2, 76, 78, 7, 24, 2,
-	2, 77, 73, 3, 2, 2, 2, 77, 76, 3, 2, 2, 2, 78, 9, 3, 2, 2, 2, 79, 81, 5,
-	8, 5, 2, 80, 79, 3, 2, 2, 2, 81, 84, 3, 2, 2, 2, 82, 80, 3, 2, 2, 2, 82,
-	83, 3, 2, 2, 2, 83, 85, 3, 2, 2, 2, 84, 82, 3, 2, 2, 2, 85, 86, 7, 20,
-	2, 2, 86, 88, 7, 20, 2, 2, 87, 89, 5, 12, 7, 2, 88, 87, 3, 2, 2, 2, 88,
-	89, 3, 2, 2, 2, 89, 90, 3, 2, 2, 2, 90, 94, 7, 3, 2, 2, 91, 93, 5, 20,
-	11, 2, 92, 91, 3, 2, 2, 2, 93, 96, 3, 2, 2, 2, 94, 92, 3, 2, 2, 2, 94,
-	95, 3, 2, 2, 2, 95, 97, 3, 2, 2, 2, 96, 94, 3, 2, 2, 2, 97, 98, 7, 4, 2,
-	2, 98, 140, 7, 10, 2, 2, 99, 101, 5, 8, 5, 2, 100, 99, 3, 2, 2, 2, 101,
-	104, 3, 2, 2, 2, 102, 100, 3, 2, 2, 2, 102, 103, 3, 2, 2, 2, 103, 105,
-	3, 2, 2, 2, 104, 102, 3, 2, 2, 2, 105, 106, 7, 20, 2, 2, 106, 108, 7, 20,
-	2, 2, 107, 109, 5, 12, 7, 2, 108, 107, 3, 2, 2, 2, 108, 109, 3, 2, 2, 2,
-	109, 110, 3, 2, 2, 2, 110, 111, 7, 7, 2, 2, 111, 113, 7, 20, 2, 2, 112,
-	114, 5, 16, 9, 2, 113, 112, 3, 2, 2, 2, 113, 114, 3, 2, 2, 2, 114, 117,
-	3, 2, 2, 2, 115, 116, 7, 7, 2, 2, 116, 118, 5, 22, 12, 2, 117, 115, 3,
-	2, 2, 2, 117, 118, 3, 2, 2, 2, 118, 119, 3, 2, 2, 2, 119, 140, 7, 10, 2,
-	2, 120, 121, 7, 20, 2, 2, 121, 122, 7, 20, 2, 2, 122, 123, 5, 22, 12, 2,
-	123, 124, 7, 10, 2, 2, 124, 140, 3, 2, 2, 2, 125, 126, 7, 20, 2, 2, 126,
-	127, 7, 20, 2, 2, 127, 128, 7, 20, 2, 2, 128, 129, 5, 22, 12, 2, 129, 130,
-	7, 10, 2, 2, 130, 140, 3, 2, 2, 2, 131, 132, 7, 20, 2, 2, 132, 133, 7,
-	20, 2, 2, 133, 134, 7, 11, 2, 2, 134, 135, 7, 20, 2, 2, 135, 136, 7, 20,
-	2, 2, 136, 137, 5, 22, 12, 2, 137, 138, 7, 10, 2, 2, 138, 140, 3, 2, 2,
-	2, 139, 82, 3, 2, 2, 2, 139, 102, 3, 2, 2, 2, 139, 120, 3, 2, 2, 2, 139,
-	125, 3, 2, 2, 2, 139, 131, 3, 2, 2, 2, 140, 11, 3, 2, 2, 2, 141, 142, 7,
-	15, 2, 2, 142, 147, 7, 20, 2, 2, 143, 144, 7, 14, 2, 2, 144, 146, 7, 20,
-	2, 2, 145, 143, 3, 2, 2, 2, 146, 149, 3, 2, 2, 2, 147, 145, 3, 2, 2, 2,
-	147, 148, 3, 2, 2, 2, 148, 150, 3, 2, 2, 2, 149, 147, 3, 2, 2, 2, 150,
-	173, 7, 16, 2, 2, 151, 152, 7, 15, 2, 2, 152, 157, 5, 14, 8, 2, 153, 154,
-	7, 14, 2, 2, 154, 156, 7, 20, 2, 2, 155, 153, 3, 2, 2, 2, 156, 159, 3,
-	2, 2, 2, 157, 155, 3, 2, 2, 2, 157, 158, 3, 2, 2, 2, 158, 160, 3, 2, 2,
-	2, 159, 157, 3, 2, 2, 2, 160, 161, 7, 16, 2, 2, 161, 173, 3, 2, 2, 2, 162,
-	163, 7, 15, 2, 2, 163, 166, 7, 20, 2, 2, 164, 165, 7, 14, 2, 2, 165, 167,
-	5, 14, 8, 2, 166, 164, 3, 2, 2, 2, 167, 168, 3, 2, 2, 2, 168, 166, 3, 2,
-	2, 2, 168, 169, 3, 2, 2, 2, 169, 170, 3, 2, 2, 2, 170, 171, 7, 16, 2, 2,
-	171, 173, 3, 2, 2, 2, 172, 141, 3, 2, 2, 2, 172, 151, 3, 2, 2, 2, 172,
-	162, 3, 2, 2, 2, 173, 13, 3, 2, 2, 2, 174, 175, 7, 20, 2, 2, 175, 178,
-	7, 15, 2, 2, 176, 179, 7, 20, 2, 2, 177, 179, 5, 14, 8, 2, 178, 176, 3,
-	2, 2, 2, 178, 177, 3, 2, 2, 2, 179, 187, 3, 2, 2, 2, 180, 183, 7, 14, 2,
-	2, 181, 184, 7, 20, 2, 2, 182, 184, 5, 14, 8, 2, 183, 181, 3, 2, 2, 2,
-	183, 182, 3, 2, 2, 2, 184, 186, 3, 2, 2, 2, 185, 180, 3, 2, 2, 2, 186,
-	189, 3, 2, 2, 2, 187, 185, 3, 2, 2, 2, 187, 188, 3, 2, 2, 2, 188, 190,
-	3, 2, 2, 2, 189, 187, 3, 2, 2, 2, 190, 191, 7, 16, 2, 2, 191, 15, 3, 2,
-	2, 2, 192, 193, 7, 15, 2, 2, 193, 198, 5, 18, 10, 2, 194, 195, 7, 14, 2,
-	2, 195, 197, 5, 18, 10, 2, 196, 194, 3, 2, 2, 2, 197, 200, 3, 2, 2, 2,
-	198, 196, 3, 2, 2, 2, 198, 199, 3, 2, 2, 2, 199, 201, 3, 2, 2, 2, 200,
-	198, 3, 2, 2, 2, 201, 202, 7, 16, 2, 2, 202, 17, 3, 2, 2, 2, 203, 215,
-	7, 20, 2, 2, 204, 205, 7, 15, 2, 2, 205, 210, 5, 18, 10, 2, 206, 207, 7,
-	14, 2, 2, 207, 209, 5, 18, 10, 2, 208, 206, 3, 2, 2, 2, 209, 212, 3, 2,
-	2, 2, 210, 208, 3, 2, 2, 2, 210, 211, 3, 2, 2, 2, 211, 213, 3, 2, 2, 2,
-	212, 210, 3, 2, 2, 2, 213, 214, 7, 16, 2, 2, 214, 216, 3, 2, 2, 2, 215,
-	204, 3, 2, 2, 2, 215, 216, 3, 2, 2, 2, 216, 19, 3, 2, 2, 2, 217, 219, 5,
-	8, 5, 2, 218, 217, 3, 2, 2, 2, 219, 222, 3, 2, 2, 2, 220, 218, 3, 2, 2,
-	2, 220, 221, 3, 2, 2, 2, 221, 223, 3, 2, 2, 2, 222, 220, 3, 2, 2, 2, 223,
-	225, 7, 20, 2, 2, 224, 226, 5, 16, 9, 2, 225, 224, 3, 2, 2, 2, 225, 226,
-	3, 2, 2, 2, 226, 227, 3, 2, 2, 2, 227, 230, 7, 20, 2, 2, 228, 229, 7, 7,
-	2, 2, 229, 231, 5, 22, 12, 2, 230, 228, 3, 2, 2, 2, 230, 231, 3, 2, 2,
-	2, 231, 232, 3, 2, 2, 2, 232, 233, 7, 10, 2, 2, 233, 21, 3, 2, 2, 2, 234,
-	267, 7, 19, 2, 2, 235, 267, 7, 20, 2, 2, 236, 267, 7, 21, 2, 2, 237, 267,
-	7, 22, 2, 2, 238, 247, 7, 5, 2, 2, 239, 244, 5, 22, 12, 2, 240, 241, 7,
-	14, 2, 2, 241, 243, 5, 22, 12, 2, 242, 240, 3, 2, 2, 2, 243, 246, 3, 2,
-	2, 2, 244, 242, 3, 2, 2, 2, 244, 245, 3, 2, 2, 2, 245, 248, 3, 2, 2, 2,
-	246, 244, 3, 2, 2, 2, 247, 239, 3, 2, 2, 2, 247, 248, 3, 2, 2, 2, 248,
-	249, 3, 2, 2, 2, 249, 267, 7, 6, 2, 2, 250, 263, 7, 3, 2, 2, 251, 252,
-	7, 19, 2, 2, 252, 253, 7, 12, 2, 2, 253, 260, 5, 22, 12, 2, 254, 255, 7,
-	14, 2, 2, 255, 256, 7, 19, 2, 2, 256, 257, 7, 12, 2, 2, 257, 259, 5, 22,
-	12, 2, 258, 254, 3, 2, 2, 2, 259, 262, 3, 2, 2, 2, 260, 258, 3, 2, 2, 2,
-	260, 261, 3, 2, 2, 2, 261, 264, 3, 2, 2, 2, 262, 260, 3, 2, 2, 2, 263,
-	251, 3, 2, 2, 2, 263, 264, 3, 2, 2, 2, 264, 265, 3, 2, 2, 2, 265, 267,
-	7, 4, 2, 2, 266, 234, 3, 2, 2, 2, 266, 235, 3, 2, 2, 2, 266, 236, 3, 2,
-	2, 2, 266, 237, 3, 2, 2, 2, 266, 238, 3, 2, 2, 2, 266, 250, 3, 2, 2, 2,
-	267, 23, 3, 2, 2, 2, 35, 30, 39, 46, 52, 64, 69, 77, 82, 88, 94, 102, 108,
-	113, 117, 139, 147, 157, 168, 172, 178, 183, 187, 198, 210, 215, 220, 225,
-	230, 244, 247, 260, 263, 266,
+	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 3, 2, 3, 2, 3, 2, 3,
+	3, 7, 3, 27, 10, 3, 12, 3, 14, 3, 30, 11, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7,
+	3, 36, 10, 3, 12, 3, 14, 3, 39, 11, 3, 3, 3, 3, 3, 7, 3, 43, 10, 3, 12,
+	3, 14, 3, 46, 11, 3, 3, 3, 7, 3, 49, 10, 3, 12, 3, 14, 3, 52, 11, 3, 3,
+	3, 3, 3, 3, 3, 3, 4, 3, 4, 3, 4, 3, 4, 6, 4, 61, 10, 4, 13, 4, 14, 4, 62,
+	3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 7, 4, 70, 10, 4, 12, 4, 14, 4, 73, 11, 4,
+	3, 4, 3, 4, 3, 4, 5, 4, 78, 10, 4, 3, 5, 3, 5, 3, 5, 3, 5, 5, 5, 84, 10,
+	5, 3, 6, 7, 6, 87, 10, 6, 12, 6, 14, 6, 90, 11, 6, 3, 6, 3, 6, 3, 6, 5,
+	6, 95, 10, 6, 3, 6, 3, 6, 7, 6, 99, 10, 6, 12, 6, 14, 6, 102, 11, 6, 3,
+	6, 3, 6, 3, 6, 7, 6, 107, 10, 6, 12, 6, 14, 6, 110, 11, 6, 3, 6, 3, 6,
+	3, 6, 5, 6, 115, 10, 6, 3, 6, 3, 6, 3, 6, 3, 6, 5, 6, 121, 10, 6, 3, 6,
+	3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6,
+	3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 5, 6, 144, 10, 6, 3, 7,
+	3, 7, 3, 7, 3, 7, 7, 7, 150, 10, 7, 12, 7, 14, 7, 153, 11, 7, 3, 7, 3,
+	7, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 7, 8, 163, 10, 8, 12, 8, 14, 8,
+	166, 11, 8, 3, 8, 3, 8, 5, 8, 170, 10, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9,
+	7, 9, 177, 10, 9, 12, 9, 14, 9, 180, 11, 9, 3, 9, 3, 9, 5, 9, 184, 10,
+	9, 3, 10, 7, 10, 187, 10, 10, 12, 10, 14, 10, 190, 11, 10, 3, 10, 3, 10,
+	5, 10, 194, 10, 10, 3, 10, 3, 10, 3, 10, 5, 10, 199, 10, 10, 3, 10, 3,
+	10, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 7, 11, 211,
+	10, 11, 12, 11, 14, 11, 214, 11, 11, 5, 11, 216, 10, 11, 3, 11, 3, 11,
+	3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 7, 11, 227, 10, 11, 12,
+	11, 14, 11, 230, 11, 11, 5, 11, 232, 10, 11, 3, 11, 5, 11, 235, 10, 11,
+	3, 11, 2, 2, 12, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 2, 2, 2, 261, 2, 22,
+	3, 2, 2, 2, 4, 28, 3, 2, 2, 2, 6, 77, 3, 2, 2, 2, 8, 83, 3, 2, 2, 2, 10,
+	143, 3, 2, 2, 2, 12, 145, 3, 2, 2, 2, 14, 169, 3, 2, 2, 2, 16, 171, 3,
+	2, 2, 2, 18, 188, 3, 2, 2, 2, 20, 234, 3, 2, 2, 2, 22, 23, 5, 4, 3, 2,
+	23, 24, 7, 2, 2, 3, 24, 3, 3, 2, 2, 2, 25, 27, 5, 8, 5, 2, 26, 25, 3, 2,
+	2, 2, 27, 30, 3, 2, 2, 2, 28, 26, 3, 2, 2, 2, 28, 29, 3, 2, 2, 2, 29, 31,
+	3, 2, 2, 2, 30, 28, 3, 2, 2, 2, 31, 32, 7, 20, 2, 2, 32, 37, 7, 20, 2,
+	2, 33, 34, 7, 13, 2, 2, 34, 36, 7, 20, 2, 2, 35, 33, 3, 2, 2, 2, 36, 39,
+	3, 2, 2, 2, 37, 35, 3, 2, 2, 2, 37, 38, 3, 2, 2, 2, 38, 40, 3, 2, 2, 2,
+	39, 37, 3, 2, 2, 2, 40, 44, 7, 3, 2, 2, 41, 43, 5, 6, 4, 2, 42, 41, 3,
+	2, 2, 2, 43, 46, 3, 2, 2, 2, 44, 42, 3, 2, 2, 2, 44, 45, 3, 2, 2, 2, 45,
+	50, 3, 2, 2, 2, 46, 44, 3, 2, 2, 2, 47, 49, 5, 10, 6, 2, 48, 47, 3, 2,
+	2, 2, 49, 52, 3, 2, 2, 2, 50, 48, 3, 2, 2, 2, 50, 51, 3, 2, 2, 2, 51, 53,
+	3, 2, 2, 2, 52, 50, 3, 2, 2, 2, 53, 54, 7, 4, 2, 2, 54, 55, 7, 10, 2, 2,
+	55, 5, 3, 2, 2, 2, 56, 57, 7, 20, 2, 2, 57, 60, 7, 20, 2, 2, 58, 59, 7,
+	13, 2, 2, 59, 61, 7, 20, 2, 2, 60, 58, 3, 2, 2, 2, 61, 62, 3, 2, 2, 2,
+	62, 60, 3, 2, 2, 2, 62, 63, 3, 2, 2, 2, 63, 64, 3, 2, 2, 2, 64, 78, 7,
+	10, 2, 2, 65, 66, 7, 20, 2, 2, 66, 71, 7, 20, 2, 2, 67, 68, 7, 13, 2, 2,
+	68, 70, 7, 20, 2, 2, 69, 67, 3, 2, 2, 2, 70, 73, 3, 2, 2, 2, 71, 69, 3,
+	2, 2, 2, 71, 72, 3, 2, 2, 2, 72, 74, 3, 2, 2, 2, 73, 71, 3, 2, 2, 2, 74,
+	75, 7, 13, 2, 2, 75, 76, 7, 17, 2, 2, 76, 78, 7, 10, 2, 2, 77, 56, 3, 2,
+	2, 2, 77, 65, 3, 2, 2, 2, 78, 7, 3, 2, 2, 2, 79, 80, 7, 18, 2, 2, 80, 81,
+	7, 20, 2, 2, 81, 84, 5, 20, 11, 2, 82, 84, 7, 24, 2, 2, 83, 79, 3, 2, 2,
+	2, 83, 82, 3, 2, 2, 2, 84, 9, 3, 2, 2, 2, 85, 87, 5, 8, 5, 2, 86, 85, 3,
+	2, 2, 2, 87, 90, 3, 2, 2, 2, 88, 86, 3, 2, 2, 2, 88, 89, 3, 2, 2, 2, 89,
+	91, 3, 2, 2, 2, 90, 88, 3, 2, 2, 2, 91, 92, 7, 20, 2, 2, 92, 94, 7, 20,
+	2, 2, 93, 95, 5, 12, 7, 2, 94, 93, 3, 2, 2, 2, 94, 95, 3, 2, 2, 2, 95,
+	96, 3, 2, 2, 2, 96, 100, 7, 3, 2, 2, 97, 99, 5, 18, 10, 2, 98, 97, 3, 2,
+	2, 2, 99, 102, 3, 2, 2, 2, 100, 98, 3, 2, 2, 2, 100, 101, 3, 2, 2, 2, 101,
+	103, 3, 2, 2, 2, 102, 100, 3, 2, 2, 2, 103, 104, 7, 4, 2, 2, 104, 144,
+	7, 10, 2, 2, 105, 107, 5, 8, 5, 2, 106, 105, 3, 2, 2, 2, 107, 110, 3, 2,
+	2, 2, 108, 106, 3, 2, 2, 2, 108, 109, 3, 2, 2, 2, 109, 111, 3, 2, 2, 2,
+	110, 108, 3, 2, 2, 2, 111, 112, 7, 20, 2, 2, 112, 114, 7, 20, 2, 2, 113,
+	115, 5, 12, 7, 2, 114, 113, 3, 2, 2, 2, 114, 115, 3, 2, 2, 2, 115, 116,
+	3, 2, 2, 2, 116, 117, 7, 7, 2, 2, 117, 120, 5, 14, 8, 2, 118, 119, 7, 7,
+	2, 2, 119, 121, 5, 20, 11, 2, 120, 118, 3, 2, 2, 2, 120, 121, 3, 2, 2,
+	2, 121, 122, 3, 2, 2, 2, 122, 123, 7, 10, 2, 2, 123, 144, 3, 2, 2, 2, 124,
+	125, 7, 20, 2, 2, 125, 126, 7, 20, 2, 2, 126, 127, 5, 20, 11, 2, 127, 128,
+	7, 10, 2, 2, 128, 144, 3, 2, 2, 2, 129, 130, 7, 20, 2, 2, 130, 131, 7,
+	20, 2, 2, 131, 132, 7, 20, 2, 2, 132, 133, 5, 20, 11, 2, 133, 134, 7, 10,
+	2, 2, 134, 144, 3, 2, 2, 2, 135, 136, 7, 20, 2, 2, 136, 137, 7, 20, 2,
+	2, 137, 138, 7, 11, 2, 2, 138, 139, 7, 20, 2, 2, 139, 140, 7, 20, 2, 2,
+	140, 141, 5, 20, 11, 2, 141, 142, 7, 10, 2, 2, 142, 144, 3, 2, 2, 2, 143,
+	88, 3, 2, 2, 2, 143, 108, 3, 2, 2, 2, 143, 124, 3, 2, 2, 2, 143, 129, 3,
+	2, 2, 2, 143, 135, 3, 2, 2, 2, 144, 11, 3, 2, 2, 2, 145, 146, 7, 15, 2,
+	2, 146, 151, 7, 20, 2, 2, 147, 148, 7, 14, 2, 2, 148, 150, 7, 20, 2, 2,
+	149, 147, 3, 2, 2, 2, 150, 153, 3, 2, 2, 2, 151, 149, 3, 2, 2, 2, 151,
+	152, 3, 2, 2, 2, 152, 154, 3, 2, 2, 2, 153, 151, 3, 2, 2, 2, 154, 155,
+	7, 16, 2, 2, 155, 13, 3, 2, 2, 2, 156, 170, 7, 20, 2, 2, 157, 158, 7, 20,
+	2, 2, 158, 159, 7, 15, 2, 2, 159, 164, 5, 16, 9, 2, 160, 161, 7, 14, 2,
+	2, 161, 163, 5, 16, 9, 2, 162, 160, 3, 2, 2, 2, 163, 166, 3, 2, 2, 2, 164,
+	162, 3, 2, 2, 2, 164, 165, 3, 2, 2, 2, 165, 167, 3, 2, 2, 2, 166, 164,
+	3, 2, 2, 2, 167, 168, 7, 16, 2, 2, 168, 170, 3, 2, 2, 2, 169, 156, 3, 2,
+	2, 2, 169, 157, 3, 2, 2, 2, 170, 15, 3, 2, 2, 2, 171, 183, 7, 20, 2, 2,
+	172, 173, 7, 15, 2, 2, 173, 178, 5, 16, 9, 2, 174, 175, 7, 14, 2, 2, 175,
+	177, 5, 16, 9, 2, 176, 174, 3, 2, 2, 2, 177, 180, 3, 2, 2, 2, 178, 176,
+	3, 2, 2, 2, 178, 179, 3, 2, 2, 2, 179, 181, 3, 2, 2, 2, 180, 178, 3, 2,
+	2, 2, 181, 182, 7, 16, 2, 2, 182, 184, 3, 2, 2, 2, 183, 172, 3, 2, 2, 2,
+	183, 184, 3, 2, 2, 2, 184, 17, 3, 2, 2, 2, 185, 187, 5, 8, 5, 2, 186, 185,
+	3, 2, 2, 2, 187, 190, 3, 2, 2, 2, 188, 186, 3, 2, 2, 2, 188, 189, 3, 2,
+	2, 2, 189, 191, 3, 2, 2, 2, 190, 188, 3, 2, 2, 2, 191, 193, 7, 20, 2, 2,
+	192, 194, 5, 14, 8, 2, 193, 192, 3, 2, 2, 2, 193, 194, 3, 2, 2, 2, 194,
+	195, 3, 2, 2, 2, 195, 198, 7, 20, 2, 2, 196, 197, 7, 7, 2, 2, 197, 199,
+	5, 20, 11, 2, 198, 196, 3, 2, 2, 2, 198, 199, 3, 2, 2, 2, 199, 200, 3,
+	2, 2, 2, 200, 201, 7, 10, 2, 2, 201, 19, 3, 2, 2, 2, 202, 235, 7, 19, 2,
+	2, 203, 235, 7, 20, 2, 2, 204, 235, 7, 21, 2, 2, 205, 235, 7, 22, 2, 2,
+	206, 215, 7, 5, 2, 2, 207, 212, 5, 20, 11, 2, 208, 209, 7, 14, 2, 2, 209,
+	211, 5, 20, 11, 2, 210, 208, 3, 2, 2, 2, 211, 214, 3, 2, 2, 2, 212, 210,
+	3, 2, 2, 2, 212, 213, 3, 2, 2, 2, 213, 216, 3, 2, 2, 2, 214, 212, 3, 2,
+	2, 2, 215, 207, 3, 2, 2, 2, 215, 216, 3, 2, 2, 2, 216, 217, 3, 2, 2, 2,
+	217, 235, 7, 6, 2, 2, 218, 231, 7, 3, 2, 2, 219, 220, 7, 19, 2, 2, 220,
+	221, 7, 12, 2, 2, 221, 228, 5, 20, 11, 2, 222, 223, 7, 14, 2, 2, 223, 224,
+	7, 19, 2, 2, 224, 225, 7, 12, 2, 2, 225, 227, 5, 20, 11, 2, 226, 222, 3,
+	2, 2, 2, 227, 230, 3, 2, 2, 2, 228, 226, 3, 2, 2, 2, 228, 229, 3, 2, 2,
+	2, 229, 232, 3, 2, 2, 2, 230, 228, 3, 2, 2, 2, 231, 219, 3, 2, 2, 2, 231,
+	232, 3, 2, 2, 2, 232, 233, 3, 2, 2, 2, 233, 235, 7, 4, 2, 2, 234, 202,
+	3, 2, 2, 2, 234, 203, 3, 2, 2, 2, 234, 204, 3, 2, 2, 2, 234, 205, 3, 2,
+	2, 2, 234, 206, 3, 2, 2, 2, 234, 218, 3, 2, 2, 2, 235, 21, 3, 2, 2, 2,
+	30, 28, 37, 44, 50, 62, 71, 77, 83, 88, 94, 100, 108, 114, 120, 143, 151,
+	164, 169, 178, 183, 188, 193, 198, 212, 215, 228, 231, 234,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -147,15 +131,16 @@ var symbolicNames = []string{
 	"", "LCUR", "RCUR", "LSQ", "RSQ", "EQ", "DQ", "SQ", "SEMI", "DCOLON", "COLON",
 	"DOT", "COMMA", "LCHEVR", "RCHEVR", "STAR", "AT", "STR", "ID", "INT", "FLT",
 	"WS", "LINE_DOC", "LINE_COMMENT", "DOWN", "UP", "ROOT", "ERROR", "ADL",
-	"Module", "Import", "Annotation", "Struct", "Union", "Newtype", "Type",
-	"TypeParam", "TypeExpr", "TypeExprElem", "Field", "Json", "JsonStr", "JsonBool",
-	"JsonNull", "JsonInt", "JsonFloat", "JsonArray", "JsonObj", "ModuleAnno",
-	"DeclAnno", "FieldAnno",
+	"Module", "ImportModule", "ImportScopedName", "Annotation", "AnnotationNotScoped",
+	"AnnotationScoped", "Struct", "Union", "Newtype", "Type", "TypeParam",
+	"TypeExprPrimOrParam", "TypeExprTypeExpr", "TypeExprElem", "Field", "Json",
+	"JsonStr", "JsonBool", "JsonNull", "JsonInt", "JsonFloat", "JsonArray",
+	"JsonObj", "ModuleAnno", "DeclAnno", "FieldAnno",
 }
 
 var ruleNames = []string{
 	"adl", "module", "imports", "annon", "top_level_statement", "typeParam",
-	"typeParamError", "typeExpr", "typeExprElem", "soruBody", "jsonValue",
+	"typeExpr", "typeExprElem", "soruBody", "jsonValue",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -185,57 +170,61 @@ func NewAdlP(input antlr.TokenStream) *AdlP {
 
 // AdlP tokens.
 const (
-	AdlPEOF          = antlr.TokenEOF
-	AdlPLCUR         = 1
-	AdlPRCUR         = 2
-	AdlPLSQ          = 3
-	AdlPRSQ          = 4
-	AdlPEQ           = 5
-	AdlPDQ           = 6
-	AdlPSQ           = 7
-	AdlPSEMI         = 8
-	AdlPDCOLON       = 9
-	AdlPCOLON        = 10
-	AdlPDOT          = 11
-	AdlPCOMMA        = 12
-	AdlPLCHEVR       = 13
-	AdlPRCHEVR       = 14
-	AdlPSTAR         = 15
-	AdlPAT           = 16
-	AdlPSTR          = 17
-	AdlPID           = 18
-	AdlPINT          = 19
-	AdlPFLT          = 20
-	AdlPWS           = 21
-	AdlPLINE_DOC     = 22
-	AdlPLINE_COMMENT = 23
-	AdlPDOWN         = 24
-	AdlPUP           = 25
-	AdlPROOT         = 26
-	AdlPERROR        = 27
-	AdlPADL          = 28
-	AdlPModule       = 29
-	AdlPImport       = 30
-	AdlPAnnotation   = 31
-	AdlPStruct       = 32
-	AdlPUnion        = 33
-	AdlPNewtype      = 34
-	AdlPType         = 35
-	AdlPTypeParam    = 36
-	AdlPTypeExpr     = 37
-	AdlPTypeExprElem = 38
-	AdlPField        = 39
-	AdlPJson         = 40
-	AdlPJsonStr      = 41
-	AdlPJsonBool     = 42
-	AdlPJsonNull     = 43
-	AdlPJsonInt      = 44
-	AdlPJsonFloat    = 45
-	AdlPJsonArray    = 46
-	AdlPJsonObj      = 47
-	AdlPModuleAnno   = 48
-	AdlPDeclAnno     = 49
-	AdlPFieldAnno    = 50
+	AdlPEOF                 = antlr.TokenEOF
+	AdlPLCUR                = 1
+	AdlPRCUR                = 2
+	AdlPLSQ                 = 3
+	AdlPRSQ                 = 4
+	AdlPEQ                  = 5
+	AdlPDQ                  = 6
+	AdlPSQ                  = 7
+	AdlPSEMI                = 8
+	AdlPDCOLON              = 9
+	AdlPCOLON               = 10
+	AdlPDOT                 = 11
+	AdlPCOMMA               = 12
+	AdlPLCHEVR              = 13
+	AdlPRCHEVR              = 14
+	AdlPSTAR                = 15
+	AdlPAT                  = 16
+	AdlPSTR                 = 17
+	AdlPID                  = 18
+	AdlPINT                 = 19
+	AdlPFLT                 = 20
+	AdlPWS                  = 21
+	AdlPLINE_DOC            = 22
+	AdlPLINE_COMMENT        = 23
+	AdlPDOWN                = 24
+	AdlPUP                  = 25
+	AdlPROOT                = 26
+	AdlPERROR               = 27
+	AdlPADL                 = 28
+	AdlPModule              = 29
+	AdlPImportModule        = 30
+	AdlPImportScopedName    = 31
+	AdlPAnnotation          = 32
+	AdlPAnnotationNotScoped = 33
+	AdlPAnnotationScoped    = 34
+	AdlPStruct              = 35
+	AdlPUnion               = 36
+	AdlPNewtype             = 37
+	AdlPType                = 38
+	AdlPTypeParam           = 39
+	AdlPTypeExprPrimOrParam = 40
+	AdlPTypeExprTypeExpr    = 41
+	AdlPTypeExprElem        = 42
+	AdlPField               = 43
+	AdlPJson                = 44
+	AdlPJsonStr             = 45
+	AdlPJsonBool            = 46
+	AdlPJsonNull            = 47
+	AdlPJsonInt             = 48
+	AdlPJsonFloat           = 49
+	AdlPJsonArray           = 50
+	AdlPJsonObj             = 51
+	AdlPModuleAnno          = 52
+	AdlPDeclAnno            = 53
+	AdlPFieldAnno           = 54
 )
 
 // AdlP rules.
@@ -246,11 +235,10 @@ const (
 	AdlPRULE_annon               = 3
 	AdlPRULE_top_level_statement = 4
 	AdlPRULE_typeParam           = 5
-	AdlPRULE_typeParamError      = 6
-	AdlPRULE_typeExpr            = 7
-	AdlPRULE_typeExprElem        = 8
-	AdlPRULE_soruBody            = 9
-	AdlPRULE_jsonValue           = 10
+	AdlPRULE_typeExpr            = 6
+	AdlPRULE_typeExprElem        = 7
+	AdlPRULE_soruBody            = 8
+	AdlPRULE_jsonValue           = 9
 )
 
 type IAdlContext interface {
@@ -413,11 +401,11 @@ func (p *AdlP) Adl() (localctx IAdlContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(22)
+		p.SetState(20)
 		p.Module()
 	}
 	{
-		p.SetState(23)
+		p.SetState(21)
 		p.Match(AdlPEOF)
 	}
 
@@ -769,94 +757,94 @@ func (p *AdlP) Module() (localctx IModuleContext) {
 
 	localctx = NewModuleStatementContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(28)
+	p.SetState(26)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == AdlPAT || _la == AdlPLINE_DOC {
 		{
-			p.SetState(25)
+			p.SetState(23)
 			p.Annon()
 		}
 
-		p.SetState(30)
+		p.SetState(28)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(31)
+		p.SetState(29)
 		var _m = p.Match(AdlPID)
 		localctx.(*ModuleStatementContext).kw = _m
 
 	}
 	{
-		p.SetState(32)
+		p.SetState(30)
 		var _m = p.Match(AdlPID)
 		localctx.(*ModuleStatementContext)._ID = _m
 
 	}
 	localctx.(*ModuleStatementContext).name = append(localctx.(*ModuleStatementContext).name, localctx.(*ModuleStatementContext)._ID)
-	p.SetState(37)
+	p.SetState(35)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == AdlPDOT {
 		{
-			p.SetState(33)
+			p.SetState(31)
 			p.Match(AdlPDOT)
 		}
 		{
-			p.SetState(34)
+			p.SetState(32)
 			var _m = p.Match(AdlPID)
 			localctx.(*ModuleStatementContext)._ID = _m
 
 		}
 		localctx.(*ModuleStatementContext).name = append(localctx.(*ModuleStatementContext).name, localctx.(*ModuleStatementContext)._ID)
 
-		p.SetState(39)
+		p.SetState(37)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(40)
+		p.SetState(38)
 		p.Match(AdlPLCUR)
 	}
-	p.SetState(44)
+	p.SetState(42)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			{
-				p.SetState(41)
+				p.SetState(39)
 				p.Imports()
 			}
 
 		}
-		p.SetState(46)
+		p.SetState(44)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext())
 	}
-	p.SetState(50)
+	p.SetState(48)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AdlPAT)|(1<<AdlPID)|(1<<AdlPLINE_DOC))) != 0 {
 		{
-			p.SetState(47)
+			p.SetState(45)
 			p.Top_level_statement()
 		}
 
-		p.SetState(52)
+		p.SetState(50)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(53)
+		p.SetState(51)
 		p.Match(AdlPRCUR)
 	}
 	{
-		p.SetState(54)
+		p.SetState(52)
 		p.Match(AdlPSEMI)
 	}
 
@@ -955,7 +943,7 @@ func (s *ImportsContext) ToStringTree(ruleNames []string, recog antlr.Recognizer
 
 //Begin AltLabelStructDecl
 
-type ImportStatementContext struct {
+type ImportModuleNameContext struct {
 	*ImportsContext
 	//TokenDecl
 	kw antlr.Token
@@ -963,12 +951,10 @@ type ImportStatementContext struct {
 	_ID antlr.Token
 	//TokenListDecl
 	a []antlr.Token
-	//TokenDecl
-	s antlr.Token
 }
 
-func NewImportStatementContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ImportStatementContext {
-	var p = new(ImportStatementContext)
+func NewImportModuleNameContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ImportModuleNameContext {
+	var p = new(ImportModuleNameContext)
 
 	p.ImportsContext = NewEmptyImportsContext()
 	p.parser = parser
@@ -977,7 +963,7 @@ func NewImportStatementContext(parser antlr.Parser, ctx antlr.ParserRuleContext)
 	return p
 }
 
-type IImportStatementContext interface {
+type IImportModuleNameContext interface {
 	//Current rule
 	IImportsContext
 	// start internal
@@ -987,20 +973,19 @@ type IImportStatementContext interface {
 	//  ruleListIndexedGetterDecl
 
 	//  tokenGetterDecl
-	SEMI() antlr.TerminalNode
 	STAR() antlr.TerminalNode
+	SEMI() antlr.TerminalNode
 	//  tokenListGetterDecl
-	AllID() []antlr.TerminalNode
 	AllDOT() []antlr.TerminalNode
+	AllID() []antlr.TerminalNode
 	//  tokenListIndexedGetterDecl
-	ID(i int) antlr.TerminalNode
 	DOT(i int) antlr.TerminalNode
+	ID(i int) antlr.TerminalNode
 	// end internal
 	//
 	//Gets for labeled elements
 	//  tokenDecls
 	GetKw() antlr.Token
-	GetS() antlr.Token
 
 	//  tokenTypeDecls
 	//  tokenListDecls
@@ -1012,23 +997,20 @@ type IImportStatementContext interface {
 	// TODO dispatchMethods (needed?)
 }
 
-func (*ImportStatementContext) IsImportStatementContext() {}
+func (*ImportModuleNameContext) IsImportModuleNameContext() {}
 
 //AltLabelStructDecl tokenDecls
-func (s *ImportStatementContext) GetKw() antlr.Token  { return s.kw }
-func (s *ImportStatementContext) SetKw(v antlr.Token) { s.kw = v }
+func (s *ImportModuleNameContext) GetKw() antlr.Token  { return s.kw }
+func (s *ImportModuleNameContext) SetKw(v antlr.Token) { s.kw = v }
 
-func (s *ImportStatementContext) Get_ID() antlr.Token  { return s._ID }
-func (s *ImportStatementContext) Set_ID(v antlr.Token) { s._ID = v }
-
-func (s *ImportStatementContext) GetS() antlr.Token  { return s.s }
-func (s *ImportStatementContext) SetS(v antlr.Token) { s.s = v }
+func (s *ImportModuleNameContext) Get_ID() antlr.Token  { return s._ID }
+func (s *ImportModuleNameContext) Set_ID(v antlr.Token) { s._ID = v }
 
 //AltLabelStructDecl tokenTypeDecls
 
 //AltLabelStructDecl tokenListDecls
-func (s *ImportStatementContext) GetA() []antlr.Token  { return s.a }
-func (s *ImportStatementContext) SetA(v []antlr.Token) { s.a = v }
+func (s *ImportModuleNameContext) GetA() []antlr.Token  { return s.a }
+func (s *ImportModuleNameContext) SetA(v []antlr.Token) { s.a = v }
 
 //AltLabelStructDecl ruleContextDecls
 
@@ -1037,54 +1019,54 @@ func (s *ImportStatementContext) SetA(v []antlr.Token) { s.a = v }
 //AltLabelStructDecl attributeDecls
 
 //getRuleContext
-func (s *ImportStatementContext) GetRuleContext() antlr.RuleContext {
+func (s *ImportModuleNameContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
 //getters
-func (s *ImportStatementContext) SEMI() antlr.TerminalNode {
-	return s.GetToken(AdlPSEMI, 0)
-}
-
-func (s *ImportStatementContext) AllID() []antlr.TerminalNode {
-	return s.GetTokens(AdlPID)
-}
-
-func (s *ImportStatementContext) ID(i int) antlr.TerminalNode {
-	return s.GetToken(AdlPID, i)
-}
-
-func (s *ImportStatementContext) AllDOT() []antlr.TerminalNode {
+func (s *ImportModuleNameContext) AllDOT() []antlr.TerminalNode {
 	return s.GetTokens(AdlPDOT)
 }
 
-func (s *ImportStatementContext) DOT(i int) antlr.TerminalNode {
+func (s *ImportModuleNameContext) DOT(i int) antlr.TerminalNode {
 	return s.GetToken(AdlPDOT, i)
 }
 
-func (s *ImportStatementContext) STAR() antlr.TerminalNode {
+func (s *ImportModuleNameContext) STAR() antlr.TerminalNode {
 	return s.GetToken(AdlPSTAR, 0)
 }
 
-func (s *ImportStatementContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ImportStatementEntryListener); ok {
-		listenerT.EnterImportStatement(s)
+func (s *ImportModuleNameContext) SEMI() antlr.TerminalNode {
+	return s.GetToken(AdlPSEMI, 0)
+}
+
+func (s *ImportModuleNameContext) AllID() []antlr.TerminalNode {
+	return s.GetTokens(AdlPID)
+}
+
+func (s *ImportModuleNameContext) ID(i int) antlr.TerminalNode {
+	return s.GetToken(AdlPID, i)
+}
+
+func (s *ImportModuleNameContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ImportModuleNameEntryListener); ok {
+		listenerT.EnterImportModuleName(s)
 	}
 }
 
-func (s *ImportStatementContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ImportStatementExitListener); ok {
-		listenerT.ExitImportStatement(s)
+func (s *ImportModuleNameContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ImportModuleNameExitListener); ok {
+		listenerT.ExitImportModuleName(s)
 	}
 }
 
-func (s *ImportStatementContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
+func (s *ImportModuleNameContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
 	h := hdls.(*AdlPHandlers)
 	if h.EnterEveryRule != nil {
 		h.EnterEveryRule(s)
 	}
-	if h.ImportStatement != nil {
-		h.ImportStatement(s, h, args...)
+	if h.ImportModuleName != nil {
+		h.ImportModuleName(s, h, args...)
 	} else {
 		s.VisitChildrenFunc(h, args...)
 	}
@@ -1094,10 +1076,151 @@ func (s *ImportStatementContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers,
 	return
 }
 
-func (s *ImportStatementContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
+func (s *ImportModuleNameContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
 	switch t := delegate.(type) {
-	case ImportStatementContextVisitor:
-		return t.VisitImportStatement(s, delegate, args...)
+	case ImportModuleNameContextVisitor:
+		return t.VisitImportModuleName(s, delegate, args...)
+	default:
+		return delegate.VisitChildren(s, delegate, args...)
+	}
+}
+
+//END AltLabelStructDecl
+
+//Begin AltLabelStructDecl
+
+type ImportScopedNameContext struct {
+	*ImportsContext
+	//TokenDecl
+	kw antlr.Token
+	//TokenDecl
+	_ID antlr.Token
+	//TokenListDecl
+	a []antlr.Token
+}
+
+func NewImportScopedNameContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ImportScopedNameContext {
+	var p = new(ImportScopedNameContext)
+
+	p.ImportsContext = NewEmptyImportsContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*ImportsContext))
+
+	return p
+}
+
+type IImportScopedNameContext interface {
+	//Current rule
+	IImportsContext
+	// start internal
+	//Gets for raw elements
+	//  ruleGetterDecl
+	//  ruleListGetterDecl
+	//  ruleListIndexedGetterDecl
+
+	//  tokenGetterDecl
+	SEMI() antlr.TerminalNode
+	//  tokenListGetterDecl
+	AllID() []antlr.TerminalNode
+	AllDOT() []antlr.TerminalNode
+	//  tokenListIndexedGetterDecl
+	ID(i int) antlr.TerminalNode
+	DOT(i int) antlr.TerminalNode
+	// end internal
+	//
+	//Gets for labeled elements
+	//  tokenDecls
+	GetKw() antlr.Token
+
+	//  tokenTypeDecls
+	//  tokenListDecls
+	GetA() []antlr.Token
+	//  ruleContextDecls
+	//  ruleContextListDecls
+	//  attributeDecls
+
+	// TODO dispatchMethods (needed?)
+}
+
+func (*ImportScopedNameContext) IsImportScopedNameContext() {}
+
+//AltLabelStructDecl tokenDecls
+func (s *ImportScopedNameContext) GetKw() antlr.Token  { return s.kw }
+func (s *ImportScopedNameContext) SetKw(v antlr.Token) { s.kw = v }
+
+func (s *ImportScopedNameContext) Get_ID() antlr.Token  { return s._ID }
+func (s *ImportScopedNameContext) Set_ID(v antlr.Token) { s._ID = v }
+
+//AltLabelStructDecl tokenTypeDecls
+
+//AltLabelStructDecl tokenListDecls
+func (s *ImportScopedNameContext) GetA() []antlr.Token  { return s.a }
+func (s *ImportScopedNameContext) SetA(v []antlr.Token) { s.a = v }
+
+//AltLabelStructDecl ruleContextDecls
+
+//AltLabelStructDecl ruleContextListDecls
+
+//AltLabelStructDecl attributeDecls
+
+//getRuleContext
+func (s *ImportScopedNameContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+//getters
+func (s *ImportScopedNameContext) SEMI() antlr.TerminalNode {
+	return s.GetToken(AdlPSEMI, 0)
+}
+
+func (s *ImportScopedNameContext) AllID() []antlr.TerminalNode {
+	return s.GetTokens(AdlPID)
+}
+
+func (s *ImportScopedNameContext) ID(i int) antlr.TerminalNode {
+	return s.GetToken(AdlPID, i)
+}
+
+func (s *ImportScopedNameContext) AllDOT() []antlr.TerminalNode {
+	return s.GetTokens(AdlPDOT)
+}
+
+func (s *ImportScopedNameContext) DOT(i int) antlr.TerminalNode {
+	return s.GetToken(AdlPDOT, i)
+}
+
+func (s *ImportScopedNameContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ImportScopedNameEntryListener); ok {
+		listenerT.EnterImportScopedName(s)
+	}
+}
+
+func (s *ImportScopedNameContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ImportScopedNameExitListener); ok {
+		listenerT.ExitImportScopedName(s)
+	}
+}
+
+func (s *ImportScopedNameContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
+	h := hdls.(*AdlPHandlers)
+	if h.EnterEveryRule != nil {
+		h.EnterEveryRule(s)
+	}
+	if h.ImportScopedName != nil {
+		h.ImportScopedName(s, h, args...)
+	} else {
+		s.VisitChildrenFunc(h, args...)
+	}
+	if h.ExitEveryRule != nil {
+		h.ExitEveryRule(s)
+	}
+	return
+}
+
+func (s *ImportScopedNameContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
+	switch t := delegate.(type) {
+	case ImportScopedNameContextVisitor:
+		return t.VisitImportScopedName(s, delegate, args...)
 	default:
 		return delegate.VisitChildren(s, delegate, args...)
 	}
@@ -1129,64 +1252,103 @@ func (p *AdlP) Imports() (localctx IImportsContext) {
 
 	var _alt int
 
-	localctx = NewImportStatementContext(p, localctx)
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(56)
-		var _m = p.Match(AdlPID)
-		localctx.(*ImportStatementContext).kw = _m
-
-	}
-	{
-		p.SetState(57)
-		var _m = p.Match(AdlPID)
-		localctx.(*ImportStatementContext)._ID = _m
-
-	}
-	localctx.(*ImportStatementContext).a = append(localctx.(*ImportStatementContext).a, localctx.(*ImportStatementContext)._ID)
-	p.SetState(62)
+	p.SetState(75)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext()) {
+	case 1:
+		localctx = NewImportScopedNameContext(p, localctx)
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(54)
+			var _m = p.Match(AdlPID)
+			localctx.(*ImportScopedNameContext).kw = _m
 
-	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
-		if _alt == 1 {
+		}
+		{
+			p.SetState(55)
+			var _m = p.Match(AdlPID)
+			localctx.(*ImportScopedNameContext)._ID = _m
+
+		}
+		localctx.(*ImportScopedNameContext).a = append(localctx.(*ImportScopedNameContext).a, localctx.(*ImportScopedNameContext)._ID)
+		p.SetState(58)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+
+		for ok := true; ok; ok = _la == AdlPDOT {
 			{
-				p.SetState(58)
+				p.SetState(56)
 				p.Match(AdlPDOT)
 			}
 			{
-				p.SetState(59)
+				p.SetState(57)
 				var _m = p.Match(AdlPID)
-				localctx.(*ImportStatementContext)._ID = _m
+				localctx.(*ImportScopedNameContext)._ID = _m
 
 			}
-			localctx.(*ImportStatementContext).a = append(localctx.(*ImportStatementContext).a, localctx.(*ImportStatementContext)._ID)
+			localctx.(*ImportScopedNameContext).a = append(localctx.(*ImportScopedNameContext).a, localctx.(*ImportScopedNameContext)._ID)
+
+			p.SetState(60)
+			p.GetErrorHandler().Sync(p)
+			_la = p.GetTokenStream().LA(1)
+		}
+		{
+			p.SetState(62)
+			p.Match(AdlPSEMI)
+		}
+
+	case 2:
+		localctx = NewImportModuleNameContext(p, localctx)
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(63)
+			var _m = p.Match(AdlPID)
+			localctx.(*ImportModuleNameContext).kw = _m
 
 		}
-		p.SetState(64)
-		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
-	}
-	p.SetState(67)
-	p.GetErrorHandler().Sync(p)
-	_la = p.GetTokenStream().LA(1)
-
-	if _la == AdlPDOT {
 		{
-			p.SetState(65)
+			p.SetState(64)
+			var _m = p.Match(AdlPID)
+			localctx.(*ImportModuleNameContext)._ID = _m
+
+		}
+		localctx.(*ImportModuleNameContext).a = append(localctx.(*ImportModuleNameContext).a, localctx.(*ImportModuleNameContext)._ID)
+		p.SetState(69)
+		p.GetErrorHandler().Sync(p)
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext())
+
+		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+			if _alt == 1 {
+				{
+					p.SetState(65)
+					p.Match(AdlPDOT)
+				}
+				{
+					p.SetState(66)
+					var _m = p.Match(AdlPID)
+					localctx.(*ImportModuleNameContext)._ID = _m
+
+				}
+				localctx.(*ImportModuleNameContext).a = append(localctx.(*ImportModuleNameContext).a, localctx.(*ImportModuleNameContext)._ID)
+
+			}
+			p.SetState(71)
+			p.GetErrorHandler().Sync(p)
+			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext())
+		}
+		{
+			p.SetState(72)
 			p.Match(AdlPDOT)
 		}
 		{
-			p.SetState(66)
-			var _m = p.Match(AdlPSTAR)
-			localctx.(*ImportStatementContext).s = _m
-
+			p.SetState(73)
+			p.Match(AdlPSTAR)
+		}
+		{
+			p.SetState(74)
+			p.Match(AdlPSEMI)
 		}
 
-	}
-	{
-		p.SetState(69)
-		p.Match(AdlPSEMI)
 	}
 
 	return localctx
@@ -1540,7 +1702,7 @@ func (p *AdlP) Annon() (localctx IAnnonContext) {
 		}
 	}()
 
-	p.SetState(75)
+	p.SetState(81)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
@@ -1548,17 +1710,17 @@ func (p *AdlP) Annon() (localctx IAnnonContext) {
 		localctx = NewLocalAnnoContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(71)
+			p.SetState(77)
 			p.Match(AdlPAT)
 		}
 		{
-			p.SetState(72)
+			p.SetState(78)
 			var _m = p.Match(AdlPID)
 			localctx.(*LocalAnnoContext).a = _m
 
 		}
 		{
-			p.SetState(73)
+			p.SetState(79)
 			p.JsonValue()
 		}
 
@@ -1566,7 +1728,7 @@ func (p *AdlP) Annon() (localctx IAnnonContext) {
 		localctx = NewDocAnnoContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(74)
+			p.SetState(80)
 			var _m = p.Match(AdlPLINE_DOC)
 			localctx.(*DocAnnoContext).a = _m
 
@@ -2176,8 +2338,6 @@ type TypeOrNewtypeContext struct {
 	kw antlr.Token
 	//TokenDecl
 	a antlr.Token
-	//TokenDecl
-	b antlr.Token
 }
 
 func NewTypeOrNewtypeContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TypeOrNewtypeContext {
@@ -2196,8 +2356,8 @@ type ITypeOrNewtypeContext interface {
 	// start internal
 	//Gets for raw elements
 	//  ruleGetterDecl
-	TypeParam() ITypeParamContext
 	TypeExpr() ITypeExprContext
+	TypeParam() ITypeParamContext
 	JsonValue() IJsonValueContext
 	//  ruleListGetterDecl
 	AllAnnon() []IAnnonContext
@@ -2218,7 +2378,6 @@ type ITypeOrNewtypeContext interface {
 	//  tokenDecls
 	GetKw() antlr.Token
 	GetA() antlr.Token
-	GetB() antlr.Token
 
 	//  tokenTypeDecls
 	//  tokenListDecls
@@ -2237,9 +2396,6 @@ func (s *TypeOrNewtypeContext) SetKw(v antlr.Token) { s.kw = v }
 
 func (s *TypeOrNewtypeContext) GetA() antlr.Token  { return s.a }
 func (s *TypeOrNewtypeContext) SetA(v antlr.Token) { s.a = v }
-
-func (s *TypeOrNewtypeContext) GetB() antlr.Token  { return s.b }
-func (s *TypeOrNewtypeContext) SetB(v antlr.Token) { s.b = v }
 
 //AltLabelStructDecl tokenTypeDecls
 
@@ -2263,6 +2419,16 @@ func (s *TypeOrNewtypeContext) AllEQ() []antlr.TerminalNode {
 
 func (s *TypeOrNewtypeContext) EQ(i int) antlr.TerminalNode {
 	return s.GetToken(AdlPEQ, i)
+}
+
+func (s *TypeOrNewtypeContext) TypeExpr() ITypeExprContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*TypeExprContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITypeExprContext)
 }
 
 func (s *TypeOrNewtypeContext) SEMI() antlr.TerminalNode {
@@ -2309,16 +2475,6 @@ func (s *TypeOrNewtypeContext) TypeParam() ITypeParamContext {
 	}
 
 	return t.(ITypeParamContext)
-}
-
-func (s *TypeOrNewtypeContext) TypeExpr() ITypeExprContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*TypeExprContext)(nil)).Elem(), 0)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ITypeExprContext)
 }
 
 func (s *TypeOrNewtypeContext) JsonValue() IJsonValueContext {
@@ -2530,154 +2686,141 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		}
 	}()
 
-	p.SetState(137)
+	p.SetState(141)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 14, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewStructOrUnionContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
-		p.SetState(80)
+		p.SetState(86)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		for _la == AdlPAT || _la == AdlPLINE_DOC {
 			{
-				p.SetState(77)
+				p.SetState(83)
 				p.Annon()
 			}
 
-			p.SetState(82)
+			p.SetState(88)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(83)
+			p.SetState(89)
 			var _m = p.Match(AdlPID)
 			localctx.(*StructOrUnionContext).kw = _m
 
 		}
 		{
-			p.SetState(84)
+			p.SetState(90)
 			var _m = p.Match(AdlPID)
 			localctx.(*StructOrUnionContext).a = _m
 
-		}
-		p.SetState(86)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-
-		if _la == AdlPLCHEVR {
-			{
-				p.SetState(85)
-				p.TypeParam()
-			}
-
-		}
-		{
-			p.SetState(88)
-			p.Match(AdlPLCUR)
 		}
 		p.SetState(92)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
+		if _la == AdlPLCHEVR {
+			{
+				p.SetState(91)
+				p.TypeParam()
+			}
+
+		}
+		{
+			p.SetState(94)
+			p.Match(AdlPLCUR)
+		}
+		p.SetState(98)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+
 		for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AdlPAT)|(1<<AdlPID)|(1<<AdlPLINE_DOC))) != 0 {
 			{
-				p.SetState(89)
+				p.SetState(95)
 				p.SoruBody()
 			}
 
-			p.SetState(94)
+			p.SetState(100)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(95)
+			p.SetState(101)
 			p.Match(AdlPRCUR)
 		}
 		{
-			p.SetState(96)
+			p.SetState(102)
 			p.Match(AdlPSEMI)
 		}
 
 	case 2:
 		localctx = NewTypeOrNewtypeContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
-		p.SetState(100)
+		p.SetState(106)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		for _la == AdlPAT || _la == AdlPLINE_DOC {
 			{
-				p.SetState(97)
+				p.SetState(103)
 				p.Annon()
 			}
 
-			p.SetState(102)
+			p.SetState(108)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(103)
+			p.SetState(109)
 			var _m = p.Match(AdlPID)
 			localctx.(*TypeOrNewtypeContext).kw = _m
 
 		}
 		{
-			p.SetState(104)
+			p.SetState(110)
 			var _m = p.Match(AdlPID)
 			localctx.(*TypeOrNewtypeContext).a = _m
 
 		}
-		p.SetState(106)
+		p.SetState(112)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPLCHEVR {
 			{
-				p.SetState(105)
+				p.SetState(111)
 				p.TypeParam()
 			}
 
 		}
 		{
-			p.SetState(108)
+			p.SetState(114)
 			p.Match(AdlPEQ)
 		}
 		{
-			p.SetState(109)
-			var _m = p.Match(AdlPID)
-			localctx.(*TypeOrNewtypeContext).b = _m
-
+			p.SetState(115)
+			p.TypeExpr()
 		}
-		p.SetState(111)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-
-		if _la == AdlPLCHEVR {
-			{
-				p.SetState(110)
-				p.TypeExpr()
-			}
-
-		}
-		p.SetState(115)
+		p.SetState(118)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPEQ {
 			{
-				p.SetState(113)
+				p.SetState(116)
 				p.Match(AdlPEQ)
 			}
 			{
-				p.SetState(114)
+				p.SetState(117)
 				p.JsonValue()
 			}
 
 		}
 		{
-			p.SetState(117)
+			p.SetState(120)
 			p.Match(AdlPSEMI)
 		}
 
@@ -2685,23 +2828,23 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		localctx = NewModuleAnnotationContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(118)
+			p.SetState(122)
 			var _m = p.Match(AdlPID)
 			localctx.(*ModuleAnnotationContext).kw = _m
 
 		}
 		{
-			p.SetState(119)
+			p.SetState(123)
 			var _m = p.Match(AdlPID)
 			localctx.(*ModuleAnnotationContext).a = _m
 
 		}
 		{
-			p.SetState(120)
+			p.SetState(124)
 			p.JsonValue()
 		}
 		{
-			p.SetState(121)
+			p.SetState(125)
 			p.Match(AdlPSEMI)
 		}
 
@@ -2709,29 +2852,29 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		localctx = NewDeclAnnotationContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(123)
+			p.SetState(127)
 			var _m = p.Match(AdlPID)
 			localctx.(*DeclAnnotationContext).kw = _m
 
 		}
 		{
-			p.SetState(124)
+			p.SetState(128)
 			var _m = p.Match(AdlPID)
 			localctx.(*DeclAnnotationContext).a = _m
 
 		}
 		{
-			p.SetState(125)
+			p.SetState(129)
 			var _m = p.Match(AdlPID)
 			localctx.(*DeclAnnotationContext).b = _m
 
 		}
 		{
-			p.SetState(126)
+			p.SetState(130)
 			p.JsonValue()
 		}
 		{
-			p.SetState(127)
+			p.SetState(131)
 			p.Match(AdlPSEMI)
 		}
 
@@ -2739,39 +2882,39 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		localctx = NewFieldAnnotationContext(p, localctx)
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(129)
+			p.SetState(133)
 			var _m = p.Match(AdlPID)
 			localctx.(*FieldAnnotationContext).kw = _m
 
 		}
 		{
-			p.SetState(130)
+			p.SetState(134)
 			var _m = p.Match(AdlPID)
 			localctx.(*FieldAnnotationContext).a = _m
 
 		}
 		{
-			p.SetState(131)
+			p.SetState(135)
 			p.Match(AdlPDCOLON)
 		}
 		{
-			p.SetState(132)
+			p.SetState(136)
 			var _m = p.Match(AdlPID)
 			localctx.(*FieldAnnotationContext).b = _m
 
 		}
 		{
-			p.SetState(133)
+			p.SetState(137)
 			var _m = p.Match(AdlPID)
 			localctx.(*FieldAnnotationContext).c = _m
 
 		}
 		{
-			p.SetState(134)
+			p.SetState(138)
 			p.JsonValue()
 		}
 		{
-			p.SetState(135)
+			p.SetState(139)
 			p.Match(AdlPSEMI)
 		}
 
@@ -3010,162 +3153,6 @@ func (s *TypeParameterContext) Visit(delegate antlr.ParseTreeVisitor, args ...in
 
 //END AltLabelStructDecl
 
-//Begin AltLabelStructDecl
-
-type ErrorTypeParamContext struct {
-	*TypeParamContext
-}
-
-func NewErrorTypeParamContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ErrorTypeParamContext {
-	var p = new(ErrorTypeParamContext)
-
-	p.TypeParamContext = NewEmptyTypeParamContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*TypeParamContext))
-
-	return p
-}
-
-type IErrorTypeParamContext interface {
-	//Current rule
-	ITypeParamContext
-	// start internal
-	//Gets for raw elements
-	//  ruleGetterDecl
-	//  ruleListGetterDecl
-	AllTypeParamError() []ITypeParamErrorContext
-	//  ruleListIndexedGetterDecl
-	TypeParamError(i int) ITypeParamErrorContext
-
-	//  tokenGetterDecl
-	LCHEVR() antlr.TerminalNode
-	RCHEVR() antlr.TerminalNode
-	//  tokenListGetterDecl
-	AllCOMMA() []antlr.TerminalNode
-	AllID() []antlr.TerminalNode
-	//  tokenListIndexedGetterDecl
-	COMMA(i int) antlr.TerminalNode
-	ID(i int) antlr.TerminalNode
-	// end internal
-	//
-	//Gets for labeled elements
-	//  tokenDecls
-	//  tokenTypeDecls
-	//  tokenListDecls
-	//  ruleContextDecls
-	//  ruleContextListDecls
-	//  attributeDecls
-
-	// TODO dispatchMethods (needed?)
-}
-
-func (*ErrorTypeParamContext) IsErrorTypeParamContext() {}
-
-//AltLabelStructDecl tokenDecls
-
-//AltLabelStructDecl tokenTypeDecls
-
-//AltLabelStructDecl tokenListDecls
-
-//AltLabelStructDecl ruleContextDecls
-
-//AltLabelStructDecl ruleContextListDecls
-
-//AltLabelStructDecl attributeDecls
-
-//getRuleContext
-func (s *ErrorTypeParamContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-//getters
-func (s *ErrorTypeParamContext) LCHEVR() antlr.TerminalNode {
-	return s.GetToken(AdlPLCHEVR, 0)
-}
-
-func (s *ErrorTypeParamContext) AllTypeParamError() []ITypeParamErrorContext {
-	//ContextRuleListGetterDecl
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*TypeParamErrorContext)(nil)).Elem())
-	var tst = make([]ITypeParamErrorContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ITypeParamErrorContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *ErrorTypeParamContext) TypeParamError(i int) ITypeParamErrorContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*TypeParamErrorContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ITypeParamErrorContext)
-}
-
-func (s *ErrorTypeParamContext) RCHEVR() antlr.TerminalNode {
-	return s.GetToken(AdlPRCHEVR, 0)
-}
-
-func (s *ErrorTypeParamContext) AllCOMMA() []antlr.TerminalNode {
-	return s.GetTokens(AdlPCOMMA)
-}
-
-func (s *ErrorTypeParamContext) COMMA(i int) antlr.TerminalNode {
-	return s.GetToken(AdlPCOMMA, i)
-}
-
-func (s *ErrorTypeParamContext) AllID() []antlr.TerminalNode {
-	return s.GetTokens(AdlPID)
-}
-
-func (s *ErrorTypeParamContext) ID(i int) antlr.TerminalNode {
-	return s.GetToken(AdlPID, i)
-}
-
-func (s *ErrorTypeParamContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ErrorTypeParamEntryListener); ok {
-		listenerT.EnterErrorTypeParam(s)
-	}
-}
-
-func (s *ErrorTypeParamContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ErrorTypeParamExitListener); ok {
-		listenerT.ExitErrorTypeParam(s)
-	}
-}
-
-func (s *ErrorTypeParamContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
-	h := hdls.(*AdlPHandlers)
-	if h.EnterEveryRule != nil {
-		h.EnterEveryRule(s)
-	}
-	if h.ErrorTypeParam != nil {
-		h.ErrorTypeParam(s, h, args...)
-	} else {
-		s.VisitChildrenFunc(h, args...)
-	}
-	if h.ExitEveryRule != nil {
-		h.ExitEveryRule(s)
-	}
-	return
-}
-
-func (s *ErrorTypeParamContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	switch t := delegate.(type) {
-	case ErrorTypeParamContextVisitor:
-		return t.VisitErrorTypeParam(s, delegate, args...)
-	default:
-		return delegate.VisitChildren(s, delegate, args...)
-	}
-}
-
-//END AltLabelStructDecl
-
 func (p *AdlP) TypeParam() (localctx ITypeParamContext) {
 	localctx = NewTypeParamContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, AdlPRULE_typeParam)
@@ -3188,379 +3175,42 @@ func (p *AdlP) TypeParam() (localctx ITypeParamContext) {
 		}
 	}()
 
-	p.SetState(170)
-	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 18, p.GetParserRuleContext()) {
-	case 1:
-		localctx = NewTypeParameterContext(p, localctx)
-		p.EnterOuterAlt(localctx, 1)
-		{
-			p.SetState(139)
-			p.Match(AdlPLCHEVR)
-		}
-		{
-			p.SetState(140)
-			var _m = p.Match(AdlPID)
-			localctx.(*TypeParameterContext)._ID = _m
-
-		}
-		localctx.(*TypeParameterContext).typep = append(localctx.(*TypeParameterContext).typep, localctx.(*TypeParameterContext)._ID)
-		p.SetState(145)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-
-		for _la == AdlPCOMMA {
-			{
-				p.SetState(141)
-				p.Match(AdlPCOMMA)
-			}
-			{
-				p.SetState(142)
-				var _m = p.Match(AdlPID)
-				localctx.(*TypeParameterContext)._ID = _m
-
-			}
-			localctx.(*TypeParameterContext).typep = append(localctx.(*TypeParameterContext).typep, localctx.(*TypeParameterContext)._ID)
-
-			p.SetState(147)
-			p.GetErrorHandler().Sync(p)
-			_la = p.GetTokenStream().LA(1)
-		}
-		{
-			p.SetState(148)
-			p.Match(AdlPRCHEVR)
-		}
-
-	case 2:
-		localctx = NewErrorTypeParamContext(p, localctx)
-		p.EnterOuterAlt(localctx, 2)
-		{
-			p.SetState(149)
-			p.Match(AdlPLCHEVR)
-		}
-		{
-			p.SetState(150)
-			p.TypeParamError()
-		}
-		p.SetState(155)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-
-		for _la == AdlPCOMMA {
-			{
-				p.SetState(151)
-				p.Match(AdlPCOMMA)
-			}
-			{
-				p.SetState(152)
-				p.Match(AdlPID)
-			}
-
-			p.SetState(157)
-			p.GetErrorHandler().Sync(p)
-			_la = p.GetTokenStream().LA(1)
-		}
-		{
-			p.SetState(158)
-			p.Match(AdlPRCHEVR)
-		}
-
-	case 3:
-		localctx = NewErrorTypeParamContext(p, localctx)
-		p.EnterOuterAlt(localctx, 3)
-		{
-			p.SetState(160)
-			p.Match(AdlPLCHEVR)
-		}
-		{
-			p.SetState(161)
-			p.Match(AdlPID)
-		}
-		p.SetState(164)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-
-		for ok := true; ok; ok = _la == AdlPCOMMA {
-			{
-				p.SetState(162)
-				p.Match(AdlPCOMMA)
-			}
-			{
-				p.SetState(163)
-				p.TypeParamError()
-			}
-
-			p.SetState(166)
-			p.GetErrorHandler().Sync(p)
-			_la = p.GetTokenStream().LA(1)
-		}
-		{
-			p.SetState(168)
-			p.Match(AdlPRCHEVR)
-		}
-
-	}
-
-	return localctx
-}
-
-type ITypeParamErrorContext interface {
-	antlr.ParserRuleContext
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// start internal
-	//  ruleGetterDecl
-	//  ruleListGetterDecl
-	AllTypeParamError() []ITypeParamErrorContext
-	//  ruleListIndexedGetterDecl
-	TypeParamError(i int) ITypeParamErrorContext
-	//  ruleContextDecls
-	//  ruleContextListDecls
-	// end internal
-	//Gets for labeled elements
-	//tokenDecls
-	//tokenTypeDecls
-	//tokenListDecls
-	//attributeDecls
-	//tokenGetterDecl
-	LCHEVR() antlr.TerminalNode
-	RCHEVR() antlr.TerminalNode
-	//tokenListGetterDecl
-	AllID() []antlr.TerminalNode
-	AllCOMMA() []antlr.TerminalNode
-	//tokenListIndexedGetterDecl
-	ID(i int) antlr.TerminalNode
-	COMMA(i int) antlr.TerminalNode
-
-	// IsTypeParamErrorContext differentiates from other interfaces.
-	//copyStruct,GetRuleContext and ToStringTree  from embedded
-
-	//<if(dispatchMethods)>
-	//<dispatchMethods; separator="\n\n">
-	//<endif>
-
-	//<if(extensionMembers)>
-	//<extensionMembers; separator="\n\n">
-	//<endif>
-}
-
-type TypeParamErrorContext struct {
-	*antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyTypeParamErrorContext() *TypeParamErrorContext {
-	var p = new(TypeParamErrorContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = AdlPRULE_typeParamError
-	return p
-}
-
-func (*TypeParamErrorContext) IsTypeParamErrorContext() {}
-
-func NewTypeParamErrorContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *TypeParamErrorContext {
-	var p = new(TypeParamErrorContext)
-
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = AdlPRULE_typeParamError
-
-	return p
-}
-
-func (s *TypeParamErrorContext) GetParser() antlr.Parser { return s.parser }
-
-//StructDecl tokenDecls
-
-//StructDecl tokenTypeDecls
-
-//StructDecl tokenListDecls
-
-//StructDecl ruleContextDecls
-
-//StructDecl ruleContextListDecls
-
-//StructDecl attributeDecls
-
-// Getters
-func (s *TypeParamErrorContext) AllID() []antlr.TerminalNode {
-	return s.GetTokens(AdlPID)
-}
-
-func (s *TypeParamErrorContext) ID(i int) antlr.TerminalNode {
-	return s.GetToken(AdlPID, i)
-}
-
-func (s *TypeParamErrorContext) LCHEVR() antlr.TerminalNode {
-	return s.GetToken(AdlPLCHEVR, 0)
-}
-
-func (s *TypeParamErrorContext) RCHEVR() antlr.TerminalNode {
-	return s.GetToken(AdlPRCHEVR, 0)
-}
-
-func (s *TypeParamErrorContext) AllTypeParamError() []ITypeParamErrorContext {
-	//ContextRuleListGetterDecl
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*TypeParamErrorContext)(nil)).Elem())
-	var tst = make([]ITypeParamErrorContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ITypeParamErrorContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *TypeParamErrorContext) TypeParamError(i int) ITypeParamErrorContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*TypeParamErrorContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ITypeParamErrorContext)
-}
-
-func (s *TypeParamErrorContext) AllCOMMA() []antlr.TerminalNode {
-	return s.GetTokens(AdlPCOMMA)
-}
-
-func (s *TypeParamErrorContext) COMMA(i int) antlr.TerminalNode {
-	return s.GetToken(AdlPCOMMA, i)
-}
-
-//provideCopyFrom
-func (s *TypeParamErrorContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *TypeParamErrorContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-//dispatchMethods
-func (s *TypeParamErrorContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(TypeParamErrorEntryListener); ok {
-		listenerT.EnterTypeParamError(s)
-	}
-}
-
-func (s *TypeParamErrorContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(TypeParamErrorExitListener); ok {
-		listenerT.ExitTypeParamError(s)
-	}
-}
-
-func (s *TypeParamErrorContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
-	h := hdls.(*AdlPHandlers)
-	if h.EnterEveryRule != nil {
-		h.EnterEveryRule(s)
-	}
-	if h.TypeParamError != nil {
-		h.TypeParamError(s, h, args...)
-	} else {
-		s.VisitChildrenFunc(h, args...)
-	}
-	if h.ExitEveryRule != nil {
-		h.ExitEveryRule(s)
-	}
-	return
-}
-
-func (s *TypeParamErrorContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	switch t := delegate.(type) {
-	case TypeParamErrorContextVisitor:
-		return t.VisitTypeParamError(s, delegate, args...)
-	default:
-		return delegate.VisitChildren(s, delegate, args...)
-	}
-}
-
-//extensionMembers
-
-func (p *AdlP) TypeParamError() (localctx ITypeParamErrorContext) {
-	localctx = NewTypeParamErrorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, AdlPRULE_typeParamError)
-	var //TokenTypeDecl
-	_la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
+	localctx = NewTypeParameterContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(172)
-		p.Match(AdlPID)
-	}
-	{
-		p.SetState(173)
+		p.SetState(143)
 		p.Match(AdlPLCHEVR)
 	}
-	p.SetState(176)
-	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 19, p.GetParserRuleContext()) {
-	case 1:
-		{
-			p.SetState(174)
-			p.Match(AdlPID)
-		}
-
-	case 2:
-		{
-			p.SetState(175)
-			p.TypeParamError()
-		}
+	{
+		p.SetState(144)
+		var _m = p.Match(AdlPID)
+		localctx.(*TypeParameterContext)._ID = _m
 
 	}
-	p.SetState(185)
+	localctx.(*TypeParameterContext).typep = append(localctx.(*TypeParameterContext).typep, localctx.(*TypeParameterContext)._ID)
+	p.SetState(149)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == AdlPCOMMA {
 		{
-			p.SetState(178)
+			p.SetState(145)
 			p.Match(AdlPCOMMA)
 		}
-		p.SetState(181)
-		p.GetErrorHandler().Sync(p)
-		switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 20, p.GetParserRuleContext()) {
-		case 1:
-			{
-				p.SetState(179)
-				p.Match(AdlPID)
-			}
-
-		case 2:
-			{
-				p.SetState(180)
-				p.TypeParamError()
-			}
+		{
+			p.SetState(146)
+			var _m = p.Match(AdlPID)
+			localctx.(*TypeParameterContext)._ID = _m
 
 		}
+		localctx.(*TypeParameterContext).typep = append(localctx.(*TypeParameterContext).typep, localctx.(*TypeParameterContext)._ID)
 
-		p.SetState(187)
+		p.SetState(151)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(188)
+		p.SetState(152)
 		p.Match(AdlPRCHEVR)
 	}
 
@@ -3659,16 +3309,18 @@ func (s *TypeExprContext) ToStringTree(ruleNames []string, recog antlr.Recognize
 
 //Begin AltLabelStructDecl
 
-type TypeExpressionContext struct {
+type TypeExprTypeExprContext struct {
 	*TypeExprContext
+	//TokenDecl
+	b antlr.Token
 	//RuleContextDecl
 	_typeExprElem ITypeExprElemContext
 	//RuleContextListDecl
 	typep []ITypeExprElemContext
 }
 
-func NewTypeExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TypeExpressionContext {
-	var p = new(TypeExpressionContext)
+func NewTypeExprTypeExprContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TypeExprTypeExprContext {
+	var p = new(TypeExprTypeExprContext)
 
 	p.TypeExprContext = NewEmptyTypeExprContext()
 	p.parser = parser
@@ -3677,7 +3329,7 @@ func NewTypeExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) 
 	return p
 }
 
-type ITypeExpressionContext interface {
+type ITypeExprTypeExprContext interface {
 	//Current rule
 	ITypeExprContext
 	// start internal
@@ -3691,6 +3343,7 @@ type ITypeExpressionContext interface {
 	//  tokenGetterDecl
 	LCHEVR() antlr.TerminalNode
 	RCHEVR() antlr.TerminalNode
+	ID() antlr.TerminalNode
 	//  tokenListGetterDecl
 	AllCOMMA() []antlr.TerminalNode
 	//  tokenListIndexedGetterDecl
@@ -3699,6 +3352,8 @@ type ITypeExpressionContext interface {
 	//
 	//Gets for labeled elements
 	//  tokenDecls
+	GetB() antlr.Token
+
 	//  tokenTypeDecls
 	//  tokenListDecls
 	//  ruleContextDecls
@@ -3711,39 +3366,45 @@ type ITypeExpressionContext interface {
 	// TODO dispatchMethods (needed?)
 }
 
-func (*TypeExpressionContext) IsTypeExpressionContext() {}
+func (*TypeExprTypeExprContext) IsTypeExprTypeExprContext() {}
 
 //AltLabelStructDecl tokenDecls
+func (s *TypeExprTypeExprContext) GetB() antlr.Token  { return s.b }
+func (s *TypeExprTypeExprContext) SetB(v antlr.Token) { s.b = v }
 
 //AltLabelStructDecl tokenTypeDecls
 
 //AltLabelStructDecl tokenListDecls
 
 //AltLabelStructDecl ruleContextDecls
-func (s *TypeExpressionContext) Get_typeExprElem() ITypeExprElemContext  { return s._typeExprElem }
-func (s *TypeExpressionContext) Set_typeExprElem(v ITypeExprElemContext) { s._typeExprElem = v }
+func (s *TypeExprTypeExprContext) Get_typeExprElem() ITypeExprElemContext  { return s._typeExprElem }
+func (s *TypeExprTypeExprContext) Set_typeExprElem(v ITypeExprElemContext) { s._typeExprElem = v }
 
 //AltLabelStructDecl ruleContextListDecls
-func (s *TypeExpressionContext) GetTypep() []ITypeExprElemContext  { return s.typep }
-func (s *TypeExpressionContext) SetTypep(v []ITypeExprElemContext) { s.typep = v }
+func (s *TypeExprTypeExprContext) GetTypep() []ITypeExprElemContext  { return s.typep }
+func (s *TypeExprTypeExprContext) SetTypep(v []ITypeExprElemContext) { s.typep = v }
 
 //AltLabelStructDecl attributeDecls
 
 //getRuleContext
-func (s *TypeExpressionContext) GetRuleContext() antlr.RuleContext {
+func (s *TypeExprTypeExprContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
 //getters
-func (s *TypeExpressionContext) LCHEVR() antlr.TerminalNode {
+func (s *TypeExprTypeExprContext) LCHEVR() antlr.TerminalNode {
 	return s.GetToken(AdlPLCHEVR, 0)
 }
 
-func (s *TypeExpressionContext) RCHEVR() antlr.TerminalNode {
+func (s *TypeExprTypeExprContext) RCHEVR() antlr.TerminalNode {
 	return s.GetToken(AdlPRCHEVR, 0)
 }
 
-func (s *TypeExpressionContext) AllTypeExprElem() []ITypeExprElemContext {
+func (s *TypeExprTypeExprContext) ID() antlr.TerminalNode {
+	return s.GetToken(AdlPID, 0)
+}
+
+func (s *TypeExprTypeExprContext) AllTypeExprElem() []ITypeExprElemContext {
 	//ContextRuleListGetterDecl
 	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*TypeExprElemContext)(nil)).Elem())
 	var tst = make([]ITypeExprElemContext, len(ts))
@@ -3757,7 +3418,7 @@ func (s *TypeExpressionContext) AllTypeExprElem() []ITypeExprElemContext {
 	return tst
 }
 
-func (s *TypeExpressionContext) TypeExprElem(i int) ITypeExprElemContext {
+func (s *TypeExprTypeExprContext) TypeExprElem(i int) ITypeExprElemContext {
 	var t = s.GetTypedRuleContext(reflect.TypeOf((*TypeExprElemContext)(nil)).Elem(), i)
 
 	if t == nil {
@@ -3767,33 +3428,33 @@ func (s *TypeExpressionContext) TypeExprElem(i int) ITypeExprElemContext {
 	return t.(ITypeExprElemContext)
 }
 
-func (s *TypeExpressionContext) AllCOMMA() []antlr.TerminalNode {
+func (s *TypeExprTypeExprContext) AllCOMMA() []antlr.TerminalNode {
 	return s.GetTokens(AdlPCOMMA)
 }
 
-func (s *TypeExpressionContext) COMMA(i int) antlr.TerminalNode {
+func (s *TypeExprTypeExprContext) COMMA(i int) antlr.TerminalNode {
 	return s.GetToken(AdlPCOMMA, i)
 }
 
-func (s *TypeExpressionContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(TypeExpressionEntryListener); ok {
-		listenerT.EnterTypeExpression(s)
+func (s *TypeExprTypeExprContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(TypeExprTypeExprEntryListener); ok {
+		listenerT.EnterTypeExprTypeExpr(s)
 	}
 }
 
-func (s *TypeExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(TypeExpressionExitListener); ok {
-		listenerT.ExitTypeExpression(s)
+func (s *TypeExprTypeExprContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(TypeExprTypeExprExitListener); ok {
+		listenerT.ExitTypeExprTypeExpr(s)
 	}
 }
 
-func (s *TypeExpressionContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
+func (s *TypeExprTypeExprContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
 	h := hdls.(*AdlPHandlers)
 	if h.EnterEveryRule != nil {
 		h.EnterEveryRule(s)
 	}
-	if h.TypeExpression != nil {
-		h.TypeExpression(s, h, args...)
+	if h.TypeExprTypeExpr != nil {
+		h.TypeExprTypeExpr(s, h, args...)
 	} else {
 		s.VisitChildrenFunc(h, args...)
 	}
@@ -3803,10 +3464,121 @@ func (s *TypeExpressionContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, 
 	return
 }
 
-func (s *TypeExpressionContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
+func (s *TypeExprTypeExprContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
 	switch t := delegate.(type) {
-	case TypeExpressionContextVisitor:
-		return t.VisitTypeExpression(s, delegate, args...)
+	case TypeExprTypeExprContextVisitor:
+		return t.VisitTypeExprTypeExpr(s, delegate, args...)
+	default:
+		return delegate.VisitChildren(s, delegate, args...)
+	}
+}
+
+//END AltLabelStructDecl
+
+//Begin AltLabelStructDecl
+
+type TypeExprPrimOrParamContext struct {
+	*TypeExprContext
+	//TokenDecl
+	b antlr.Token
+}
+
+func NewTypeExprPrimOrParamContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TypeExprPrimOrParamContext {
+	var p = new(TypeExprPrimOrParamContext)
+
+	p.TypeExprContext = NewEmptyTypeExprContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*TypeExprContext))
+
+	return p
+}
+
+type ITypeExprPrimOrParamContext interface {
+	//Current rule
+	ITypeExprContext
+	// start internal
+	//Gets for raw elements
+	//  ruleGetterDecl
+	//  ruleListGetterDecl
+	//  ruleListIndexedGetterDecl
+
+	//  tokenGetterDecl
+	ID() antlr.TerminalNode
+	//  tokenListGetterDecl
+	//  tokenListIndexedGetterDecl
+	// end internal
+	//
+	//Gets for labeled elements
+	//  tokenDecls
+	GetB() antlr.Token
+
+	//  tokenTypeDecls
+	//  tokenListDecls
+	//  ruleContextDecls
+	//  ruleContextListDecls
+	//  attributeDecls
+
+	// TODO dispatchMethods (needed?)
+}
+
+func (*TypeExprPrimOrParamContext) IsTypeExprPrimOrParamContext() {}
+
+//AltLabelStructDecl tokenDecls
+func (s *TypeExprPrimOrParamContext) GetB() antlr.Token  { return s.b }
+func (s *TypeExprPrimOrParamContext) SetB(v antlr.Token) { s.b = v }
+
+//AltLabelStructDecl tokenTypeDecls
+
+//AltLabelStructDecl tokenListDecls
+
+//AltLabelStructDecl ruleContextDecls
+
+//AltLabelStructDecl ruleContextListDecls
+
+//AltLabelStructDecl attributeDecls
+
+//getRuleContext
+func (s *TypeExprPrimOrParamContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+//getters
+func (s *TypeExprPrimOrParamContext) ID() antlr.TerminalNode {
+	return s.GetToken(AdlPID, 0)
+}
+
+func (s *TypeExprPrimOrParamContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(TypeExprPrimOrParamEntryListener); ok {
+		listenerT.EnterTypeExprPrimOrParam(s)
+	}
+}
+
+func (s *TypeExprPrimOrParamContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(TypeExprPrimOrParamExitListener); ok {
+		listenerT.ExitTypeExprPrimOrParam(s)
+	}
+}
+
+func (s *TypeExprPrimOrParamContext) VisitFunc(hdls antlr.ParserTreeVisitorHandlers, args ...interface{}) (result interface{}) {
+	h := hdls.(*AdlPHandlers)
+	if h.EnterEveryRule != nil {
+		h.EnterEveryRule(s)
+	}
+	if h.TypeExprPrimOrParam != nil {
+		h.TypeExprPrimOrParam(s, h, args...)
+	} else {
+		s.VisitChildrenFunc(h, args...)
+	}
+	if h.ExitEveryRule != nil {
+		h.ExitEveryRule(s)
+	}
+	return
+}
+
+func (s *TypeExprPrimOrParamContext) Visit(delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
+	switch t := delegate.(type) {
+	case TypeExprPrimOrParamContextVisitor:
+		return t.VisitTypeExprPrimOrParam(s, delegate, args...)
 	default:
 		return delegate.VisitChildren(s, delegate, args...)
 	}
@@ -3816,7 +3588,7 @@ func (s *TypeExpressionContext) Visit(delegate antlr.ParseTreeVisitor, args ...i
 
 func (p *AdlP) TypeExpr() (localctx ITypeExprContext) {
 	localctx = NewTypeExprContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, AdlPRULE_typeExpr)
+	p.EnterRule(localctx, 12, AdlPRULE_typeExpr)
 	var //TokenTypeDecl
 	_la int
 
@@ -3836,47 +3608,69 @@ func (p *AdlP) TypeExpr() (localctx ITypeExprContext) {
 		}
 	}()
 
-	localctx = NewTypeExpressionContext(p, localctx)
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(190)
-		p.Match(AdlPLCHEVR)
-	}
-	{
-		p.SetState(191)
-
-		var _x = p.TypeExprElem()
-
-		localctx.(*TypeExpressionContext)._typeExprElem = _x
-
-	}
-	localctx.(*TypeExpressionContext).typep = append(localctx.(*TypeExpressionContext).typep, localctx.(*TypeExpressionContext)._typeExprElem)
-	p.SetState(196)
+	p.SetState(167)
 	p.GetErrorHandler().Sync(p)
-	_la = p.GetTokenStream().LA(1)
-
-	for _la == AdlPCOMMA {
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 17, p.GetParserRuleContext()) {
+	case 1:
+		localctx = NewTypeExprPrimOrParamContext(p, localctx)
+		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(192)
-			p.Match(AdlPCOMMA)
+			p.SetState(154)
+			var _m = p.Match(AdlPID)
+			localctx.(*TypeExprPrimOrParamContext).b = _m
+
+		}
+
+	case 2:
+		localctx = NewTypeExprTypeExprContext(p, localctx)
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(155)
+			var _m = p.Match(AdlPID)
+			localctx.(*TypeExprTypeExprContext).b = _m
+
 		}
 		{
-			p.SetState(193)
+			p.SetState(156)
+			p.Match(AdlPLCHEVR)
+		}
+		{
+			p.SetState(157)
 
 			var _x = p.TypeExprElem()
 
-			localctx.(*TypeExpressionContext)._typeExprElem = _x
+			localctx.(*TypeExprTypeExprContext)._typeExprElem = _x
 
 		}
-		localctx.(*TypeExpressionContext).typep = append(localctx.(*TypeExpressionContext).typep, localctx.(*TypeExpressionContext)._typeExprElem)
-
-		p.SetState(198)
+		localctx.(*TypeExprTypeExprContext).typep = append(localctx.(*TypeExprTypeExprContext).typep, localctx.(*TypeExprTypeExprContext)._typeExprElem)
+		p.SetState(162)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
-	}
-	{
-		p.SetState(199)
-		p.Match(AdlPRCHEVR)
+
+		for _la == AdlPCOMMA {
+			{
+				p.SetState(158)
+				p.Match(AdlPCOMMA)
+			}
+			{
+				p.SetState(159)
+
+				var _x = p.TypeExprElem()
+
+				localctx.(*TypeExprTypeExprContext)._typeExprElem = _x
+
+			}
+			localctx.(*TypeExprTypeExprContext).typep = append(localctx.(*TypeExprTypeExprContext).typep, localctx.(*TypeExprTypeExprContext)._typeExprElem)
+
+			p.SetState(164)
+			p.GetErrorHandler().Sync(p)
+			_la = p.GetTokenStream().LA(1)
+		}
+		{
+			p.SetState(165)
+			p.Match(AdlPRCHEVR)
+		}
+
 	}
 
 	return localctx
@@ -4142,7 +3936,7 @@ func (s *TypeExpressionElemContext) Visit(delegate antlr.ParseTreeVisitor, args 
 
 func (p *AdlP) TypeExprElem() (localctx ITypeExprElemContext) {
 	localctx = NewTypeExprElemContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, AdlPRULE_typeExprElem)
+	p.EnterRule(localctx, 14, AdlPRULE_typeExprElem)
 	var //TokenTypeDecl
 	_la int
 
@@ -4165,22 +3959,22 @@ func (p *AdlP) TypeExprElem() (localctx ITypeExprElemContext) {
 	localctx = NewTypeExpressionElemContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(201)
+		p.SetState(169)
 		var _m = p.Match(AdlPID)
 		localctx.(*TypeExpressionElemContext).a = _m
 
 	}
-	p.SetState(213)
+	p.SetState(181)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlPLCHEVR {
 		{
-			p.SetState(202)
+			p.SetState(170)
 			p.Match(AdlPLCHEVR)
 		}
 		{
-			p.SetState(203)
+			p.SetState(171)
 
 			var _x = p.TypeExprElem()
 
@@ -4188,17 +3982,17 @@ func (p *AdlP) TypeExprElem() (localctx ITypeExprElemContext) {
 
 		}
 		localctx.(*TypeExpressionElemContext).typep = append(localctx.(*TypeExpressionElemContext).typep, localctx.(*TypeExpressionElemContext)._typeExprElem)
-		p.SetState(208)
+		p.SetState(176)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		for _la == AdlPCOMMA {
 			{
-				p.SetState(204)
+				p.SetState(172)
 				p.Match(AdlPCOMMA)
 			}
 			{
-				p.SetState(205)
+				p.SetState(173)
 
 				var _x = p.TypeExprElem()
 
@@ -4207,12 +4001,12 @@ func (p *AdlP) TypeExprElem() (localctx ITypeExprElemContext) {
 			}
 			localctx.(*TypeExpressionElemContext).typep = append(localctx.(*TypeExpressionElemContext).typep, localctx.(*TypeExpressionElemContext)._typeExprElem)
 
-			p.SetState(210)
+			p.SetState(178)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(211)
+			p.SetState(179)
 			p.Match(AdlPRCHEVR)
 		}
 
@@ -4493,7 +4287,7 @@ func (s *FieldStatementContext) Visit(delegate antlr.ParseTreeVisitor, args ...i
 
 func (p *AdlP) SoruBody() (localctx ISoruBodyContext) {
 	localctx = NewSoruBodyContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, AdlPRULE_soruBody)
+	p.EnterRule(localctx, 16, AdlPRULE_soruBody)
 	var //TokenTypeDecl
 	_la int
 
@@ -4515,60 +4309,59 @@ func (p *AdlP) SoruBody() (localctx ISoruBodyContext) {
 
 	localctx = NewFieldStatementContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(218)
+	p.SetState(186)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == AdlPAT || _la == AdlPLINE_DOC {
 		{
-			p.SetState(215)
+			p.SetState(183)
 			p.Annon()
 		}
 
-		p.SetState(220)
+		p.SetState(188)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(221)
+		p.SetState(189)
 		var _m = p.Match(AdlPID)
 		localctx.(*FieldStatementContext).a = _m
 
 	}
-	p.SetState(223)
+	p.SetState(191)
 	p.GetErrorHandler().Sync(p)
-	_la = p.GetTokenStream().LA(1)
 
-	if _la == AdlPLCHEVR {
+	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 21, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(222)
+			p.SetState(190)
 			p.TypeExpr()
 		}
 
 	}
 	{
-		p.SetState(225)
+		p.SetState(193)
 		var _m = p.Match(AdlPID)
 		localctx.(*FieldStatementContext).b = _m
 
 	}
-	p.SetState(228)
+	p.SetState(196)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlPEQ {
 		{
-			p.SetState(226)
+			p.SetState(194)
 			p.Match(AdlPEQ)
 		}
 		{
-			p.SetState(227)
+			p.SetState(195)
 			p.JsonValue()
 		}
 
 	}
 	{
-		p.SetState(230)
+		p.SetState(198)
 		p.Match(AdlPSEMI)
 	}
 
@@ -5455,7 +5248,7 @@ func (s *StringStatementContext) Visit(delegate antlr.ParseTreeVisitor, args ...
 
 func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 	localctx = NewJsonValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, AdlPRULE_jsonValue)
+	p.EnterRule(localctx, 18, AdlPRULE_jsonValue)
 	var //TokenTypeDecl
 	_la int
 
@@ -5475,7 +5268,7 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		}
 	}()
 
-	p.SetState(264)
+	p.SetState(232)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
@@ -5483,7 +5276,7 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		localctx = NewStringStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(232)
+			p.SetState(200)
 			var _m = p.Match(AdlPSTR)
 			localctx.(*StringStatementContext).s = _m
 
@@ -5493,7 +5286,7 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		localctx = NewTrueFalseNullContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(233)
+			p.SetState(201)
 			var _m = p.Match(AdlPID)
 			localctx.(*TrueFalseNullContext).kw = _m
 
@@ -5503,7 +5296,7 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		localctx = NewNumberStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(234)
+			p.SetState(202)
 			var _m = p.Match(AdlPINT)
 			localctx.(*NumberStatementContext).n = _m
 
@@ -5513,7 +5306,7 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		localctx = NewFloatStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(235)
+			p.SetState(203)
 			var _m = p.Match(AdlPFLT)
 			localctx.(*FloatStatementContext).f = _m
 
@@ -5523,16 +5316,16 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		localctx = NewArrayStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(236)
+			p.SetState(204)
 			p.Match(AdlPLSQ)
 		}
-		p.SetState(245)
+		p.SetState(213)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AdlPLCUR)|(1<<AdlPLSQ)|(1<<AdlPSTR)|(1<<AdlPID)|(1<<AdlPINT)|(1<<AdlPFLT))) != 0 {
 			{
-				p.SetState(237)
+				p.SetState(205)
 
 				var _x = p.JsonValue()
 
@@ -5540,17 +5333,17 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 
 			}
 			localctx.(*ArrayStatementContext).jv = append(localctx.(*ArrayStatementContext).jv, localctx.(*ArrayStatementContext)._jsonValue)
-			p.SetState(242)
+			p.SetState(210)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
 			for _la == AdlPCOMMA {
 				{
-					p.SetState(238)
+					p.SetState(206)
 					p.Match(AdlPCOMMA)
 				}
 				{
-					p.SetState(239)
+					p.SetState(207)
 
 					var _x = p.JsonValue()
 
@@ -5559,14 +5352,14 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 				}
 				localctx.(*ArrayStatementContext).jv = append(localctx.(*ArrayStatementContext).jv, localctx.(*ArrayStatementContext)._jsonValue)
 
-				p.SetState(244)
+				p.SetState(212)
 				p.GetErrorHandler().Sync(p)
 				_la = p.GetTokenStream().LA(1)
 			}
 
 		}
 		{
-			p.SetState(247)
+			p.SetState(215)
 			p.Match(AdlPRSQ)
 		}
 
@@ -5574,27 +5367,27 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		localctx = NewObjStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(248)
+			p.SetState(216)
 			p.Match(AdlPLCUR)
 		}
-		p.SetState(261)
+		p.SetState(229)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPSTR {
 			{
-				p.SetState(249)
+				p.SetState(217)
 				var _m = p.Match(AdlPSTR)
 				localctx.(*ObjStatementContext)._STR = _m
 
 			}
 			localctx.(*ObjStatementContext).k = append(localctx.(*ObjStatementContext).k, localctx.(*ObjStatementContext)._STR)
 			{
-				p.SetState(250)
+				p.SetState(218)
 				p.Match(AdlPCOLON)
 			}
 			{
-				p.SetState(251)
+				p.SetState(219)
 
 				var _x = p.JsonValue()
 
@@ -5602,28 +5395,28 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 
 			}
 			localctx.(*ObjStatementContext).v = append(localctx.(*ObjStatementContext).v, localctx.(*ObjStatementContext)._jsonValue)
-			p.SetState(258)
+			p.SetState(226)
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
 			for _la == AdlPCOMMA {
 				{
-					p.SetState(252)
+					p.SetState(220)
 					p.Match(AdlPCOMMA)
 				}
 				{
-					p.SetState(253)
+					p.SetState(221)
 					var _m = p.Match(AdlPSTR)
 					localctx.(*ObjStatementContext)._STR = _m
 
 				}
 				localctx.(*ObjStatementContext).k = append(localctx.(*ObjStatementContext).k, localctx.(*ObjStatementContext)._STR)
 				{
-					p.SetState(254)
+					p.SetState(222)
 					p.Match(AdlPCOLON)
 				}
 				{
-					p.SetState(255)
+					p.SetState(223)
 
 					var _x = p.JsonValue()
 
@@ -5632,14 +5425,14 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 				}
 				localctx.(*ObjStatementContext).v = append(localctx.(*ObjStatementContext).v, localctx.(*ObjStatementContext)._jsonValue)
 
-				p.SetState(260)
+				p.SetState(228)
 				p.GetErrorHandler().Sync(p)
 				_la = p.GetTokenStream().LA(1)
 			}
 
 		}
 		{
-			p.SetState(263)
+			p.SetState(231)
 			p.Match(AdlPRCUR)
 		}
 

@@ -21,10 +21,9 @@ func main() {
 		Complete().
 		Version(Version).
 		AddCommand(opts.New(&adl{}).
-			AddCommand(cmd.NewLoadAdlAst())).
+			AddCommand(cmd.NewLoadAdlAst()).
+			AddCommand(cmd.BuildAdlAst()),
+		).
 		Parse().
 		RunFatal()
-}
-
-func (r root) Run() {
 }

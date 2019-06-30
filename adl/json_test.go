@@ -1,3 +1,100 @@
+package adl_test
+
+import (
+	"encoding/json"
+	"testing"
+
+	"github.com/wxio/tron-go/adl"
+)
+
+func TestAst2Go(t *testing.T) {
+	m := adl.Module{}
+	err := json.Unmarshal([]byte(ast_oneofeach), &m)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}
+
+const adl_oneofeach = `
+module helix.protoapp.requests {
+
+	import common.http.*;
+	import common.*;
+	import common.db.DbTable;
+	import sys.types.*;
+	
+	// comment
+	/// doccmt
+	@Path "localanno"
+	type Hello<A> = Post<HelloReq, HelloResp<Vector<Vector<Vector<A>>>,Int32,Float>>;
+	
+	struct Const {
+	  
+	};
+	
+	type Literal<T> = StringMap<T>;
+	type StrLiteral = Literal<String>;
+	annotation StrLiteral { "a" : "b" } ;
+	
+	struct A {
+	  String a;
+	};
+	struct B {
+	  Int32 b;
+	};
+	union MyConfig {
+	  A a;
+	  B b;
+	};
+	type MyConfigMap = StringMap<MyConfig>;
+	annotation MyConfig { "a" : { "a" : "mystring" } };
+	annotation MyConfig { "b" : { "b" : 10 } };
+	annotation MyConfigMap { 
+	  "a b" : { "b" : { "b" : 10 } },
+	  "a a" : { "a" : { "a" : "hw" } }
+	};
+	
+	/// doconstr
+	@SA { "a" : "b" }
+	struct HelloReq {
+	  String name;
+	};
+	
+	struct SA {
+	  String a;
+	};
+	
+	struct HelloResp<A,B,C> {
+	};
+	
+	/// docontype
+	@Path "/debug/time"
+	type CurrentTime = Get<Instant>;
+	
+	/// doconnewtype
+	@Path "/debug/dummy-exception"
+	newtype DummyException = Post<String, Unit>;
+	
+	union LoginResp<T> {
+	  @SA { "a" : "b" }
+	  T accessToken;
+	};
+	
+	annotation Path "mod anno str";
+	
+	annotation HelloReq::name Path "field anno";
+	
+	annotation HelloReq DbTable {
+	  "withIdPrimaryKey" : true,
+	  "indexes" : [["username"]]
+	};
+	
+	};	
+`
+
+// generated via timbod7's `adlc ast <file>`
+const ast_oneofeach = `
 {
     "annotations": [
         {
@@ -357,3 +454,4 @@
     ],
     "name": "helix.protoapp.requests"
 }
+`

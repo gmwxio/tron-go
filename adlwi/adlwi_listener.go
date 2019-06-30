@@ -1,7 +1,7 @@
 // Generated from AdlWi.g4 by ANTLR 4.7.
 
 package adlw1 // AdlWi
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/wxio/goantlr"
 
 // AdlWiListener is a complete listener for a parse tree produced by AdlWi.
 type AdlWiListener interface {
@@ -21,6 +21,12 @@ type AdlWiListener interface {
 
 	TypeExpr_EntryListener
 	TypeExpr_ExitListener
+
+	ImportModuleEntryListener
+	ImportModuleExitListener
+
+	ImportScopedModuleEntryListener
+	ImportScopedModuleExitListener
 
 	StructEntryListener
 	StructExitListener
@@ -116,6 +122,22 @@ type TypeExpr_ExitListener interface {
 // Named alternatives
 //
 //
+// From Rule 'import_'
+type ImportModuleEntryListener interface {
+	EnterImportModule(c *ImportModuleContext)
+}
+type ImportModuleExitListener interface {
+	ExitImportModule(c *ImportModuleContext)
+}
+
+// From Rule 'import_'
+type ImportScopedModuleEntryListener interface {
+	EnterImportScopedModule(c *ImportScopedModuleContext)
+}
+type ImportScopedModuleExitListener interface {
+	ExitImportScopedModule(c *ImportScopedModuleContext)
+}
+
 // From Rule 'tld'
 type StructEntryListener interface {
 	EnterStruct(c *StructContext)

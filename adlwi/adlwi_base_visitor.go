@@ -3,7 +3,7 @@
 package adlw1 // AdlWi
 // See base listener file for example implementations
 
-//import "github.com/antlr/antlr4/runtime/Go/antlr"
+//import "github.com/wxio/goantlr"
 
 // import "generate package"
 
@@ -22,6 +22,8 @@ package adlw1 // AdlWi
 //var _ adlw1.AdlContextVisitor = &AdlWiVisitor{}
 //var _ adlw1.JsonContextVisitor = &AdlWiVisitor{}
 //var _ adlw1.ModuleContextVisitor = &AdlWiVisitor{}
+//var _ adlw1.ImportModuleContextVisitor = &AdlWiVisitor{}
+//var _ adlw1.ImportScopedModuleContextVisitor = &AdlWiVisitor{}
 //var _ adlw1.StructContextVisitor = &AdlWiVisitor{}
 //var _ adlw1.UnionContextVisitor = &AdlWiVisitor{}
 //var _ adlw1.TypeContextVisitor = &AdlWiVisitor{}
@@ -70,6 +72,8 @@ package adlw1 // AdlWi
 //Adl: func(ctx *adlw1.AdlContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //Json: func(ctx *adlw1.JsonContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //Module: func(ctx *adlw1.ModuleContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
+//ImportModule: func(ctx *adlw1.ImportModuleContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
+//ImportScopedModule: func(ctx *adlw1.ImportScopedModuleContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //Struct: func(ctx *adlw1.StructContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //Union: func(ctx *adlw1.UnionContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //Type: func(ctx *adlw1.TypeContext, this *adlw1.AdlWiHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
@@ -95,6 +99,8 @@ package adlw1 // AdlWi
 //func (v *AdlWiVisitor) VisitAdl(ctx adlw1.IAdlContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWiVisitor) VisitJson(ctx adlw1.IJsonContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWiVisitor) VisitModule(ctx adlw1.IModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
+//func (v *AdlWiVisitor) VisitImportModule(ctx adlw1.IImportModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
+//func (v *AdlWiVisitor) VisitImportScopedModule(ctx adlw1.IImportScopedModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWiVisitor) VisitStruct(ctx adlw1.IStructContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWiVisitor) VisitUnion(ctx adlw1.IUnionContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWiVisitor) VisitType(ctx adlw1.ITypeContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}

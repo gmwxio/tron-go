@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/wxio/goantlr"
 
 // Suppress unused import error
 var _ = fmt.Printf

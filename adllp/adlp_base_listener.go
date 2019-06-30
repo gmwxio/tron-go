@@ -1,7 +1,7 @@
 // Generated from AdlP.g4 by ANTLR 4.7.
 
 package adllp // AdlP
-//import "github.com/antlr/antlr4/runtime/Go/antlr"
+//import "github.com/wxio/goantlr"
 //import "generated code if in another package"
 
 //// Commented out basic implementation for your convenience.
@@ -45,8 +45,11 @@ package adllp // AdlP
 //var _ adllp.ModuleStatementEntryListener = &AdlPListener{}
 //var _ adllp.ModuleStatementExitListener = &AdlPListener{}
 
-//var _ adllp.ImportStatementEntryListener = &AdlPListener{}
-//var _ adllp.ImportStatementExitListener = &AdlPListener{}
+//var _ adllp.ImportScopedNameEntryListener = &AdlPListener{}
+//var _ adllp.ImportScopedNameExitListener = &AdlPListener{}
+
+//var _ adllp.ImportModuleNameEntryListener = &AdlPListener{}
+//var _ adllp.ImportModuleNameExitListener = &AdlPListener{}
 
 //var _ adllp.LocalAnnoEntryListener = &AdlPListener{}
 //var _ adllp.LocalAnnoExitListener = &AdlPListener{}
@@ -72,14 +75,11 @@ package adllp // AdlP
 //var _ adllp.TypeParameterEntryListener = &AdlPListener{}
 //var _ adllp.TypeParameterExitListener = &AdlPListener{}
 
-//var _ adllp.ErrorTypeParamEntryListener = &AdlPListener{}
-//var _ adllp.ErrorTypeParamExitListener = &AdlPListener{}
+//var _ adllp.TypeExprPrimOrParamEntryListener = &AdlPListener{}
+//var _ adllp.TypeExprPrimOrParamExitListener = &AdlPListener{}
 
-//var _ adllp.TypeParamErrorEntryListener = &AdlPListener{}
-//var _ adllp.TypeParamErrorExitListener = &AdlPListener{}
-
-//var _ adllp.TypeExpressionEntryListener = &AdlPListener{}
-//var _ adllp.TypeExpressionExitListener = &AdlPListener{}
+//var _ adllp.TypeExprTypeExprEntryListener = &AdlPListener{}
+//var _ adllp.TypeExprTypeExprExitListener = &AdlPListener{}
 
 //var _ adllp.TypeExpressionElemEntryListener = &AdlPListener{}
 //var _ adllp.TypeExpressionElemExitListener = &AdlPListener{}
@@ -157,8 +157,11 @@ package adllp // AdlP
 //func (s *AdlPListener) EnterModuleStatement(ctx adllp.*adllp.ModuleStatementContext) {}
 //func (s *AdlPListener) ExitModuleStatement(ctx adllp.*adllp.ModuleStatementContext) {}
 
-//func (s *AdlPListener) EnterImportStatement(ctx adllp.*adllp.ImportStatementContext) {}
-//func (s *AdlPListener) ExitImportStatement(ctx adllp.*adllp.ImportStatementContext) {}
+//func (s *AdlPListener) EnterImportScopedName(ctx adllp.*adllp.ImportScopedNameContext) {}
+//func (s *AdlPListener) ExitImportScopedName(ctx adllp.*adllp.ImportScopedNameContext) {}
+
+//func (s *AdlPListener) EnterImportModuleName(ctx adllp.*adllp.ImportModuleNameContext) {}
+//func (s *AdlPListener) ExitImportModuleName(ctx adllp.*adllp.ImportModuleNameContext) {}
 
 //func (s *AdlPListener) EnterLocalAnno(ctx adllp.*adllp.LocalAnnoContext) {}
 //func (s *AdlPListener) ExitLocalAnno(ctx adllp.*adllp.LocalAnnoContext) {}
@@ -184,14 +187,11 @@ package adllp // AdlP
 //func (s *AdlPListener) EnterTypeParameter(ctx adllp.*adllp.TypeParameterContext) {}
 //func (s *AdlPListener) ExitTypeParameter(ctx adllp.*adllp.TypeParameterContext) {}
 
-//func (s *AdlPListener) EnterErrorTypeParam(ctx adllp.*adllp.ErrorTypeParamContext) {}
-//func (s *AdlPListener) ExitErrorTypeParam(ctx adllp.*adllp.ErrorTypeParamContext) {}
+//func (s *AdlPListener) EnterTypeExprPrimOrParam(ctx adllp.*adllp.TypeExprPrimOrParamContext) {}
+//func (s *AdlPListener) ExitTypeExprPrimOrParam(ctx adllp.*adllp.TypeExprPrimOrParamContext) {}
 
-//func (s *AdlPListener) EnterTypeParamError(ctx adllp.*adllp.TypeParamErrorContext) {}
-//func (s *AdlPListener) ExitTypeParamError(ctx adllp.*adllp.TypeParamErrorContext) {}
-
-//func (s *AdlPListener) EnterTypeExpression(ctx adllp.*adllp.TypeExpressionContext) {}
-//func (s *AdlPListener) ExitTypeExpression(ctx adllp.*adllp.TypeExpressionContext) {}
+//func (s *AdlPListener) EnterTypeExprTypeExpr(ctx adllp.*adllp.TypeExprTypeExprContext) {}
+//func (s *AdlPListener) ExitTypeExprTypeExpr(ctx adllp.*adllp.TypeExprTypeExprContext) {}
 
 //func (s *AdlPListener) EnterTypeExpressionElem(ctx adllp.*adllp.TypeExpressionElemContext) {}
 //func (s *AdlPListener) ExitTypeExpressionElem(ctx adllp.*adllp.TypeExpressionElemContext) {}

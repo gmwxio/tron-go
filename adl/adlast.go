@@ -4,6 +4,14 @@ import (
 	"fmt"
 )
 
+type ADL struct {
+	Modules []*Module
+}
+
+func (a ADL) String() string {
+	return fmt.Sprintf("%v", a.Modules)
+}
+
 type Annotations []Annotation
 
 type Annotation struct {
@@ -32,7 +40,7 @@ type Field struct {
 	SerializedName string      `json:"serializedName"`
 	TypeExpr       TypeExpr    `json:"typeExpr"`
 	Default        interface{} `json:"default,omitempty"`
-	Annotations    Annotations `json:"annotations"`
+	Annotations    `json:"annotations"`
 }
 
 // Struct & Union
@@ -60,10 +68,10 @@ type DeclType struct {
 }
 
 type Decl struct {
-	Name        string      `json:"name"`
-	Version     *string     `json:"version,omitempty"`
-	Type        DeclType    `json:"type_"`
-	Annotations Annotations `json:"annotations"`
+	Name        string   `json:"name"`
+	Version     *string  `json:"version,omitempty"`
+	Type        DeclType `json:"type_"`
+	Annotations `json:"annotations"`
 }
 
 // struct ScopedDecl

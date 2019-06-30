@@ -1,7 +1,7 @@
 // Generated from AdlP.g4 by ANTLR 4.7.
 
 package adllp // AdlP
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/wxio/goantlr"
 
 // AdlPListener is a complete listener for a parse tree produced by AdlP.
 type AdlPListener interface {
@@ -10,14 +10,14 @@ type AdlPListener interface {
 	AdlEntryListener
 	AdlExitListener
 
-	TypeParamErrorEntryListener
-	TypeParamErrorExitListener
-
 	ModuleStatementEntryListener
 	ModuleStatementExitListener
 
-	ImportStatementEntryListener
-	ImportStatementExitListener
+	ImportScopedNameEntryListener
+	ImportScopedNameExitListener
+
+	ImportModuleNameEntryListener
+	ImportModuleNameExitListener
 
 	LocalAnnoEntryListener
 	LocalAnnoExitListener
@@ -43,11 +43,11 @@ type AdlPListener interface {
 	TypeParameterEntryListener
 	TypeParameterExitListener
 
-	ErrorTypeParamEntryListener
-	ErrorTypeParamExitListener
+	TypeExprPrimOrParamEntryListener
+	TypeExprPrimOrParamExitListener
 
-	TypeExpressionEntryListener
-	TypeExpressionExitListener
+	TypeExprTypeExprEntryListener
+	TypeExprTypeExprExitListener
 
 	TypeExpressionElemEntryListener
 	TypeExpressionElemExitListener
@@ -84,13 +84,6 @@ type AdlExitListener interface {
 	ExitAdl(c *AdlContext)
 }
 
-type TypeParamErrorEntryListener interface {
-	EnterTypeParamError(c *TypeParamErrorContext)
-}
-type TypeParamErrorExitListener interface {
-	ExitTypeParamError(c *TypeParamErrorContext)
-}
-
 //
 // Named alternatives
 //
@@ -104,11 +97,19 @@ type ModuleStatementExitListener interface {
 }
 
 // From Rule 'imports'
-type ImportStatementEntryListener interface {
-	EnterImportStatement(c *ImportStatementContext)
+type ImportScopedNameEntryListener interface {
+	EnterImportScopedName(c *ImportScopedNameContext)
 }
-type ImportStatementExitListener interface {
-	ExitImportStatement(c *ImportStatementContext)
+type ImportScopedNameExitListener interface {
+	ExitImportScopedName(c *ImportScopedNameContext)
+}
+
+// From Rule 'imports'
+type ImportModuleNameEntryListener interface {
+	EnterImportModuleName(c *ImportModuleNameContext)
+}
+type ImportModuleNameExitListener interface {
+	ExitImportModuleName(c *ImportModuleNameContext)
 }
 
 // From Rule 'annon'
@@ -175,20 +176,20 @@ type TypeParameterExitListener interface {
 	ExitTypeParameter(c *TypeParameterContext)
 }
 
-// From Rule 'typeParam'
-type ErrorTypeParamEntryListener interface {
-	EnterErrorTypeParam(c *ErrorTypeParamContext)
+// From Rule 'typeExpr'
+type TypeExprPrimOrParamEntryListener interface {
+	EnterTypeExprPrimOrParam(c *TypeExprPrimOrParamContext)
 }
-type ErrorTypeParamExitListener interface {
-	ExitErrorTypeParam(c *ErrorTypeParamContext)
+type TypeExprPrimOrParamExitListener interface {
+	ExitTypeExprPrimOrParam(c *TypeExprPrimOrParamContext)
 }
 
 // From Rule 'typeExpr'
-type TypeExpressionEntryListener interface {
-	EnterTypeExpression(c *TypeExpressionContext)
+type TypeExprTypeExprEntryListener interface {
+	EnterTypeExprTypeExpr(c *TypeExprTypeExprContext)
 }
-type TypeExpressionExitListener interface {
-	ExitTypeExpression(c *TypeExpressionContext)
+type TypeExprTypeExprExitListener interface {
+	ExitTypeExprTypeExpr(c *TypeExprTypeExprContext)
 }
 
 // From Rule 'typeExprElem'

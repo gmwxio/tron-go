@@ -1,7 +1,7 @@
 // Generated from AdlWi.g4 by ANTLR 4.7.
 
 package adlw1 // AdlWi
-//import "github.com/antlr/antlr4/runtime/Go/antlr"
+//import "github.com/wxio/goantlr"
 //import "generated code if in another package"
 
 //// Commented out basic implementation for your convenience.
@@ -47,6 +47,12 @@ package adlw1 // AdlWi
 
 //var _ adlw1.ModuleEntryListener = &AdlWiListener{}
 //var _ adlw1.ModuleExitListener = &AdlWiListener{}
+
+//var _ adlw1.ImportModuleEntryListener = &AdlWiListener{}
+//var _ adlw1.ImportModuleExitListener = &AdlWiListener{}
+
+//var _ adlw1.ImportScopedModuleEntryListener = &AdlWiListener{}
+//var _ adlw1.ImportScopedModuleExitListener = &AdlWiListener{}
 
 //var _ adlw1.StructEntryListener = &AdlWiListener{}
 //var _ adlw1.StructExitListener = &AdlWiListener{}
@@ -159,6 +165,12 @@ package adlw1 // AdlWi
 
 //func (s *AdlWiListener) EnterModule(ctx adlw1.*adlw1.ModuleContext) {}
 //func (s *AdlWiListener) ExitModule(ctx adlw1.*adlw1.ModuleContext) {}
+
+//func (s *AdlWiListener) EnterImportModule(ctx adlw1.*adlw1.ImportModuleContext) {}
+//func (s *AdlWiListener) ExitImportModule(ctx adlw1.*adlw1.ImportModuleContext) {}
+
+//func (s *AdlWiListener) EnterImportScopedModule(ctx adlw1.*adlw1.ImportScopedModuleContext) {}
+//func (s *AdlWiListener) ExitImportScopedModule(ctx adlw1.*adlw1.ImportScopedModuleContext) {}
 
 //func (s *AdlWiListener) EnterStruct(ctx adlw1.*adlw1.StructContext) {}
 //func (s *AdlWiListener) ExitStruct(ctx adlw1.*adlw1.StructContext) {}
