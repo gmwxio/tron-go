@@ -35,10 +35,11 @@ export function activate(ctx: ExtensionContext) {
 	// Otherwise the run options are used
 	let serverOptions: ServerOptions = {
 		run: { command: serverModule, transport: TransportKind.stdio,
-			options: {detached: true}
+			options: {detached: true},
+			args: ["stdio"]
 		
 		},
-		debug: { command: serverModule, transport: TransportKind.stdio }
+		debug: { command: serverModule, transport: TransportKind.stdio, args: ["stdio"] }
 		// ,
 		// run: {
 		// 	command: serverModule,
