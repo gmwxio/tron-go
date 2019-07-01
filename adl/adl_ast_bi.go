@@ -45,16 +45,16 @@ type ADLBuildListener struct {
 	bldr ctree.WalkableBuilder
 	adl  *ADL
 	errs struct {
-		SyntaxErr []interface{}
+		SyntaxErr []DiagMessage
 	}
 	debug bool
 }
 
 type errs struct {
-	LexErr        []interface{}
+	LexErr        []lexErrMsg
 	LexWarning    []interface{}
 	ParseErr      []parseErrMsg
-	SyntaxErr     []interface{}
+	SyntaxErr     []DiagMessage
 	SyntaxWarning []interface{}
 }
 

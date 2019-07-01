@@ -2,7 +2,8 @@ module github.com/wxio/tron-go
 
 go 1.12
 
-replace golang.org/x/tools => github.com/wxio/tools v0.0.1
+//replace golang.org/x/tools => github.com/wxio/tools v0.0.1
+replace golang.org/x/tools => /home/garym/devel/wxio/golang_tools
 
 require (
 	github.com/davecgh/go-spew v1.1.1
