@@ -14,14 +14,14 @@ func WalkADL(tr ctree.Tree, list antlr.ParseTreeListener) errs {
 	p.SetTokenStream(tts)
 	p.RemoveErrorListeners()
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	el := &lexErr{}
+	el := &parseErr{}
 	p.AddErrorListener(el)
 	p.BuildParseTrees = true
 	jv := p.Adl()
 	antlr.ParseTreeWalkerDefault.Walk(list, jv)
 	errs := errs{
-		parserErr: el.err,
-		warnings:  el.warning,
+		ParseErr:      el.ParseErr,
+		SyntaxWarning: el.SyntaxWarning,
 	}
 	return errs
 }
@@ -34,13 +34,13 @@ func VisitADL(tr ctree.Tree, vi antlr.ParseTreeVisitor) errs {
 	p.SetTokenStream(tts)
 	p.RemoveErrorListeners()
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	el := &lexErr{}
+	el := &parseErr{}
 	p.AddErrorListener(el)
 	ctx := p.Adl()
 	ctx.Visit(vi)
 	errs := errs{
-		parserErr: el.err,
-		warnings:  el.warning,
+		ParseErr:      el.ParseErr,
+		SyntaxWarning: el.SyntaxWarning,
 	}
 	return errs
 }

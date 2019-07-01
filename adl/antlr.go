@@ -3,6 +3,7 @@ package adl
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	antlr "github.com/wxio/goantlr"
 	walker "github.com/wxio/tron-go/internal/adlwi"
@@ -39,6 +40,7 @@ func tokens2strings(arr []antlr.Token) []string {
 }
 
 type Error struct {
+	Start, Stop antlr.Token
 	Expected    []string
 	Received    string
 	Annotations `json:"annotations"`
@@ -50,7 +52,13 @@ type lexErr struct {
 }
 
 func (d *lexErr) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
+	// t, ok := offendingSymbol.(antlr.Token)
+	// if !ok && e != nil {
+	// 	t = e.GetOffendingToken()
+	// }
+	// d.err = append(d.err, t)
 	d.err = append(d.err, fmt.Errorf("line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg))
+
 }
 
 func (d *lexErr) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
@@ -65,4 +73,50 @@ func (d *lexErr) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr
 
 func (d *lexErr) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
 	d.warning = append(d.warning, fmt.Errorf("ReportContextSensitivity rec:%v dfs:%v start:%d stop:%d, config:%v\n", recognizer, dfa, startIndex, stopIndex, configs))
+}
+
+type parseErrMsg struct {
+	OffendingSymbol interface{}
+	OffendingToken  antlr.Token
+	Line, Column    int
+	Msg             string
+}
+
+type parseErr struct {
+	ParseErr []parseErrMsg
+	// SyntaxErr []interface{}
+	SyntaxWarning []interface{}
+}
+
+func (v *parseErr) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
+	if strings.HasPrefix(msg, "reportAttemptingFullContext") { // TODO remove NewDiagnosticErrorListener and move warning to ReportAmbiguity etc. when getDecisionDescription is make public
+		v.SyntaxWarning = append(v.SyntaxWarning, fmt.Sprintf("At %d:%d <%s>", line, column, msg))
+		return
+	}
+	var t antlr.Token
+	if e != nil {
+		t = e.GetOffendingToken()
+	}
+	// t, ok := offendingSymbol.(antlr.Token)
+	// if !ok && e != nil {
+	// 	t = e.GetOffendingToken()
+	// }
+	v.ParseErr = append(v.ParseErr, parseErrMsg{
+		OffendingSymbol: offendingSymbol,
+		OffendingToken:  t,
+		Line:            line,
+		Column:          column,
+		Msg:             msg,
+	})
+}
+func (v *parseErr) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
+	sta := recognizer.GetTokenStream().Get(startIndex)
+	sto := recognizer.GetTokenStream().Get(stopIndex)
+	v.SyntaxWarning = append(v.SyntaxWarning, fmt.Sprintf("%v:%v ReportAmbiguity rec:%v dfs:%v start:%d stop:%d, exact:%v, ambigAlts:%v config:%v\n", sta, sto, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs))
+}
+func (v *parseErr) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs antlr.ATNConfigSet) {
+	v.SyntaxWarning = append(v.SyntaxWarning, fmt.Sprintf("ReportAttemptingFullContext rec:%v dfs:%v start:%d stop:%d, conflictingAlts:%v config:%v\n", recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs))
+}
+func (v *parseErr) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
+	v.SyntaxWarning = append(v.SyntaxWarning, fmt.Sprintf("ReportContextSensitivity rec:%v dfs:%v start:%d stop:%d, config:%v\n", recognizer, dfa, startIndex, stopIndex, configs))
 }
