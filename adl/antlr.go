@@ -2,7 +2,6 @@ package adl
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	antlr "github.com/wxio/goantlr"
@@ -39,6 +38,14 @@ func tokens2strings(arr []antlr.Token) []string {
 	return name
 }
 
+type DiagMessage interface {
+	Line() int
+	Column() int
+	Message() string
+	Len() int
+	Text() string
+}
+
 type Error struct {
 	Start, Stop antlr.Token
 	Expected    []string
@@ -46,19 +53,46 @@ type Error struct {
 	Annotations `json:"annotations"`
 }
 
+func (er Error) Line() int {
+	return er.Start.GetLine() - 1
+}
+func (er Error) Column() int {
+	return er.Start.GetColumn()
+}
+func (er Error) Message() string {
+	return fmt.Sprintf("expected %v received %v", er.Expected, er.Received)
+}
+func (er Error) Len() int {
+	return len(er.Start.GetText())
+}
+func (er Error) Text() string {
+	return er.Start.GetText()
+}
+
+type lexErrMsg struct {
+	OffendingSymbol interface{}
+	OffendingToken  antlr.Token
+	Line, Column    int
+	Msg             string
+}
+
 type lexErr struct {
-	err     []interface{}
+	err     []lexErrMsg
 	warning []interface{}
 }
 
 func (d *lexErr) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
-	// t, ok := offendingSymbol.(antlr.Token)
-	// if !ok && e != nil {
-	// 	t = e.GetOffendingToken()
-	// }
-	// d.err = append(d.err, t)
-	d.err = append(d.err, fmt.Errorf("line "+strconv.Itoa(line)+":"+strconv.Itoa(column)+" "+msg))
-
+	var t antlr.Token
+	if e != nil {
+		t = e.GetOffendingToken()
+	}
+	d.err = append(d.err, lexErrMsg{
+		OffendingSymbol: offendingSymbol,
+		OffendingToken:  t,
+		Line:            line,
+		Column:          column,
+		Msg:             msg,
+	})
 }
 
 func (d *lexErr) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs antlr.ATNConfigSet) {

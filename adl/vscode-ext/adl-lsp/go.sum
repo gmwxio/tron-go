@@ -1,5 +1,6 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b h1:VKtxabqXZkF25pY9ekfRL6a582T4P37/31XEstQ5p58=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golangq/q v1.0.7 h1:fdyS9pAWgiMPYUM9+Hod8Fn4RyQybBaMph8X9pqNeM0=
@@ -13,6 +14,7 @@ github.com/jpillora/opts v1.1.0 h1:eP4c8yn68iN4OgQ/6nTAWd+obufJOwUvAqW7dYzvCwA=
 github.com/jpillora/opts v1.1.0/go.mod h1:7p7X/vlpKZmtaDFYKs956EujFqA6aCrOkcCaS6UBcR4=
 github.com/posener/complete v1.2.2-0.20190308074557-af07aa5181b3 h1:GqpA1/5oN1NgsxoSA4RH0YWTaqvUlQNeOpHXD/JRbOQ=
 github.com/posener/complete v1.2.2-0.20190308074557-af07aa5181b3/go.mod h1:6gapUrK/U1TAN7ciCoNRIdVC5sbdBTUh1DKN0g6uH7E=
+github.com/wxio/goantlr v0.0.0-20190624051626-116617327c90 h1:U2UY8hkFmO/LInC8kncQOv4CofNTM93/LLUkEVaH/Qk=
 github.com/wxio/goantlr v0.0.0-20190624051626-116617327c90/go.mod h1:pLdPrFDy+6XIrueD5DWjVFLHOb4+bmIL4ukIOruRtAg=
 github.com/wxio/tools v0.0.1 h1:3cVISXprFt6641MhbFTNqwqij3k1IBPO/nO+G4X5cKY=
 github.com/wxio/tools v0.0.1/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=

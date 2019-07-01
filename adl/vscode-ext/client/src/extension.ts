@@ -36,10 +36,12 @@ export function activate(ctx: ExtensionContext) {
 	let serverOptions: ServerOptions = {
 		run: { command: serverModule, transport: TransportKind.stdio,
 			options: {detached: true},
-			args: ["stdio"]
-		
+			args: ["stdio"] 
 		},
-		debug: { command: serverModule, transport: TransportKind.stdio, args: ["stdio"] }
+		debug: { command: serverModule, transport: TransportKind.stdio, 
+			args: ["stdio"] 
+			// args: ["tcp", "client", "--reconnect"]
+		}
 		// ,
 		// run: {
 		// 	command: serverModule,

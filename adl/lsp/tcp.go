@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"github.com/jpillora/opts"
 
@@ -26,7 +27,8 @@ type tcpsvr struct {
 	Addr string
 }
 type tcpclient struct {
-	Addr string
+	Addr      string
+	Reconnect bool
 }
 
 func (svr *tcpsvr) Run() error {
@@ -64,7 +66,18 @@ func handle(in io.Reader, out io.Writer) {
 }
 
 func (tcpc *tcpclient) Run() error {
-	con, err := net.Dial("tcp", tcpc.Addr)
+	if tcpc.Reconnect {
+		for {
+			connect(tcpc.Addr)
+			<-time.After(1 * time.Second)
+		}
+	}
+	err := connect(tcpc.Addr)
+	return err
+}
+
+func connect(addr string) error {
+	con, err := net.Dial("tcp", addr)
 	if err != nil {
 		return err
 	}
