@@ -74,165 +74,165 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 	case *parser.ModuleStatementContext:
 		if ctx.GetKw().GetText() != "module" {
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"module"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		} else {
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPModule, Module{
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPModule, Module{
 				Name: strings.Join(tokens2strings(ctx.GetName()), ".")})
 		}
 		v.bldr.Down()
 	case *parser.ImportModuleNameContext:
 		if ctx.GetKw().GetText() != "import" {
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"import"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		} else {
 			path := strings.Join(tokens2strings(ctx.GetA()), ".")
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPImportModule, Import{ModuleName: &path})
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPImportModule, Import{ModuleName: &path})
 		}
 	case *parser.ImportScopedNameContext:
 		if ctx.GetKw().GetText() != "import" {
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"import"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		} else {
 			toks := ctx.GetA()
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPImportScopedName, Import{ScopedName: &ScopedName{
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPImportScopedName, Import{ScopedName: &ScopedName{
 				ModuleName: strings.Join(tokens2strings(toks[:len(toks)-1]), "."),
 				Name:       toks[len(toks)-1].GetText(),
 			}})
 		}
 	case *parser.LocalAnnoContext:
 		an := Annotation{Key: ScopedName{Name: ctx.GetA().GetText()}}
-		v.bldr.AddNode(ctx.GetA(), parser.AdlPAnnotationNotScoped, an)
+		v.bldr.AddNode(ctx.GetA(), ctx.GetStop(), parser.AdlPAnnotationNotScoped, an)
 		v.bldr.Down()
 	case *parser.DocAnnoContext:
 		an := Annotation{Key: ScopedName{ModuleName: "sys.annotations", Name: "Doc"}, Val: ctx.GetA().GetText()}
-		v.bldr.AddNode(ctx.GetA(), parser.AdlPAnnotation, an)
+		v.bldr.AddNode(ctx.GetA(), ctx.GetStop(), parser.AdlPAnnotation, an)
 	case *parser.StructOrUnionContext:
 		switch ctx.GetKw().GetText() {
 		case "struct":
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPStruct, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPStruct, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
 				Struct: &Name{},
 			}})
 		case "union":
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPUnion, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPUnion, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
 				Union: &Name{},
 			}})
 		default:
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"struct", "union"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		}
 		v.bldr.Down()
 	case *parser.TypeOrNewtypeContext:
 		switch ctx.GetKw().GetText() {
 		case "type":
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPType, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPType, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
 				Type: &TypeDef{}}})
 		case "newtype":
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPNewtype, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPNewtype, Decl{Name: ctx.GetA().GetText(), Type: DeclType{
 				Newtype: &NewType{}}})
 		default:
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"type", "newtype"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetKw(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetKw(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		}
 		v.bldr.Down()
 	case *parser.TypeParameterContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeParam, tokens2strings(ctx.GetTypep()))
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeParam, tokens2strings(ctx.GetTypep()))
 	case *parser.TypeExpressionElemContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeExprElem, ctx.GetA().GetText())
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprElem, ctx.GetA().GetText())
 		v.bldr.Down()
 	case *parser.TypeExprPrimOrParamContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeExprPrimOrParam, ctx.GetB().GetText())
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprPrimOrParam, ctx.GetB().GetText())
 	case *parser.TypeExprTypeExprContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPTypeExprTypeExpr, ctx.GetB().GetText())
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprTypeExpr, ctx.GetB().GetText())
 		v.bldr.Down()
 	case *parser.ModuleAnnotationContext:
 		switch ctx.GetKw().GetText() {
 		case "annotation":
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPModuleAnno, ctx.GetA().GetText())
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPModuleAnno, ctx.GetA().GetText())
 		default:
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		}
 		v.bldr.Down()
 	case *parser.DeclAnnotationContext:
 		switch ctx.GetKw().GetText() {
 		case "annotation":
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPDeclAnno, []string{
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPDeclAnno, []string{
 				ctx.GetA().GetText(),
 				ctx.GetB().GetText(),
 			})
 		default:
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		}
 		v.bldr.Down()
 	case *parser.FieldAnnotationContext:
 		switch ctx.GetKw().GetText() {
 		case "annotation":
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPFieldAnno, []string{
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPFieldAnno, []string{
 				ctx.GetA().GetText(),
 				ctx.GetB().GetText(),
 				ctx.GetC().GetText(),
 			})
 		default:
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"annotation"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		}
 		v.bldr.Down()
 	case *parser.FieldStatementContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPField, Field{
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPField, Field{
 			Name: ctx.GetB().GetText(),
 		}).Down()
 	case *parser.StringStatementContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonStr, ctx.GetS().GetText())
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonStr, ctx.GetS().GetText())
 	case *parser.TrueFalseNullContext:
 		switch strings.ToLower(ctx.GetKw().GetText()) {
 		case "true":
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonBool, true)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonBool, true)
 		case "false":
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonBool, false)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonBool, false)
 		case "null":
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonNull, nil)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonNull, nil)
 		default:
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"true", "false", "null"}, Received: ctx.GetKw().GetText()}
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 		}
 	case *parser.NumberStatementContext:
 		i, err := strconv.ParseInt(ctx.GetN().GetText(), 10, 64)
 		if err == nil {
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonInt, i)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonInt, i)
 		} else {
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"<number>"}, Received: ctx.GetN().GetText()}
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 
 		}
 	case *parser.FloatStatementContext:
 		i, err := strconv.ParseFloat(ctx.GetF().GetText(), 64)
 		if err == nil {
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonFloat, i)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonFloat, i)
 		} else {
 			et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"<float>"}, Received: ctx.GetF().GetText()}
-			v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+			v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 			v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 
 		}
 	case *parser.ArrayStatementContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonArray, JsonArray{}).Down()
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonArray, JsonArray{}).Down()
 	case *parser.ObjStatementContext:
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPJsonObj, JsonObj{}).Down()
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPJsonObj, JsonObj{}).Down()
 		// rules name occur on errors
 	case *parser.Top_level_statementContext:
 		et := Error{Start: ctx.GetStart(), Stop: ctx.GetStop(), Expected: []string{"@|struct|union|annotation"}, Received: ctx.GetStart().GetText()}
-		v.bldr.AddNode(ctx.GetStart(), parser.AdlPERROR, et)
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPERROR, et)
 		v.errs.SyntaxErr = append(v.errs.SyntaxErr, et)
 
 	// case *parser.ErrorTypeParamContext:

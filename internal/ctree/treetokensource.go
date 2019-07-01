@@ -3,12 +3,13 @@ package ctree
 import (
 	"fmt"
 
+	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
 )
 
 type WalkableBuilder interface {
 	Add(n antlr.Token) WalkableBuilder
-	AddNode(n antlr.Token, ttype int, val interface{}) WalkableBuilder
+	AddNode(n antlr.Token, stop antlr.Token, ttype int, val interface{}) WalkableBuilder
 	Down() WalkableBuilder
 	Up() WalkableBuilder
 	Build() Tree
@@ -22,12 +23,14 @@ type walkerbuilder struct {
 
 type TreeNode struct {
 	antlr.Token
+	stop  antlr.Token
 	TType int
 	Val   interface{}
 }
 
 func (t *TreeNode) GetTokenType() int { return t.TType }
 func (tn TreeNode) String() string    { return fmt.Sprintf("%v", tn.Val) }
+func (tn TreeNode) GetStop() int      { return tn.stop.GetTokenIndex() }
 
 func NewWalkableBuild(name string, root antlr.Token) WalkableBuilder {
 	t := NewTree(name, root)
@@ -52,11 +55,12 @@ func NewBuild(tree_name string, n antlr.Token, ttype int, val interface{}) Walka
 	b := &walkerbuilder{t, tn, nil}
 	return b
 }
-func (b *walkerbuilder) AddNode(an antlr.Token, ttype int, val interface{}) WalkableBuilder {
+func (b *walkerbuilder) AddNode(an antlr.Token, stop antlr.Token, ttype int, val interface{}) WalkableBuilder {
 	if _, ok := val.(antlr.Token); ok {
 		panic("trying to add a token as a node - this is just to confusing to be allowed")
 	}
-	tn := &TreeNode{Token: an, TType: ttype, Val: val}
+	q.Q(stop)
+	tn := &TreeNode{Token: an, stop: stop, TType: ttype, Val: val}
 	b.tree.Add(b.curr, tn)
 	b.last = tn
 	return b

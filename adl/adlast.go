@@ -114,7 +114,8 @@ func (an *Annotation) Set(val interface{}) {
 	an.Val = val
 }
 
-func (m Module) String() string { return fmt.Sprintf("name: %s imports: %v", m.Name, m.Imports) }
+func (m Module) String() string { return m.Name }
+func (m Decl) String() string   { return m.Name }
 func (i Import) String() string {
 	if i.ModuleName != nil {
 		return *i.ModuleName

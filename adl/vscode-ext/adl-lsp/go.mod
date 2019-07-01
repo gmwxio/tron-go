@@ -4,7 +4,9 @@ go 1.12
 
 replace github.com/wxio/tron-go => ../../../
 
-replace golang.org/x/tools => github.com/wxio/tools v0.0.1
+replace golang.org/x/tools => /home/garym/devel/wxio/tools
+
+//replace golang.org/x/tools => github.com/wxio/tools v0.0.1
 
 require (
 	github.com/jpillora/opts v1.1.0

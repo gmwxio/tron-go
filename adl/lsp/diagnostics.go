@@ -31,7 +31,7 @@ func qstack() {
 		// if !strings.Contains(frame.File, "runtime/") {
 		// 	break
 		// }
-		q.Q(more, frame)
+		q.Q(frame)
 		if !more {
 			break
 		}
@@ -57,8 +57,8 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 	_, _, _, _ = tr, atr, bl, ts
 	if err1.Error() != nil {
 		// q.Q("%v", tr.TreeString())
-		errColl := &errColl{}
-		antlr.ParseTreeWalkerDefault.Walk(errColl, atr)
+		errC := &errColl{}
+		antlr.ParseTreeWalkerDefault.Walk(errC, atr)
 		q.Q("Lex Errors")
 		for i, er := range err1.LexErr {
 			q.Q(i, er)
@@ -75,7 +75,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 				},
 				Severity:           protocol.SeverityError,
 				Code:               er.OffendingToken.GetText(),
-				Source:             "adl-lsp",
+				Source:             "ADL-LEX",
 				Message:            er.Msg,
 				Tags:               []protocol.DiagnosticTag{},
 				RelatedInformation: []protocol.DiagnosticRelatedInformation{},
@@ -98,7 +98,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 				},
 				Severity:           protocol.SeverityError,
 				Code:               er.Text(),
-				Source:             "adl-lsp",
+				Source:             "ADL-PARSER",
 				Message:            er.Msg,
 				Tags:               []protocol.DiagnosticTag{},
 				RelatedInformation: []protocol.DiagnosticRelatedInformation{},
@@ -121,7 +121,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 				},
 				Severity:           protocol.SeverityError,
 				Code:               er.Text(),
-				Source:             "adl-lsp",
+				Source:             "ADL-SYNTAX",
 				Message:            er.Message(),
 				Tags:               []protocol.DiagnosticTag{},
 				RelatedInformation: []protocol.DiagnosticRelatedInformation{},
@@ -129,7 +129,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 			dss = append(dss, ds)
 		}
 		q.Q("Error Nodes")
-		for i, er := range errColl.errs {
+		for i, er := range errC.errs {
 			q.Q(i, er.GetSymbol())
 			ds := protocol.Diagnostic{
 				Range: protocol.Range{
@@ -144,17 +144,94 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 				},
 				Severity:           protocol.SeverityError,
 				Code:               er.GetText(),
-				Source:             "adl-lsp",
+				Source:             "ADL-WALK",
 				Message:            fmt.Sprintf("error at token %v", er),
 				Tags:               []protocol.DiagnosticTag{},
 				RelatedInformation: []protocol.DiagnosticRelatedInformation{},
 			}
 			dss = append(dss, ds)
 			if i > 9 {
-				q.Q("  ... total errs ", len(errColl.errs))
+				q.Q("  ... total errs ", len(errC.errs))
 				break
 			}
 		}
+		// if tr != nil {
+		// 	errC = &errColl{}
+		// 	err3 := adl.WalkADLWo(tr, errC)
+		// 	q.Q("Parse Errors")
+		// 	for i, er := range err3.ParseErr {
+		// 		q.Q(i, er)
+		// 		ds := protocol.Diagnostic{
+		// 			Range: protocol.Range{
+		// 				Start: protocol.Position{
+		// 					Line:      float64(er.Line()),
+		// 					Character: float64(er.Column()),
+		// 				},
+		// 				End: protocol.Position{
+		// 					Line:      float64(er.Line()),
+		// 					Character: float64(er.Column() + er.Len()),
+		// 				},
+		// 			},
+		// 			Severity:           protocol.SeverityError,
+		// 			Code:               er.Text(),
+		// 			Source:             "ADL-TREE-PARSER",
+		// 			Message:            er.Msg,
+		// 			Tags:               []protocol.DiagnosticTag{},
+		// 			RelatedInformation: []protocol.DiagnosticRelatedInformation{},
+		// 		}
+		// 		dss = append(dss, ds)
+		// 	}
+		// 	q.Q("Syntax Errors")
+		// 	for i, er := range err3.SyntaxErr {
+		// 		q.Q(i, er)
+		// 		ds := protocol.Diagnostic{
+		// 			Range: protocol.Range{
+		// 				Start: protocol.Position{
+		// 					Line:      float64(er.Line()),
+		// 					Character: float64(er.Column()),
+		// 				},
+		// 				End: protocol.Position{
+		// 					Line:      float64(er.Line()),
+		// 					Character: float64(er.Column() + er.Len()),
+		// 				},
+		// 			},
+		// 			Severity:           protocol.SeverityError,
+		// 			Code:               er.Text(),
+		// 			Source:             "ADL-TREE-SYNTAX",
+		// 			Message:            er.Message(),
+		// 			Tags:               []protocol.DiagnosticTag{},
+		// 			RelatedInformation: []protocol.DiagnosticRelatedInformation{},
+		// 		}
+		// 		dss = append(dss, ds)
+		// 	}
+		// 	q.Q("Error Nodes")
+		// 	for i, er := range errC.errs {
+		// 		q.Q(i, er.GetSymbol())
+		// 		ds := protocol.Diagnostic{
+		// 			Range: protocol.Range{
+		// 				Start: protocol.Position{
+		// 					Line:      float64(er.GetSymbol().GetLine() - 1),
+		// 					Character: float64(er.GetSymbol().GetColumn()),
+		// 				},
+		// 				End: protocol.Position{
+		// 					Line:      float64(er.GetSymbol().GetLine() - 1),
+		// 					Character: float64(er.GetSymbol().GetColumn() + len(er.GetText())),
+		// 				},
+		// 			},
+		// 			Severity:           protocol.SeverityError,
+		// 			Code:               er.GetText(),
+		// 			Source:             "ADL-TREE-WALK",
+		// 			Message:            fmt.Sprintf("error at token %v", er),
+		// 			Tags:               []protocol.DiagnosticTag{},
+		// 			RelatedInformation: []protocol.DiagnosticRelatedInformation{},
+		// 		}
+		// 		dss = append(dss, ds)
+		// 		if i > 9 {
+		// 			q.Q("  ... total errs ", len(errC.errs))
+		// 			break
+		// 		}
+		// 	}
+		// }
 	}
 	q.Q(dss)
 	svr.client.PublishDiagnostics(ctx, &protocol.PublishDiagnosticsParams{

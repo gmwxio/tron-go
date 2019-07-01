@@ -3,13 +3,16 @@ package lsp
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
+	"github.com/wxio/tron-go/adl"
 	"golang.org/x/tools/jsonrpc2"
 	"golang.org/x/tools/lsp/protocol"
 )
@@ -317,7 +320,44 @@ func (svr *server) DocumentHighlight(ctx context.Context, req *protocol.TextDocu
 	return nil, nil
 }
 func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSymbolParams) ([]protocol.DocumentSymbol, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			qstack()
+		}
+	}()
 	q.Q(req)
+	fname := req.TextDocument.URI
+	if strings.HasPrefix(fname, "file://") {
+		fname = fname[len("file://"):]
+	}
+	by, err := ioutil.ReadFile(fname)
+	if err != nil {
+		q.Q(err)
+		return nil, nil
+	}
+
+	tr, atr, bl, ts, err1 := adl.BuildAdlAST(string(by))
+	_, _, _ = atr, bl, ts
+	if err1.Error() != nil {
+		q.Q(err1.Error())
+		return nil, nil
+	}
+	if tr != nil {
+		dsa := make([]protocol.DocumentSymbol, 0)
+		ds := &docSym{
+			dsa:       &dsa,
+			lexStream: ts,
+			furi:      fname,
+		}
+		err := adl.VisitAdlWo(tr, ds)
+		if err.Error() != nil {
+			q.Q(err.Error())
+			return nil, nil
+		}
+		// x, _ := json.MarshalIndent(ds.dsa, "", "  ")
+		// q.Q(string(x))
+		return *ds.dsa, nil
+	}
 	return nil, nil
 }
 

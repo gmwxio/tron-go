@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
 	walker "github.com/wxio/tron-go/internal/adlwi"
 )
@@ -26,6 +27,21 @@ func debugTreeToken(tts antlr.TokenStream, p antlr.Recognizer) {
 			p.GetSymbolicNames()[to.GetTokenType()],
 			to.GetLine(),
 		)
+		i++
+	}
+}
+
+func QTreeToken(tts antlr.TokenStream, p antlr.Recognizer) {
+	i := 1
+	for {
+		to := tts.Get(i)
+		if -1 == to.GetTokenType() {
+			break
+		}
+		q.Q(fmt.Sprintf("tt:%v %d : %v\t\t%d:%d", to.GetTokenType(), i,
+			p.GetSymbolicNames()[to.GetTokenType()],
+			to.GetLine(), to.GetColumn(),
+		))
 		i++
 	}
 }
