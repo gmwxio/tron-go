@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/wxio/tron-go/internal/adl"
+	"github.com/wxio/tron-go/adl"
 )
 
 func TestAst2Go(t *testing.T) {

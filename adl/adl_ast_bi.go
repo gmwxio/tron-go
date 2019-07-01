@@ -69,7 +69,8 @@ func (er errs) Error() error {
 func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 	switch ctx := ctx.(type) {
 	case *parser.AdlContext:
-		v.bldr = ctree.NewBuild("ADL", ctx.GetStart(), parser.AdlPADL, nil)
+		var tttype *TTType
+		v.bldr = ctree.NewBuild("ADL", tttype, ctx.GetStart(), parser.AdlPADL, nil)
 		v.adl = &ADL{}
 	case *parser.ModuleStatementContext:
 		if ctx.GetKw().GetText() != "module" {

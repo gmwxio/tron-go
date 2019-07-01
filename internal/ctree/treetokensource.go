@@ -16,22 +16,37 @@ type WalkableBuilder interface {
 }
 type walkerbuilder struct {
 	tree Tree
+	ttt  TreeTokenTypes
 	curr antlr.Token
 	last antlr.Token
 }
 
 type TreeNode struct {
 	antlr.Token
-	TType int
-	Val   interface{}
+	TType  int
+	Val    interface{}
+	TNText *string
 }
 
-func (t *TreeNode) GetTokenType() int { return t.TType }
-func (tn TreeNode) String() string    { return fmt.Sprintf("%v", tn.Val) }
+type TokenDown struct{ antlr.Token }
+type TokenUp struct{ antlr.Token }
+type TokenEof struct{ antlr.Token }
 
-func NewWalkableBuild(name string, root antlr.Token) WalkableBuilder {
+func (TokenDown) String() string { return "<DOWN>" }
+func (TokenUp) String() string   { return "<UP>" }
+func (TokenEof) String() string  { return "<EOF>" }
+
+func (t *TreeNode) GetTokenType() int { return t.TType }
+func (tn TreeNode) String() string {
+	if tn.TNText != nil {
+		return *tn.TNText
+	}
+	return fmt.Sprintf("%v", tn.Val)
+}
+
+func NewWalkableBuild(name string, ttt TreeTokenTypes, root antlr.Token) WalkableBuilder {
 	t := NewTree(name, root)
-	b := &walkerbuilder{t, root, nil}
+	b := &walkerbuilder{t, ttt, root, nil}
 	return b
 }
 func (b *walkerbuilder) Add(n antlr.Token) WalkableBuilder {
@@ -43,20 +58,35 @@ func (b *walkerbuilder) Add(n antlr.Token) WalkableBuilder {
 	return b
 }
 
-func NewBuild(tree_name string, n antlr.Token, ttype int, val interface{}) WalkableBuilder {
+func NewBuild(tree_name string, ttt TreeTokenTypes, n antlr.Token, ttype int, val interface{}) WalkableBuilder {
 	if _, ok := val.(antlr.Token); ok {
 		panic("trying to add a token as a node - this is just to confusing to be allowed")
 	}
 	tn := &TreeNode{Token: n, TType: ttype, Val: val}
 	t := NewTree(tree_name, tn)
-	b := &walkerbuilder{t, tn, nil}
+	b := &walkerbuilder{t, ttt, tn, nil}
 	return b
 }
+
+var (
+	UP  = "UP"
+	DN  = "DOWN"
+	EOF = "EOF"
+)
+
 func (b *walkerbuilder) AddNode(an antlr.Token, ttype int, val interface{}) WalkableBuilder {
 	if _, ok := val.(antlr.Token); ok {
 		panic("trying to add a token as a node - this is just to confusing to be allowed")
 	}
 	tn := &TreeNode{Token: an, TType: ttype, Val: val}
+	switch ttype {
+	case b.ttt.Up():
+		tn.Token = &TokenUp{Token: an}
+	case b.ttt.Down():
+		tn.TNText = &DN
+	case b.ttt.Eof():
+		tn.TNText = &EOF
+	}
 	b.tree.Add(b.curr, tn)
 	b.last = tn
 	return b
