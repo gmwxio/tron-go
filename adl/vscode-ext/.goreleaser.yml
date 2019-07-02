@@ -2,6 +2,10 @@ project_name: adl-lsp
 release:
   disable: true
 
+before:
+  hooks:
+    - rm tron-*.vsix
+
 builds:
   - binary: adl-lsp
     env:
