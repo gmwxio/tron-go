@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"time"
 
 	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
@@ -100,18 +99,33 @@ func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParam
 func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedParams) error {
 	q.Q(req)
 
-	go func() {
-		for {
-			select {
-			case <-time.After(10 * time.Second):
-				svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
-					Message: "TRON LSP (version" + svr.version + ")",
-					Type:    protocol.Info,
-				})
-			case <-ctx.Done():
-				q.Q("log message exit")
-				return
-			}
+	// go func() {
+	// 	for {
+	// 		select {
+	// 		case <-time.After(10 * time.Second):
+	// 			svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
+	// 				Message: "TRON LSP (version" + svr.version + ")",
+	// 				Type:    protocol.Info,
+	// 			})
+	// 		case <-ctx.Done():
+	// 			q.Q("log message exit")
+	// 			return
+	// 		}
+	// 	}
+	// }()
+
+	defer func() {
+		svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
+			Message: "TRON LSP (version" + svr.version + ")",
+			Type:    protocol.Info,
+		})
+		err := svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+			Message: "Started TRON LSP (version" + svr.version + ")",
+			Type:    protocol.Info,
+		})
+		if err != nil {
+			q.Q(err)
+			// return err // TODO what does returning an error do
 		}
 	}()
 
@@ -191,16 +205,6 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 	// 		return err
 	// 	}
 	// }
-
-	err = svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-		Message: "hello from tronlsp",
-		Type:    protocol.Info,
-	})
-	if err != nil {
-		q.Q(err)
-		// return err // TODO what does returning an error do
-	}
-
 	return nil
 }
 func (svr *server) Shutdown(context.Context) error {
