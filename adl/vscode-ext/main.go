@@ -1,13 +1,16 @@
 package main
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/jpillora/opts"
 	"github.com/wxio/tron-go/adl/lsp"
 )
 
 var (
 	Version string
-	Data    string
+	Date    string
 	Commit  string
 )
 
@@ -23,4 +26,9 @@ func main() {
 		AddCommand(lsp.NewConsole()).
 		Parse().
 		RunFatal()
+}
+
+func (*root) Run() error {
+	fmt.Printf("version: %v\ncommit: %v\n date: %v\n", Version, Commit, Date)
+	return errors.New("")
 }

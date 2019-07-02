@@ -1,10 +1,6 @@
 project_name: adl-lsp
 release:
-  github:
-    owner: wxio
-    name: tron-go
-  draft: true
-  # disable: true
+  disable: true
 
 builds:
   - binary: adl-lsp
@@ -26,15 +22,14 @@ builds:
         goarch: amd64
     main: .
     ldflags:
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+      - -s -w -X main.Version={{.Version}} -X main.Commit={{.Commit}} -X main.Date={{.Date}}
     hooks:
       post: vsce package
 
-archives:
-  - id: vsix
-    format: binary
-    files:
-      -  tron-*.vsix
+archive:
+  format: binary
+  files:
+    - none*
 
 checksum:
   name_template: "checksums.txt"
