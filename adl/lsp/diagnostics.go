@@ -56,7 +56,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 	dss := []protocol.Diagnostic{}
 	tr, atr, bl, ts, err1 := adl.BuildAdlAST(text)
 	_, _, _, _ = tr, atr, bl, ts
-	adl.QTreeToken(ts, bl)
+	// adl.QTreeToken(ts, bl)
 	if err1.Error() != nil {
 		// q.Q("%v", tr.TreeString())
 		errC := &errColl{}
