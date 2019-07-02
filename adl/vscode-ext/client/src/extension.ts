@@ -45,12 +45,8 @@ export function activate(ctx: ExtensionContext) {
 			break;
 	}
 	// The server is implemented in Go
-	let serverModuleDebug = ctx.asAbsolutePath(
-		path.join('adl-lsp', 'adl-lsp')
-	);
-	let serverModuleRun = ctx.asAbsolutePath(
-		path.join('adl-lsp', 'dist', 'adl-lsp_'+plat+"_"+arch, 'adl-lsp'+exte)
-	);
+	let serverModuleDebug = ctx.asAbsolutePath('adl-lsp');
+	let serverModuleRun = ctx.asAbsolutePath(path.join('dist', 'adl-lsp_'+plat+"_"+arch, 'adl-lsp'+exte));
 	// The debug options for the server
 	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
 	let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };

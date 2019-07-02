@@ -2,7 +2,7 @@ module adl-lsp
 
 go 1.12
 
-replace github.com/wxio/tron-go => ../../../
+replace github.com/wxio/tron-go => ../../
 
 replace golang.org/x/tools => /home/garym/devel/wxio/tools
 
