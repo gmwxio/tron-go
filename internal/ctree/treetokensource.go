@@ -3,7 +3,6 @@ package ctree
 import (
 	"fmt"
 
-	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
 )
 
@@ -59,7 +58,6 @@ func (b *walkerbuilder) AddNode(an antlr.Token, stop antlr.Token, ttype int, val
 	if _, ok := val.(antlr.Token); ok {
 		panic("trying to add a token as a node - this is just to confusing to be allowed")
 	}
-	q.Q(stop)
 	tn := &TreeNode{Token: an, stop: stop, TType: ttype, Val: val}
 	b.tree.Add(b.curr, tn)
 	b.last = tn

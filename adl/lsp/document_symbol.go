@@ -5,7 +5,6 @@ import (
 
 	"github.com/wxio/tron-go/internal/ctree"
 
-	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
 	"github.com/wxio/tron-go/internal/adlwo"
 	"golang.org/x/tools/lsp/protocol"
@@ -78,7 +77,7 @@ func (v *docSym) VisitModule(ctx adlwo.IModuleContext, delegate antlr.ParseTreeV
 		},
 	}
 
-	q.Q(ds)
+	// q.Q(ds)
 	ds.Children = make([]protocol.DocumentSymbol, 0)
 	// result = v.VisitChildren(ctx, delegate, &ds.Children)
 	result = v.VisitChildren(ctx, delegate, v.dsa)
@@ -94,7 +93,7 @@ func (v *docSym) VisitImportScopedModule(ctx adlwo.IImportScopedModuleContext, d
 	return
 }
 func (v *docSym) VisitStruct(ctx adlwo.IStructContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	q.Q("struct")
+	// q.Q("struct")
 	arr := args[0].(*[]protocol.DocumentSymbol)
 	sym := ctx.Struct().GetSymbol().(*ctree.TreeNode)
 	sidx := sym.GetStop()
@@ -107,8 +106,8 @@ func (v *docSym) VisitStruct(ctx adlwo.IStructContext, delegate antlr.ParseTreeV
 		Line:      float64(stok.GetLine() - 1),
 		Character: float64(stok.GetColumn() + 1),
 	}
-	p := fmt.Sprintf("%T", ctx.Struct().GetPayload())
-	q.Q(p)
+	// p := fmt.Sprintf("%T", ctx.Struct().GetPayload())
+	// q.Q(p)
 	ds := protocol.DocumentSymbol{
 		Detail: fmt.Sprintf("%s", ctx.Struct().GetText()),
 		Name:   fmt.Sprintf("%v", ctx.Struct().GetPayload()),
@@ -126,7 +125,7 @@ func (v *docSym) VisitStruct(ctx adlwo.IStructContext, delegate antlr.ParseTreeV
 		},
 	}
 	// x := fmt.Sprintf("%#+v", ds)
-	q.Q(arr)
+	// q.Q(arr)
 	*arr = append(*arr, ds)
 	ds.Children = make([]protocol.DocumentSymbol, 0)
 	result = v.VisitChildren(ctx, delegate, &ds.Children)

@@ -41,6 +41,7 @@ func qstack() {
 func (svr *server) diag(ctx context.Context, fname string, text string) {
 	defer func() {
 		if r := recover(); r != nil {
+			q.Q(r)
 			qstack()
 		}
 	}()
@@ -55,6 +56,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 	dss := []protocol.Diagnostic{}
 	tr, atr, bl, ts, err1 := adl.BuildAdlAST(text)
 	_, _, _, _ = tr, atr, bl, ts
+	adl.QTreeToken(ts, bl)
 	if err1.Error() != nil {
 		// q.Q("%v", tr.TreeString())
 		errC := &errColl{}
@@ -65,18 +67,18 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 			ds := protocol.Diagnostic{
 				Range: protocol.Range{
 					Start: protocol.Position{
-						Line:      float64(er.Line - 1),
-						Character: float64(er.Column),
+						Line:      float64(er.Line() - 1),
+						Character: float64(er.Column()),
 					},
 					End: protocol.Position{
-						Line:      float64(er.Line - 1),
-						Character: float64(er.Column + len(er.OffendingToken.GetText())),
+						Line:      float64(er.Line() - 1),
+						Character: float64(er.Column() + er.Len()),
 					},
 				},
 				Severity:           protocol.SeverityError,
-				Code:               er.OffendingToken.GetText(),
+				Code:               er.Text(),
 				Source:             "ADL-LEX",
-				Message:            er.Msg,
+				Message:            er.Message(),
 				Tags:               []protocol.DiagnosticTag{},
 				RelatedInformation: []protocol.DiagnosticRelatedInformation{},
 			}

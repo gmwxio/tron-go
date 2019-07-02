@@ -88,8 +88,36 @@ func (er Error) Text() string {
 type lexErrMsg struct {
 	OffendingSymbol interface{}
 	OffendingToken  antlr.Token
-	Line, Column    int
+	line, column    int
 	Msg             string
+}
+
+func (er *lexErrMsg) Line() int {
+	return er.line
+}
+func (er *lexErrMsg) Column() int {
+	return er.column
+}
+func (er *lexErrMsg) Message() string {
+	return er.Msg
+}
+func (lem *lexErrMsg) Len() int {
+	if lem.OffendingToken != nil {
+		return len(lem.OffendingToken.GetText())
+	}
+	if t, ok := lem.OffendingSymbol.(antlr.Token); ok {
+		return len(t.GetText())
+	}
+	return 1
+}
+func (lem *lexErrMsg) Text() string {
+	if lem.OffendingToken != nil {
+		return lem.OffendingToken.GetText()
+	}
+	if t, ok := lem.OffendingSymbol.(antlr.Token); ok {
+		return t.GetText()
+	}
+	return "<unknown token>"
 }
 
 type lexErr struct {
@@ -105,8 +133,8 @@ func (d *lexErr) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interf
 	d.err = append(d.err, lexErrMsg{
 		OffendingSymbol: offendingSymbol,
 		OffendingToken:  t,
-		Line:            line,
-		Column:          column,
+		line:            line,
+		column:          column,
 		Msg:             msg,
 	})
 }

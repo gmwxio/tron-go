@@ -241,7 +241,7 @@ func (svr *server) DidOpen(ctx context.Context, req *protocol.DidOpenTextDocumen
 	return nil
 }
 func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDocumentParams) error {
-	q.Q(req)
+	// q.Q(req)
 	if len(req.ContentChanges) < 1 {
 		q.Q("no change")
 		return nil
@@ -325,7 +325,7 @@ func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSym
 			qstack()
 		}
 	}()
-	q.Q(req)
+	// q.Q(req)
 	fname := req.TextDocument.URI
 	if strings.HasPrefix(fname, "file://") {
 		fname = fname[len("file://"):]
