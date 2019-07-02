@@ -8,7 +8,7 @@ import (
 
 var (
 	Version string
-	Data    string
+	Date    string
 	Commit  string
 )
 
@@ -24,9 +24,8 @@ func main() {
 		AddCommand(opts.New(&adl{}).
 			AddCommand(cmd.NewLoadAdlAst()).
 			AddCommand(cmd.BuildAdlAst()).
-			AddCommand(lsp.NewTcp()).
-			AddCommand(lsp.NewConsole()),
-		).
+			AddCommand(lsp.NewTcp(Version)).
+			AddCommand(lsp.NewConsole(Version))).
 		Parse().
 		RunFatal()
 }

@@ -4,7 +4,7 @@ release:
 
 before:
   hooks:
-    - rm tron-*.vsix
+    - ./.goreleaser_before.sh
 
 builds:
   - binary: adl-lsp
