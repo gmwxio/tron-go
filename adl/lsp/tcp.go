@@ -15,20 +15,22 @@ import (
 	"golang.org/x/tools/lsp/protocol"
 )
 
-func NewTcp() opts.Opts {
+func NewTcp(ver string) opts.Opts {
 	return opts.New(&tcpopt{}).Name("tcp").
-		AddCommand(opts.New(&tcpsvr{Addr: "localhost:8080"}).Name("svr")).
-		AddCommand(opts.New(&tcpclient{Addr: "localhost:8080"}).Name("client"))
+		AddCommand(opts.New(&tcpsvr{Addr: "localhost:8080", version: ver}).Name("svr")).
+		AddCommand(opts.New(&tcpclient{Addr: "localhost:8080", version: ver}).Name("client"))
 }
 
 type tcpopt struct {
 }
 type tcpsvr struct {
-	Addr string
+	Addr    string
+	version string
 }
 type tcpclient struct {
 	Addr      string
 	Reconnect bool
+	version   string
 }
 
 func (svr *tcpsvr) Run() error {
@@ -45,17 +47,18 @@ func (svr *tcpsvr) Run() error {
 			q.Q(err)
 			os.Exit(1)
 		}
-		go handle(conn, conn)
+		go svr.handle(conn, conn)
 	}
 }
 
-func handle(in io.Reader, out io.Writer) {
+func (svr *tcpsvr) handle(in io.Reader, out io.Writer) {
 	q.Q("setting up stream")
 	stream := jsonrpc2.NewHeaderStream(in, out)
 	ctx, cancel := context.WithCancel(context.Background())
 	srv := &server{
 		// tcpConn: conn,
-		cancel: cancel,
+		cancel:  cancel,
+		version: svr.version,
 	}
 	connLSP, client, _ := protocol.NewServer(stream, srv)
 	srv.client = client

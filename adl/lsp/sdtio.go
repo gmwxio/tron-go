@@ -10,11 +10,12 @@ import (
 	"golang.org/x/tools/lsp/protocol"
 )
 
-func NewConsole() opts.Opts {
-	return opts.New(&tcpsdtio{}).Name("stdio")
+func NewConsole(version string) opts.Opts {
+	return opts.New(&tcpsdtio{version: version}).Name("stdio")
 }
 
 type tcpsdtio struct {
+	version string
 }
 
 func (svr *tcpsdtio) Run() error {
@@ -23,7 +24,8 @@ func (svr *tcpsdtio) Run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	srv := &server{
 		// tcpConn: conn,
-		cancel: cancel,
+		cancel:  cancel,
+		version: svr.version,
 	}
 	connLSP, client, _ := protocol.NewServer(stream, srv)
 	srv.client = client

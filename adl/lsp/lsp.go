@@ -14,6 +14,7 @@ import (
 )
 
 type server struct {
+	version    string
 	client     protocol.Client
 	conn       *jsonrpc2.Conn
 	initParams *protocol.InitializeParams
@@ -104,7 +105,7 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 			select {
 			case <-time.After(10 * time.Second):
 				svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
-					Message: fmt.Sprintf("hello from tronlsp %v", time.Now()),
+					Message: "TRON LSP (version" + svr.version + ")",
 					Type:    protocol.Info,
 				})
 			case <-ctx.Done():

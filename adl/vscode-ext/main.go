@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	Version string
+	Version = "dev"
 	Date    string
 	Commit  string
 )
@@ -22,13 +22,13 @@ func main() {
 	opts.New(&r).Name("adl-lsp").
 		EmbedGlobalFlagSet().
 		Version(Version).
-		AddCommand(lsp.NewTcp()).
-		AddCommand(lsp.NewConsole()).
+		AddCommand(lsp.NewTcp(Version)).
+		AddCommand(lsp.NewConsole(Version)).
 		Parse().
 		RunFatal()
 }
 
 func (*root) Run() error {
-	fmt.Printf("version: %v\ncommit: %v\n date: %v\n", Version, Commit, Date)
+	fmt.Printf("version: %v\ncommit: %v\ndate: %v\n", Version, Commit, Date)
 	return errors.New("")
 }
