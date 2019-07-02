@@ -2,9 +2,9 @@ project_name: adl-lsp
 release:
   disable: true
 
-before:
-  hooks:
-    - ./.goreleaser_before.sh
+# before:
+#   hooks:
+#     - ./.goreleaser_before.sh
 
 builds:
   - binary: adl-lsp
@@ -28,7 +28,7 @@ builds:
     ldflags:
       - -s -w -X main.Version={{.Version}} -X main.Commit={{.Commit}} -X main.Date={{.Date}}
     hooks:
-      post: vsce package
+      post: ./.goreleaser_vsce.sh
 
 archive:
   format: binary
