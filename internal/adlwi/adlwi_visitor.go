@@ -1,6 +1,6 @@
 // Generated from AdlWi.g4 by ANTLR 4.7.
 
-package adlw1 // AdlWi
+package adlwi // AdlWi
 import "github.com/wxio/goantlr"
 
 // Struct of Handlers

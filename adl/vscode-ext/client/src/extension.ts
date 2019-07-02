@@ -46,6 +46,7 @@ export function activate(ctx: ExtensionContext) {
 	}
 	// The server is implemented in Go
 	let serverModuleDebug = ctx.asAbsolutePath('adl-lsp');
+	let adlc = ctx.asAbsolutePath('adlc');
 	let serverModuleRun = ctx.asAbsolutePath(path.join('dist', 'adl-lsp_'+plat+"_"+arch, 'adl-lsp'+exte));
 	// The debug options for the server
 	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
@@ -54,12 +55,23 @@ export function activate(ctx: ExtensionContext) {
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
 	let serverOptions: ServerOptions = {
-		run: { command: serverModuleRun, transport: TransportKind.stdio,
-			options: {detached: true},
-			args: ["stdio"] 
+		run: { 
+			command: serverModuleRun, 
+			transport: TransportKind.stdio,
+			options: {
+				detached: true,
+				env: {"ADLC":adlc}
+			},
+			args: ["stdio", "--adlc-path", adlc],
 		},
-		debug: { command: serverModuleDebug, transport: TransportKind.stdio, 
-			args: ["stdio"] 
+		debug: { 
+			command: serverModuleDebug, 
+			transport: TransportKind.stdio, 
+			options: {
+				detached: true,
+				env: {"ADLC":adlc}
+			},
+			args: ["stdio", "--adlc-path", adlc]
 			// args: ["tcp", "client", "--reconnect"]
 		}
 		// ,

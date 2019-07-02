@@ -1,6 +1,6 @@
 // Generated from AdlWi.g4 by ANTLR 4.7.
 
-package adlw1 // AdlWi
+package adlwi // AdlWi
 //import "github.com/wxio/goantlr"
 //import "generated code if in another package"
 
@@ -9,9 +9,9 @@ package adlw1 // AdlWi
 //func Example(s string) {
 //  // Setup
 //  input := antlr.NewInputStream(s)
-//  lexer := adlw1.NewAdlWiLexer(input)
+//  lexer := adlwi.NewAdlWiLexer(input)
 //  stream := antlr.NewCommonTokenStream(lexer, 0)
-//  p := adlw1.NewAdlWiParser(stream)
+//  p := adlwi.NewAdlWiParser(stream)
 
 //  // Antlr error listener - turns reports (ambiguity etc) into syntax errors
 //  p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
@@ -37,88 +37,88 @@ package adlw1 // AdlWi
 // }
 
 //// implemented all listeners methods
-//var _ adlw1.AdlWiListener = &AdlWiListener{}
+//var _ adlwi.AdlWiListener = &AdlWiListener{}
 //// implemented specific
-//var _ adlw1.AdlEntryListener = &AdlWiListener{}
-//var _ adlw1.AdlExitListener = &AdlWiListener{}
+//var _ adlwi.AdlEntryListener = &AdlWiListener{}
+//var _ adlwi.AdlExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonExitListener = &AdlWiListener{}
+//var _ adlwi.JsonEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonExitListener = &AdlWiListener{}
 
-//var _ adlw1.ModuleEntryListener = &AdlWiListener{}
-//var _ adlw1.ModuleExitListener = &AdlWiListener{}
+//var _ adlwi.ModuleEntryListener = &AdlWiListener{}
+//var _ adlwi.ModuleExitListener = &AdlWiListener{}
 
-//var _ adlw1.ImportModuleEntryListener = &AdlWiListener{}
-//var _ adlw1.ImportModuleExitListener = &AdlWiListener{}
+//var _ adlwi.ImportModuleEntryListener = &AdlWiListener{}
+//var _ adlwi.ImportModuleExitListener = &AdlWiListener{}
 
-//var _ adlw1.ImportScopedModuleEntryListener = &AdlWiListener{}
-//var _ adlw1.ImportScopedModuleExitListener = &AdlWiListener{}
+//var _ adlwi.ImportScopedModuleEntryListener = &AdlWiListener{}
+//var _ adlwi.ImportScopedModuleExitListener = &AdlWiListener{}
 
-//var _ adlw1.ImportErrorEntryListener = &AdlWiListener{}
-//var _ adlw1.ImportErrorExitListener = &AdlWiListener{}
+//var _ adlwi.ImportErrorEntryListener = &AdlWiListener{}
+//var _ adlwi.ImportErrorExitListener = &AdlWiListener{}
 
-//var _ adlw1.StructEntryListener = &AdlWiListener{}
-//var _ adlw1.StructExitListener = &AdlWiListener{}
+//var _ adlwi.StructEntryListener = &AdlWiListener{}
+//var _ adlwi.StructExitListener = &AdlWiListener{}
 
-//var _ adlw1.UnionEntryListener = &AdlWiListener{}
-//var _ adlw1.UnionExitListener = &AdlWiListener{}
+//var _ adlwi.UnionEntryListener = &AdlWiListener{}
+//var _ adlwi.UnionExitListener = &AdlWiListener{}
 
-//var _ adlw1.TypeEntryListener = &AdlWiListener{}
-//var _ adlw1.TypeExitListener = &AdlWiListener{}
+//var _ adlwi.TypeEntryListener = &AdlWiListener{}
+//var _ adlwi.TypeExitListener = &AdlWiListener{}
 
-//var _ adlw1.NewtypeEntryListener = &AdlWiListener{}
-//var _ adlw1.NewtypeExitListener = &AdlWiListener{}
+//var _ adlwi.NewtypeEntryListener = &AdlWiListener{}
+//var _ adlwi.NewtypeExitListener = &AdlWiListener{}
 
-//var _ adlw1.ModAnnoEntryListener = &AdlWiListener{}
-//var _ adlw1.ModAnnoExitListener = &AdlWiListener{}
+//var _ adlwi.ModAnnoEntryListener = &AdlWiListener{}
+//var _ adlwi.ModAnnoExitListener = &AdlWiListener{}
 
-//var _ adlw1.DeclAnnoEntryListener = &AdlWiListener{}
-//var _ adlw1.DeclAnnoExitListener = &AdlWiListener{}
+//var _ adlwi.DeclAnnoEntryListener = &AdlWiListener{}
+//var _ adlwi.DeclAnnoExitListener = &AdlWiListener{}
 
-//var _ adlw1.FieldAnnoEntryListener = &AdlWiListener{}
-//var _ adlw1.FieldAnnoExitListener = &AdlWiListener{}
+//var _ adlwi.FieldAnnoEntryListener = &AdlWiListener{}
+//var _ adlwi.FieldAnnoExitListener = &AdlWiListener{}
 
-//var _ adlw1.TypeParamErrorEntryListener = &AdlWiListener{}
-//var _ adlw1.TypeParamErrorExitListener = &AdlWiListener{}
+//var _ adlwi.TypeParamErrorEntryListener = &AdlWiListener{}
+//var _ adlwi.TypeParamErrorExitListener = &AdlWiListener{}
 
-//var _ adlw1.TLDErrorEntryListener = &AdlWiListener{}
-//var _ adlw1.TLDErrorExitListener = &AdlWiListener{}
+//var _ adlwi.TLDErrorEntryListener = &AdlWiListener{}
+//var _ adlwi.TLDErrorExitListener = &AdlWiListener{}
 
-//var _ adlw1.FieldEntryListener = &AdlWiListener{}
-//var _ adlw1.FieldExitListener = &AdlWiListener{}
+//var _ adlwi.FieldEntryListener = &AdlWiListener{}
+//var _ adlwi.FieldExitListener = &AdlWiListener{}
 
-//var _ adlw1.AnnotationEntryListener = &AdlWiListener{}
-//var _ adlw1.AnnotationExitListener = &AdlWiListener{}
+//var _ adlwi.AnnotationEntryListener = &AdlWiListener{}
+//var _ adlwi.AnnotationExitListener = &AdlWiListener{}
 
-//var _ adlw1.TypeExpr_EntryListener = &AdlWiListener{}
-//var _ adlw1.TypeExpr_ExitListener = &AdlWiListener{}
+//var _ adlwi.TypeExpr_EntryListener = &AdlWiListener{}
+//var _ adlwi.TypeExpr_ExitListener = &AdlWiListener{}
 
-//var _ adlw1.TypeParamsEntryListener = &AdlWiListener{}
-//var _ adlw1.TypeParamsExitListener = &AdlWiListener{}
+//var _ adlwi.TypeParamsEntryListener = &AdlWiListener{}
+//var _ adlwi.TypeParamsExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonStrEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonStrExitListener = &AdlWiListener{}
+//var _ adlwi.JsonStrEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonStrExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonBoolEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonBoolExitListener = &AdlWiListener{}
+//var _ adlwi.JsonBoolEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonBoolExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonNullEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonNullExitListener = &AdlWiListener{}
+//var _ adlwi.JsonNullEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonNullExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonIntEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonIntExitListener = &AdlWiListener{}
+//var _ adlwi.JsonIntEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonIntExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonFloatEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonFloatExitListener = &AdlWiListener{}
+//var _ adlwi.JsonFloatEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonFloatExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonArrayEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonArrayExitListener = &AdlWiListener{}
+//var _ adlwi.JsonArrayEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonArrayExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonObjEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonObjExitListener = &AdlWiListener{}
+//var _ adlwi.JsonObjEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonObjExitListener = &AdlWiListener{}
 
-//var _ adlw1.JsonErrorEntryListener = &AdlWiListener{}
-//var _ adlw1.JsonErrorExitListener = &AdlWiListener{}
+//var _ adlwi.JsonErrorEntryListener = &AdlWiListener{}
+//var _ adlwi.JsonErrorExitListener = &AdlWiListener{}
 
 //type AdlWiListener struct {
 //}
@@ -166,83 +166,83 @@ package adlw1 // AdlWi
 
 //// Only implemented as needed.
 
-//func (s *AdlWiListener) EnterAdl(ctx adlw1.*adlw1.AdlContext) {}
-//func (s *AdlWiListener) ExitAdl(ctx adlw1.*adlw1.AdlContext) {}
+//func (s *AdlWiListener) EnterAdl(ctx adlwi.*adlwi.AdlContext) {}
+//func (s *AdlWiListener) ExitAdl(ctx adlwi.*adlwi.AdlContext) {}
 
-//func (s *AdlWiListener) EnterJson(ctx adlw1.*adlw1.JsonContext) {}
-//func (s *AdlWiListener) ExitJson(ctx adlw1.*adlw1.JsonContext) {}
+//func (s *AdlWiListener) EnterJson(ctx adlwi.*adlwi.JsonContext) {}
+//func (s *AdlWiListener) ExitJson(ctx adlwi.*adlwi.JsonContext) {}
 
-//func (s *AdlWiListener) EnterModule(ctx adlw1.*adlw1.ModuleContext) {}
-//func (s *AdlWiListener) ExitModule(ctx adlw1.*adlw1.ModuleContext) {}
+//func (s *AdlWiListener) EnterModule(ctx adlwi.*adlwi.ModuleContext) {}
+//func (s *AdlWiListener) ExitModule(ctx adlwi.*adlwi.ModuleContext) {}
 
-//func (s *AdlWiListener) EnterImportModule(ctx adlw1.*adlw1.ImportModuleContext) {}
-//func (s *AdlWiListener) ExitImportModule(ctx adlw1.*adlw1.ImportModuleContext) {}
+//func (s *AdlWiListener) EnterImportModule(ctx adlwi.*adlwi.ImportModuleContext) {}
+//func (s *AdlWiListener) ExitImportModule(ctx adlwi.*adlwi.ImportModuleContext) {}
 
-//func (s *AdlWiListener) EnterImportScopedModule(ctx adlw1.*adlw1.ImportScopedModuleContext) {}
-//func (s *AdlWiListener) ExitImportScopedModule(ctx adlw1.*adlw1.ImportScopedModuleContext) {}
+//func (s *AdlWiListener) EnterImportScopedModule(ctx adlwi.*adlwi.ImportScopedModuleContext) {}
+//func (s *AdlWiListener) ExitImportScopedModule(ctx adlwi.*adlwi.ImportScopedModuleContext) {}
 
-//func (s *AdlWiListener) EnterImportError(ctx adlw1.*adlw1.ImportErrorContext) {}
-//func (s *AdlWiListener) ExitImportError(ctx adlw1.*adlw1.ImportErrorContext) {}
+//func (s *AdlWiListener) EnterImportError(ctx adlwi.*adlwi.ImportErrorContext) {}
+//func (s *AdlWiListener) ExitImportError(ctx adlwi.*adlwi.ImportErrorContext) {}
 
-//func (s *AdlWiListener) EnterStruct(ctx adlw1.*adlw1.StructContext) {}
-//func (s *AdlWiListener) ExitStruct(ctx adlw1.*adlw1.StructContext) {}
+//func (s *AdlWiListener) EnterStruct(ctx adlwi.*adlwi.StructContext) {}
+//func (s *AdlWiListener) ExitStruct(ctx adlwi.*adlwi.StructContext) {}
 
-//func (s *AdlWiListener) EnterUnion(ctx adlw1.*adlw1.UnionContext) {}
-//func (s *AdlWiListener) ExitUnion(ctx adlw1.*adlw1.UnionContext) {}
+//func (s *AdlWiListener) EnterUnion(ctx adlwi.*adlwi.UnionContext) {}
+//func (s *AdlWiListener) ExitUnion(ctx adlwi.*adlwi.UnionContext) {}
 
-//func (s *AdlWiListener) EnterType(ctx adlw1.*adlw1.TypeContext) {}
-//func (s *AdlWiListener) ExitType(ctx adlw1.*adlw1.TypeContext) {}
+//func (s *AdlWiListener) EnterType(ctx adlwi.*adlwi.TypeContext) {}
+//func (s *AdlWiListener) ExitType(ctx adlwi.*adlwi.TypeContext) {}
 
-//func (s *AdlWiListener) EnterNewtype(ctx adlw1.*adlw1.NewtypeContext) {}
-//func (s *AdlWiListener) ExitNewtype(ctx adlw1.*adlw1.NewtypeContext) {}
+//func (s *AdlWiListener) EnterNewtype(ctx adlwi.*adlwi.NewtypeContext) {}
+//func (s *AdlWiListener) ExitNewtype(ctx adlwi.*adlwi.NewtypeContext) {}
 
-//func (s *AdlWiListener) EnterModAnno(ctx adlw1.*adlw1.ModAnnoContext) {}
-//func (s *AdlWiListener) ExitModAnno(ctx adlw1.*adlw1.ModAnnoContext) {}
+//func (s *AdlWiListener) EnterModAnno(ctx adlwi.*adlwi.ModAnnoContext) {}
+//func (s *AdlWiListener) ExitModAnno(ctx adlwi.*adlwi.ModAnnoContext) {}
 
-//func (s *AdlWiListener) EnterDeclAnno(ctx adlw1.*adlw1.DeclAnnoContext) {}
-//func (s *AdlWiListener) ExitDeclAnno(ctx adlw1.*adlw1.DeclAnnoContext) {}
+//func (s *AdlWiListener) EnterDeclAnno(ctx adlwi.*adlwi.DeclAnnoContext) {}
+//func (s *AdlWiListener) ExitDeclAnno(ctx adlwi.*adlwi.DeclAnnoContext) {}
 
-//func (s *AdlWiListener) EnterFieldAnno(ctx adlw1.*adlw1.FieldAnnoContext) {}
-//func (s *AdlWiListener) ExitFieldAnno(ctx adlw1.*adlw1.FieldAnnoContext) {}
+//func (s *AdlWiListener) EnterFieldAnno(ctx adlwi.*adlwi.FieldAnnoContext) {}
+//func (s *AdlWiListener) ExitFieldAnno(ctx adlwi.*adlwi.FieldAnnoContext) {}
 
-//func (s *AdlWiListener) EnterTypeParamError(ctx adlw1.*adlw1.TypeParamErrorContext) {}
-//func (s *AdlWiListener) ExitTypeParamError(ctx adlw1.*adlw1.TypeParamErrorContext) {}
+//func (s *AdlWiListener) EnterTypeParamError(ctx adlwi.*adlwi.TypeParamErrorContext) {}
+//func (s *AdlWiListener) ExitTypeParamError(ctx adlwi.*adlwi.TypeParamErrorContext) {}
 
-//func (s *AdlWiListener) EnterTLDError(ctx adlw1.*adlw1.TLDErrorContext) {}
-//func (s *AdlWiListener) ExitTLDError(ctx adlw1.*adlw1.TLDErrorContext) {}
+//func (s *AdlWiListener) EnterTLDError(ctx adlwi.*adlwi.TLDErrorContext) {}
+//func (s *AdlWiListener) ExitTLDError(ctx adlwi.*adlwi.TLDErrorContext) {}
 
-//func (s *AdlWiListener) EnterField(ctx adlw1.*adlw1.FieldContext) {}
-//func (s *AdlWiListener) ExitField(ctx adlw1.*adlw1.FieldContext) {}
+//func (s *AdlWiListener) EnterField(ctx adlwi.*adlwi.FieldContext) {}
+//func (s *AdlWiListener) ExitField(ctx adlwi.*adlwi.FieldContext) {}
 
-//func (s *AdlWiListener) EnterAnnotation(ctx adlw1.*adlw1.AnnotationContext) {}
-//func (s *AdlWiListener) ExitAnnotation(ctx adlw1.*adlw1.AnnotationContext) {}
+//func (s *AdlWiListener) EnterAnnotation(ctx adlwi.*adlwi.AnnotationContext) {}
+//func (s *AdlWiListener) ExitAnnotation(ctx adlwi.*adlwi.AnnotationContext) {}
 
-//func (s *AdlWiListener) EnterTypeExpr_(ctx adlw1.*adlw1.TypeExpr_Context) {}
-//func (s *AdlWiListener) ExitTypeExpr_(ctx adlw1.*adlw1.TypeExpr_Context) {}
+//func (s *AdlWiListener) EnterTypeExpr_(ctx adlwi.*adlwi.TypeExpr_Context) {}
+//func (s *AdlWiListener) ExitTypeExpr_(ctx adlwi.*adlwi.TypeExpr_Context) {}
 
-//func (s *AdlWiListener) EnterTypeParams(ctx adlw1.*adlw1.TypeParamsContext) {}
-//func (s *AdlWiListener) ExitTypeParams(ctx adlw1.*adlw1.TypeParamsContext) {}
+//func (s *AdlWiListener) EnterTypeParams(ctx adlwi.*adlwi.TypeParamsContext) {}
+//func (s *AdlWiListener) ExitTypeParams(ctx adlwi.*adlwi.TypeParamsContext) {}
 
-//func (s *AdlWiListener) EnterJsonStr(ctx adlw1.*adlw1.JsonStrContext) {}
-//func (s *AdlWiListener) ExitJsonStr(ctx adlw1.*adlw1.JsonStrContext) {}
+//func (s *AdlWiListener) EnterJsonStr(ctx adlwi.*adlwi.JsonStrContext) {}
+//func (s *AdlWiListener) ExitJsonStr(ctx adlwi.*adlwi.JsonStrContext) {}
 
-//func (s *AdlWiListener) EnterJsonBool(ctx adlw1.*adlw1.JsonBoolContext) {}
-//func (s *AdlWiListener) ExitJsonBool(ctx adlw1.*adlw1.JsonBoolContext) {}
+//func (s *AdlWiListener) EnterJsonBool(ctx adlwi.*adlwi.JsonBoolContext) {}
+//func (s *AdlWiListener) ExitJsonBool(ctx adlwi.*adlwi.JsonBoolContext) {}
 
-//func (s *AdlWiListener) EnterJsonNull(ctx adlw1.*adlw1.JsonNullContext) {}
-//func (s *AdlWiListener) ExitJsonNull(ctx adlw1.*adlw1.JsonNullContext) {}
+//func (s *AdlWiListener) EnterJsonNull(ctx adlwi.*adlwi.JsonNullContext) {}
+//func (s *AdlWiListener) ExitJsonNull(ctx adlwi.*adlwi.JsonNullContext) {}
 
-//func (s *AdlWiListener) EnterJsonInt(ctx adlw1.*adlw1.JsonIntContext) {}
-//func (s *AdlWiListener) ExitJsonInt(ctx adlw1.*adlw1.JsonIntContext) {}
+//func (s *AdlWiListener) EnterJsonInt(ctx adlwi.*adlwi.JsonIntContext) {}
+//func (s *AdlWiListener) ExitJsonInt(ctx adlwi.*adlwi.JsonIntContext) {}
 
-//func (s *AdlWiListener) EnterJsonFloat(ctx adlw1.*adlw1.JsonFloatContext) {}
-//func (s *AdlWiListener) ExitJsonFloat(ctx adlw1.*adlw1.JsonFloatContext) {}
+//func (s *AdlWiListener) EnterJsonFloat(ctx adlwi.*adlwi.JsonFloatContext) {}
+//func (s *AdlWiListener) ExitJsonFloat(ctx adlwi.*adlwi.JsonFloatContext) {}
 
-//func (s *AdlWiListener) EnterJsonArray(ctx adlw1.*adlw1.JsonArrayContext) {}
-//func (s *AdlWiListener) ExitJsonArray(ctx adlw1.*adlw1.JsonArrayContext) {}
+//func (s *AdlWiListener) EnterJsonArray(ctx adlwi.*adlwi.JsonArrayContext) {}
+//func (s *AdlWiListener) ExitJsonArray(ctx adlwi.*adlwi.JsonArrayContext) {}
 
-//func (s *AdlWiListener) EnterJsonObj(ctx adlw1.*adlw1.JsonObjContext) {}
-//func (s *AdlWiListener) ExitJsonObj(ctx adlw1.*adlw1.JsonObjContext) {}
+//func (s *AdlWiListener) EnterJsonObj(ctx adlwi.*adlwi.JsonObjContext) {}
+//func (s *AdlWiListener) ExitJsonObj(ctx adlwi.*adlwi.JsonObjContext) {}
 
-//func (s *AdlWiListener) EnterJsonError(ctx adlw1.*adlw1.JsonErrorContext) {}
-//func (s *AdlWiListener) ExitJsonError(ctx adlw1.*adlw1.JsonErrorContext) {}
+//func (s *AdlWiListener) EnterJsonError(ctx adlwi.*adlwi.JsonErrorContext) {}
+//func (s *AdlWiListener) ExitJsonError(ctx adlwi.*adlwi.JsonErrorContext) {}

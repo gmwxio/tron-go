@@ -3,8 +3,10 @@ package lsp
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/golangq/q"
 	"golang.org/x/tools/jsonrpc2"
@@ -13,17 +15,30 @@ import (
 
 type server struct {
 	version    string
+	adlcPath   string
+	tempDir    string
+	extConfig  TronExtCfg
+	langCfg    TronLangCfg
 	client     protocol.Client
 	conn       *jsonrpc2.Conn
 	initParams *protocol.InitializeParams
 	cancel     context.CancelFunc
 	// tcpConn    net.Conn
-	cache filecache
+	fileCache filecache
+	astCache  astcache
 }
 
 func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParams) (*protocol.InitializeResult, error) {
+	q.Q(svr.adlcPath)
+	tempDir, err := ioutil.TempDir("", "adl-lsp")
+	if err != nil {
+		q.Q(err)
+		return nil, err
+	}
+	svr.tempDir = tempDir
 	q.Q(req)
-	svr.cache = newCache()
+	svr.fileCache = newCache()
+	svr.astCache = newAstCache()
 	svr.initParams = req
 	// type ServerCapabilities struct {
 	// 	InnerServerCapabilities
@@ -115,11 +130,11 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 
 	defer func() {
 		svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
-			Message: "TRON LSP (version" + svr.version + ")",
+			Message: "TRON LSP (version " + svr.version + ")",
 			Type:    protocol.Info,
 		})
 		err := svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-			Message: "Started TRON LSP (version" + svr.version + ")",
+			Message: "Started TRON LSP (version " + svr.version + ")",
 			Type:    protocol.Info,
 		})
 		if err != nil {
@@ -183,27 +198,19 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 		}...,
 		)
 	}
-	result, err := svr.client.Configuration(ctx2, &protocol.ConfigurationParams{Items: items})
-	if err != nil {
+	var result []TronCfg
+	if err := svr.conn.Call(ctx2, "workspace/configuration", &protocol.ConfigurationParams{Items: items}, &result); err != nil {
 		q.Q(err)
-		// return err // TODO what does returning an error do
+		return err
 	}
-	q.Q("config", result)
-
-	// for _, view := range svr.views {
-	// 	config, err := svr.client.Configuration(ctx, &protocol.ConfigurationParams{
-	// 		Items: []protocol.ConfigurationItem{{
-	// 			ScopeURI: protocol.NewURI(view.Folder),
-	// 			Section:  "gopls",
-	// 		}},
-	// 	})
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	if err := s.processConfig(view, config[0]); err != nil {
-	// 		return err
-	// 	}
-	// }
+	for _, x := range result {
+		if x.TronExtCfg != nil {
+			svr.extConfig = *x.TronExtCfg
+		}
+		if x.TronLangCfg != nil {
+			svr.langCfg = *x.TronLangCfg
+		}
+	}
 	return nil
 }
 func (svr *server) Shutdown(context.Context) error {
@@ -239,18 +246,24 @@ func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteComm
 }
 func (svr *server) DidOpen(ctx context.Context, req *protocol.DidOpenTextDocumentParams) error {
 	q.Q(req)
-	svr.cache.put(req.TextDocument.URI, req.TextDocument.Text)
+	if strings.HasSuffix(req.TextDocument.URI, ".mod") {
+		return nil
+	}
+	svr.fileCache.put(req.TextDocument.URI, req.TextDocument.Text)
 	svr.diag(ctx, req.TextDocument.URI, req.TextDocument.Text)
 	return nil
 }
 func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDocumentParams) error {
 	q.Q(req)
+	if strings.HasSuffix(req.TextDocument.URI, ".mod") {
+		return nil
+	}
 	if len(req.ContentChanges) < 1 {
 		q.Q("no change")
 		return nil
 	}
 	change := req.ContentChanges[0]
-	svr.cache.put(req.TextDocument.URI, change.Text)
+	svr.fileCache.put(req.TextDocument.URI, change.Text)
 	svr.diag(ctx, req.TextDocument.URI, change.Text)
 	return nil
 }
@@ -268,6 +281,10 @@ func (svr *server) DidSave(ctx context.Context, req *protocol.DidSaveTextDocumen
 }
 func (svr *server) DidClose(ctx context.Context, req *protocol.DidCloseTextDocumentParams) error {
 	q.Q(req)
+	if strings.HasSuffix(req.TextDocument.URI, ".mod") {
+		return nil
+	}
+	svr.fileCache.delete(req.TextDocument.URI)
 	svr.client.PublishDiagnostics(ctx, &protocol.PublishDiagnosticsParams{
 		Diagnostics: []protocol.Diagnostic{},
 		URI:         req.TextDocument.URI,
@@ -334,7 +351,7 @@ func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSym
 		}
 	}()
 	q.Q(req)
-	txt, err := svr.cache.get(req.TextDocument.URI)
+	txt, err := svr.fileCache.get(req.TextDocument.URI)
 	if err != nil {
 		return []protocol.DocumentSymbol{}, nil
 	}

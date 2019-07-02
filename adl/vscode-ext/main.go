@@ -15,7 +15,6 @@ var (
 )
 
 type root struct{}
-type adl struct{}
 
 func main() {
 	r := root{}

@@ -15,7 +15,8 @@ func NewConsole(version string) opts.Opts {
 }
 
 type tcpsdtio struct {
-	version string
+	AdlcPath string
+	version  string
 }
 
 func (svr *tcpsdtio) Run() error {
@@ -24,8 +25,9 @@ func (svr *tcpsdtio) Run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	srv := &server{
 		// tcpConn: conn,
-		cancel:  cancel,
-		version: svr.version,
+		cancel:   cancel,
+		version:  svr.version,
+		adlcPath: svr.AdlcPath,
 	}
 	connLSP, client, _ := protocol.NewServer(stream, srv)
 	srv.client = client

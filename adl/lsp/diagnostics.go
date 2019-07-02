@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/wxio/tron-go/internal/ctree"
+
+	"github.com/wxio/tron-go/internal/adlwi"
+
 	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
 	"github.com/wxio/tron-go/adl"
@@ -47,6 +51,30 @@ func (s *errColl) EnterEveryRule(ctx antlr.ParserRuleContext) {}
 func (s *errColl) ExitEveryRule(ctx antlr.ParserRuleContext)  {}
 func (s *errColl) VisitErrorNode(node antlr.ErrorNode) {
 	s.errs = append(s.errs, node)
+}
+
+type diagColl struct {
+	module  adl.Module
+	imports []adl.Import
+}
+
+func (s *diagColl) VisitTerminal(node antlr.TerminalNode)      {}
+func (s *diagColl) EnterEveryRule(ctx antlr.ParserRuleContext) {}
+func (s *diagColl) ExitEveryRule(ctx antlr.ParserRuleContext)  {}
+func (s *diagColl) VisitErrorNode(node antlr.ErrorNode) {
+	// s.errs = append(s.errs, node)
+}
+func (s *diagColl) EnterModule(ctx *adlwi.ModuleContext) {
+	q.Q(ctx)
+	s.module = ctx.GetTok().(*ctree.TreeNode).Val.(adl.Module)
+}
+func (s *diagColl) EnterImportModule(ctx *adlwi.ImportModuleContext) {
+	q.Q(ctx)
+	s.imports = append(s.imports, ctx.GetStart().(*ctree.TreeNode).Val.(adl.Import))
+}
+func (s *diagColl) EnterImportScopedModule(ctx *adlwi.ImportScopedModuleContext) {
+	q.Q(ctx)
+	s.imports = append(s.imports, ctx.GetStart().(*ctree.TreeNode).Val.(adl.Import))
 }
 
 func (svr *server) diag(ctx context.Context, fname string, text string) {
@@ -254,4 +282,9 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 		Diagnostics: dss,
 		URI:         fname,
 	})
+	//
+	dc := &diagColl{}
+	adl.WalkADL(tr, dc)
+	q.Q(dc.module)
+	q.Q(dc.imports)
 }

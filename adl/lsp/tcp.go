@@ -24,8 +24,9 @@ func NewTcp(ver string) opts.Opts {
 type tcpopt struct {
 }
 type tcpsvr struct {
-	Addr    string
-	version string
+	AdlcPath string
+	Addr     string
+	version  string
 }
 type tcpclient struct {
 	Addr      string
@@ -57,8 +58,9 @@ func (svr *tcpsvr) handle(in io.Reader, out io.Writer) {
 	ctx, cancel := context.WithCancel(context.Background())
 	srv := &server{
 		// tcpConn: conn,
-		cancel:  cancel,
-		version: svr.version,
+		cancel:   cancel,
+		version:  svr.version,
+		adlcPath: svr.AdlcPath,
 	}
 	connLSP, client, _ := protocol.NewServer(stream, srv)
 	srv.client = client
