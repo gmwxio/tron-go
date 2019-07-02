@@ -38,6 +38,17 @@ func qstack() {
 	}
 }
 
+type errColl struct {
+	errs []antlr.ErrorNode
+}
+
+func (s *errColl) VisitTerminal(node antlr.TerminalNode)      {}
+func (s *errColl) EnterEveryRule(ctx antlr.ParserRuleContext) {}
+func (s *errColl) ExitEveryRule(ctx antlr.ParserRuleContext)  {}
+func (s *errColl) VisitErrorNode(node antlr.ErrorNode) {
+	s.errs = append(s.errs, node)
+}
+
 func (svr *server) diag(ctx context.Context, fname string, text string) {
 	defer func() {
 		if r := recover(); r != nil {

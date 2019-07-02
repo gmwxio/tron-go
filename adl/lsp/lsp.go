@@ -7,7 +7,6 @@ import (
 	"path"
 
 	"github.com/golangq/q"
-	antlr "github.com/wxio/goantlr"
 	"golang.org/x/tools/jsonrpc2"
 	"golang.org/x/tools/lsp/protocol"
 )
@@ -269,6 +268,10 @@ func (svr *server) DidSave(ctx context.Context, req *protocol.DidSaveTextDocumen
 }
 func (svr *server) DidClose(ctx context.Context, req *protocol.DidCloseTextDocumentParams) error {
 	q.Q(req)
+	svr.client.PublishDiagnostics(ctx, &protocol.PublishDiagnosticsParams{
+		Diagnostics: []protocol.Diagnostic{},
+		URI:         req.TextDocument.URI,
+	})
 	return nil
 }
 func (svr *server) Completion(ctx context.Context, req *protocol.CompletionParams) (*protocol.CompletionList, error) {
@@ -341,17 +344,6 @@ func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSym
 		return []protocol.DocumentSymbol{}, nil
 	}
 	return dsa, nil
-}
-
-type errColl struct {
-	errs []antlr.ErrorNode
-}
-
-func (s *errColl) VisitTerminal(node antlr.TerminalNode)      {}
-func (s *errColl) EnterEveryRule(ctx antlr.ParserRuleContext) {}
-func (s *errColl) ExitEveryRule(ctx antlr.ParserRuleContext)  {}
-func (s *errColl) VisitErrorNode(node antlr.ErrorNode) {
-	s.errs = append(s.errs, node)
 }
 
 func (svr *server) CodeAction(ctx context.Context, req *protocol.CodeActionParams) ([]protocol.CodeAction, error) {
