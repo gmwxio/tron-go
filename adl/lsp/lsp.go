@@ -3,16 +3,12 @@ package lsp
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
-	"github.com/wxio/tron-go/adl"
 	"golang.org/x/tools/jsonrpc2"
 	"golang.org/x/tools/lsp/protocol"
 )
@@ -23,10 +19,12 @@ type server struct {
 	initParams *protocol.InitializeParams
 	cancel     context.CancelFunc
 	// tcpConn    net.Conn
+	cache filecache
 }
 
 func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParams) (*protocol.InitializeResult, error) {
 	q.Q(req)
+	svr.cache = newCache()
 	svr.initParams = req
 	// type ServerCapabilities struct {
 	// 	InnerServerCapabilities
@@ -38,7 +36,7 @@ func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParam
 	// 	DeclarationServerCapabilities
 	// 	SelectionRangeServerCapabilities
 	// }
-	q.Q(spew.Sdump(req))
+	// q.Q(spew.Sdump(req))
 	textDocumentSyncKind := protocol.Full
 	ret := &protocol.InitializeResult{
 		Capabilities: protocol.ServerCapabilities{
@@ -164,7 +162,7 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 
 	var items []protocol.ConfigurationItem
 	for _, wf := range wfs {
-		q.Q(wf)
+		// q.Q(wf)
 		items = append(items, []protocol.ConfigurationItem{
 			{ScopeURI: wf.URI, Section: "tron"},
 			{ScopeURI: wf.URI, Section: "[tron]"},
@@ -237,16 +235,18 @@ func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteComm
 }
 func (svr *server) DidOpen(ctx context.Context, req *protocol.DidOpenTextDocumentParams) error {
 	q.Q(req)
+	svr.cache.put(req.TextDocument.URI, req.TextDocument.Text)
 	svr.diag(ctx, req.TextDocument.URI, req.TextDocument.Text)
 	return nil
 }
 func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDocumentParams) error {
-	// q.Q(req)
+	q.Q(req)
 	if len(req.ContentChanges) < 1 {
 		q.Q("no change")
 		return nil
 	}
 	change := req.ContentChanges[0]
+	svr.cache.put(req.TextDocument.URI, change.Text)
 	svr.diag(ctx, req.TextDocument.URI, change.Text)
 	return nil
 }
@@ -325,40 +325,17 @@ func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSym
 			qstack()
 		}
 	}()
-	// q.Q(req)
-	fname := req.TextDocument.URI
-	if strings.HasPrefix(fname, "file://") {
-		fname = fname[len("file://"):]
+	q.Q(req)
+	txt, err := svr.cache.get(req.TextDocument.URI)
+	if err != nil {
+		return []protocol.DocumentSymbol{}, nil
 	}
-	by, err := ioutil.ReadFile(fname)
+	dsa, err := buildDocSym(txt, req.TextDocument.URI)
 	if err != nil {
 		q.Q(err)
-		return nil, nil
+		return []protocol.DocumentSymbol{}, nil
 	}
-
-	tr, atr, bl, ts, err1 := adl.BuildAdlAST(string(by))
-	_, _, _ = atr, bl, ts
-	if err1.Error() != nil {
-		q.Q(err1.Error())
-		return nil, nil
-	}
-	if tr != nil {
-		dsa := make([]protocol.DocumentSymbol, 0)
-		ds := &docSym{
-			dsa:       &dsa,
-			lexStream: ts,
-			furi:      fname,
-		}
-		err := adl.VisitAdlWo(tr, ds)
-		if err.Error() != nil {
-			q.Q(err.Error())
-			return nil, nil
-		}
-		// x, _ := json.MarshalIndent(ds.dsa, "", "  ")
-		// q.Q(string(x))
-		return *ds.dsa, nil
-	}
-	return nil, nil
+	return dsa, nil
 }
 
 type errColl struct {

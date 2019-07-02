@@ -23,9 +23,33 @@ import {
 let client: LanguageClient;
 
 export function activate(ctx: ExtensionContext) {
+	let plat = process.platform.toString();
+	let arch = process.arch;
+	let exte = "";
+	switch (process.platform.toString()) {
+		case "win32":
+			plat = "windows"
+			exte = ".exe"
+			break;
+		default:
+			break;
+	}
+	switch (process.arch) {
+		case "x64":
+			arch = "amd64"
+			break;
+		case "x32":
+			arch = "386"
+			break;
+		default:
+			break;
+	}
 	// The server is implemented in Go
-	let serverModule = ctx.asAbsolutePath(
+	let serverModuleDebug = ctx.asAbsolutePath(
 		path.join('adl-lsp', 'adl-lsp')
+	);
+	let serverModuleRun = ctx.asAbsolutePath(
+		path.join('adl-lsp', 'dist', 'adl-lsp_'+plat+"_"+arch, 'adl-lsp'+exte)
 	);
 	// The debug options for the server
 	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
@@ -34,11 +58,11 @@ export function activate(ctx: ExtensionContext) {
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
 	let serverOptions: ServerOptions = {
-		run: { command: serverModule, transport: TransportKind.stdio,
+		run: { command: serverModuleRun, transport: TransportKind.stdio,
 			options: {detached: true},
 			args: ["stdio"] 
 		},
-		debug: { command: serverModule, transport: TransportKind.stdio, 
+		debug: { command: serverModuleDebug, transport: TransportKind.stdio, 
 			args: ["stdio"] 
 			// args: ["tcp", "client", "--reconnect"]
 		}

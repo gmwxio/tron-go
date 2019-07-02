@@ -61,9 +61,10 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 		// q.Q("%v", tr.TreeString())
 		errC := &errColl{}
 		antlr.ParseTreeWalkerDefault.Walk(errC, atr)
-		q.Q("Lex Errors")
+		// q.Q("Lex Errors")
 		for i, er := range err1.LexErr {
-			q.Q(i, er)
+			_ = i
+			// q.Q(i, er)
 			ds := protocol.Diagnostic{
 				Range: protocol.Range{
 					Start: protocol.Position{
@@ -84,9 +85,10 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 			}
 			dss = append(dss, ds)
 		}
-		q.Q("Parse Errors")
+		// q.Q("Parse Errors")
 		for i, er := range err1.ParseErr {
-			q.Q(i, er)
+			_ = i
+			// q.Q(i, er)
 			ds := protocol.Diagnostic{
 				Range: protocol.Range{
 					Start: protocol.Position{
@@ -107,9 +109,10 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 			}
 			dss = append(dss, ds)
 		}
-		q.Q("Syntax Errors")
+		// q.Q("Syntax Errors")
 		for i, er := range err1.SyntaxErr {
-			q.Q(i, er)
+			_ = i
+			// q.Q(i, er)
 			ds := protocol.Diagnostic{
 				Range: protocol.Range{
 					Start: protocol.Position{
@@ -130,9 +133,9 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 			}
 			dss = append(dss, ds)
 		}
-		q.Q("Error Nodes")
+		// q.Q("Error Nodes")
 		for i, er := range errC.errs {
-			q.Q(i, er.GetSymbol())
+			// q.Q(i, er.GetSymbol())
 			ds := protocol.Diagnostic{
 				Range: protocol.Range{
 					Start: protocol.Position{
@@ -153,7 +156,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 			}
 			dss = append(dss, ds)
 			if i > 9 {
-				q.Q("  ... total errs ", len(errC.errs))
+				// q.Q("  ... total errs ", len(errC.errs))
 				break
 			}
 		}
@@ -235,7 +238,7 @@ func (svr *server) diag(ctx context.Context, fname string, text string) {
 		// 	}
 		// }
 	}
-	q.Q(dss)
+	// q.Q(dss)
 	svr.client.PublishDiagnostics(ctx, &protocol.PublishDiagnosticsParams{
 		Diagnostics: dss,
 		URI:         fname,

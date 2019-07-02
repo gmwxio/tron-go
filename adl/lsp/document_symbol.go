@@ -3,12 +3,38 @@ package lsp
 import (
 	"fmt"
 
+	"github.com/wxio/tron-go/adl"
 	"github.com/wxio/tron-go/internal/ctree"
 
 	antlr "github.com/wxio/goantlr"
 	"github.com/wxio/tron-go/internal/adlwo"
 	"golang.org/x/tools/lsp/protocol"
 )
+
+func buildDocSym(by string, furi string) ([]protocol.DocumentSymbol, error) {
+	tr, atr, bl, ts, err1 := adl.BuildAdlAST(by)
+	_, _, _ = atr, bl, ts
+	dsa := make([]protocol.DocumentSymbol, 0)
+	if err1.Error() != nil {
+		// q.Q(err1.Error())
+		return dsa, err1.Error()
+	}
+	if tr != nil {
+		ds := &docSym{
+			dsa:       &dsa,
+			lexStream: ts,
+			furi:      furi,
+		}
+		err := adl.VisitAdlWo(tr, ds)
+		if err.Error() != nil {
+			return dsa, nil
+		}
+		// x, _ := json.MarshalIndent(ds.dsa, "", "  ")
+		// q.Q(string(x))
+		return dsa, nil
+	}
+	return dsa, nil
+}
 
 type docSym struct {
 	*antlr.BaseParseTreeVisitor

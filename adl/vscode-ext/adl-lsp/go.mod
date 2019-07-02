@@ -6,6 +6,8 @@ replace github.com/wxio/tron-go => ../../../
 
 replace golang.org/x/tools => /home/garym/devel/wxio/tools
 
+replace github.com/wxio/goantlr => /home/garym/devel/wxio/goantlr
+
 //replace golang.org/x/tools => github.com/wxio/tools v0.0.1
 
 require (
