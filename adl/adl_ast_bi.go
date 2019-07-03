@@ -141,13 +141,10 @@ func (v *ADLBuildListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 		v.bldr.Down()
 	case *parser.TypeParameterContext:
 		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeParam, tokens2strings(ctx.GetTypep()))
-	case *parser.TypeExpressionElemContext:
-		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprElem, ctx.GetA().GetText())
-		v.bldr.Down()
-	case *parser.TypeExprPrimOrParamContext:
-		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprPrimOrParam, ctx.GetB().GetText())
-	case *parser.TypeExprTypeExprContext:
-		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprTypeExpr, ctx.GetB().GetText())
+	case *parser.TypeExprSimpleContext:
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprSimple, ctx.GetB().GetText())
+	case *parser.TypeExprGenericContext:
+		v.bldr.AddNode(ctx.GetStart(), ctx.GetStop(), parser.AdlPTypeExprGeneric, ctx.GetB().GetText())
 		v.bldr.Down()
 	case *parser.ModuleAnnotationContext:
 		switch ctx.GetKw().GetText() {
@@ -262,11 +259,9 @@ func (v *ADLBuildListener) ExitEveryRule(ctx antlr.ParserRuleContext) {
 		v.bldr.Up()
 	case *parser.TypeOrNewtypeContext:
 		v.bldr.Up()
-	case *parser.TypeExpressionElemContext:
-		v.bldr.Up()
 	case *parser.TypeParameterContext:
-	case *parser.TypeExprPrimOrParamContext:
-	case *parser.TypeExprTypeExprContext:
+	case *parser.TypeExprSimpleContext:
+	case *parser.TypeExprGenericContext:
 		v.bldr.Up()
 	case *parser.ModuleAnnotationContext:
 		v.bldr.Up()

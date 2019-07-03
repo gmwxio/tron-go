@@ -25,8 +25,8 @@ type AdlWiHandlers struct {
 	TLDError           func(ctx ITLDErrorContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Field              func(ctx IFieldContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	Annotation         func(ctx IAnnotationContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
-	TypeExpr_          func(ctx ITypeExpr_Context, this *AdlWiHandlers, args ...interface{}) (result interface{})
-	TypeParams         func(ctx ITypeParamsContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
+	TypeExprSimple     func(ctx ITypeExprSimpleContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
+	TypeExprGeneric    func(ctx ITypeExprGenericContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	JsonStr            func(ctx IJsonStrContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	JsonBool           func(ctx IJsonBoolContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
 	JsonNull           func(ctx IJsonNullContext, this *AdlWiHandlers, args ...interface{}) (result interface{})
@@ -57,8 +57,8 @@ type AdlWiVisitor interface {
 	TLDErrorContextVisitor
 	FieldContextVisitor
 	AnnotationContextVisitor
-	TypeExpr_ContextVisitor
-	TypeParamsContextVisitor
+	TypeExprSimpleContextVisitor
+	TypeExprGenericContextVisitor
 	JsonStrContextVisitor
 	JsonBoolContextVisitor
 	JsonNullContextVisitor
@@ -120,11 +120,11 @@ type FieldContextVisitor interface {
 type AnnotationContextVisitor interface {
 	VisitAnnotation(ctx IAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
-type TypeExpr_ContextVisitor interface {
-	VisitTypeExpr_(ctx ITypeExpr_Context, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+type TypeExprSimpleContextVisitor interface {
+	VisitTypeExprSimple(ctx ITypeExprSimpleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
-type TypeParamsContextVisitor interface {
-	VisitTypeParams(ctx ITypeParamsContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+type TypeExprGenericContextVisitor interface {
+	VisitTypeExprGeneric(ctx ITypeExprGenericContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
 type JsonStrContextVisitor interface {
 	VisitJsonStr(ctx IJsonStrContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})

@@ -34,7 +34,6 @@ package adlwo // AdlWo
 //var _ adlwo.FieldContextVisitor = &AdlWoVisitor{}
 //var _ adlwo.AnnotationContextVisitor = &AdlWoVisitor{}
 //var _ adlwo.TypeExpr_ContextVisitor = &AdlWoVisitor{}
-//var _ adlwo.TypeParamsContextVisitor = &AdlWoVisitor{}
 //var _ adlwo.JsonStrContextVisitor = &AdlWoVisitor{}
 //var _ adlwo.JsonBoolContextVisitor = &AdlWoVisitor{}
 //var _ adlwo.JsonNullContextVisitor = &AdlWoVisitor{}
@@ -83,7 +82,6 @@ package adlwo // AdlWo
 //Field: func(ctx *adlwo.FieldContext, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //Annotation: func(ctx *adlwo.AnnotationContext, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //TypeExpr_: func(ctx *adlwo.TypeExpr_Context, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
-//TypeParams: func(ctx *adlwo.TypeParamsContext, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //JsonStr: func(ctx *adlwo.JsonStrContext, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //JsonBool: func(ctx *adlwo.JsonBoolContext, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //JsonNull: func(ctx *adlwo.JsonNullContext, this *adlwo.AdlWoHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
@@ -109,7 +107,6 @@ package adlwo // AdlWo
 //func (v *AdlWoVisitor) VisitField(ctx adlwo.IFieldContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWoVisitor) VisitAnnotation(ctx adlwo.IAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWoVisitor) VisitTypeExpr_(ctx adlwo.ITypeExpr_Context, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
-//func (v *AdlWoVisitor) VisitTypeParams(ctx adlwo.ITypeParamsContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWoVisitor) VisitJsonStr(ctx adlwo.IJsonStrContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWoVisitor) VisitJsonBool(ctx adlwo.IJsonBoolContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlWoVisitor) VisitJsonNull(ctx adlwo.IJsonNullContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}

@@ -31,9 +31,8 @@ package adllp // AdlP
 //var _ adllp.DeclAnnotationContextVisitor = &AdlPVisitor{}
 //var _ adllp.FieldAnnotationContextVisitor = &AdlPVisitor{}
 //var _ adllp.TypeParameterContextVisitor = &AdlPVisitor{}
-//var _ adllp.TypeExprPrimOrParamContextVisitor = &AdlPVisitor{}
-//var _ adllp.TypeExprTypeExprContextVisitor = &AdlPVisitor{}
-//var _ adllp.TypeExpressionElemContextVisitor = &AdlPVisitor{}
+//var _ adllp.TypeExprSimpleContextVisitor = &AdlPVisitor{}
+//var _ adllp.TypeExprGenericContextVisitor = &AdlPVisitor{}
 //var _ adllp.FieldStatementContextVisitor = &AdlPVisitor{}
 //var _ adllp.StringStatementContextVisitor = &AdlPVisitor{}
 //var _ adllp.TrueFalseNullContextVisitor = &AdlPVisitor{}
@@ -79,9 +78,8 @@ package adllp // AdlP
 //DeclAnnotation: func(ctx *adllp.DeclAnnotationContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //FieldAnnotation: func(ctx *adllp.FieldAnnotationContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //TypeParameter: func(ctx *adllp.TypeParameterContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
-//TypeExprPrimOrParam: func(ctx *adllp.TypeExprPrimOrParamContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
-//TypeExprTypeExpr: func(ctx *adllp.TypeExprTypeExprContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
-//TypeExpressionElem: func(ctx *adllp.TypeExpressionElemContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
+//TypeExprSimple: func(ctx *adllp.TypeExprSimpleContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
+//TypeExprGeneric: func(ctx *adllp.TypeExprGenericContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //FieldStatement: func(ctx *adllp.FieldStatementContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //StringStatement: func(ctx *adllp.StringStatementContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //TrueFalseNull: func(ctx *adllp.TrueFalseNullContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
@@ -104,9 +102,8 @@ package adllp // AdlP
 //func (v *AdlPVisitor) VisitDeclAnnotation(ctx adllp.IDeclAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitFieldAnnotation(ctx adllp.IFieldAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitTypeParameter(ctx adllp.ITypeParameterContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
-//func (v *AdlPVisitor) VisitTypeExprPrimOrParam(ctx adllp.ITypeExprPrimOrParamContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
-//func (v *AdlPVisitor) VisitTypeExprTypeExpr(ctx adllp.ITypeExprTypeExprContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
-//func (v *AdlPVisitor) VisitTypeExpressionElem(ctx adllp.ITypeExpressionElemContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
+//func (v *AdlPVisitor) VisitTypeExprSimple(ctx adllp.ITypeExprSimpleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
+//func (v *AdlPVisitor) VisitTypeExprGeneric(ctx adllp.ITypeExprGenericContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitFieldStatement(ctx adllp.IFieldStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitStringStatement(ctx adllp.IStringStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitTrueFalseNull(ctx adllp.ITrueFalseNullContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}

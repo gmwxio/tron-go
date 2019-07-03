@@ -293,25 +293,9 @@ func (svr *server) DidClose(ctx context.Context, req *protocol.DidCloseTextDocum
 }
 func (svr *server) Completion(ctx context.Context, req *protocol.CompletionParams) (*protocol.CompletionList, error) {
 	q.Q(req)
-	cl := protocol.CompletionList{
-		IsIncomplete: false,
-		Items: []protocol.CompletionItem{
-			{
-				Label:         "test",
-				Kind:          protocol.TextCompletion,
-				Detail:        "This is a test",
-				Documentation: "this is the docs",
-			},
-			{
-				Label:         "test2",
-				Kind:          protocol.TextCompletion,
-				Detail:        "This is a test2",
-				Documentation: "this is the docs2",
-			},
-		},
-	}
-	return &cl, nil
+	return svr.collect(ctx, req)
 }
+
 func (svr *server) CompletionResolve(ctx context.Context, req *protocol.CompletionItem) (*protocol.CompletionItem, error) {
 	q.Q(req)
 	return nil, nil

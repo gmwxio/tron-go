@@ -8,28 +8,27 @@ type AdlPHandlers struct {
 	EnterEveryRule func(ctx antlr.RuleNode)
 	ExitEveryRule  func(ctx antlr.RuleNode)
 
-	Adl                 func(ctx IAdlContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	ModuleStatement     func(ctx IModuleStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	ImportScopedName    func(ctx IImportScopedNameContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	ImportModuleName    func(ctx IImportModuleNameContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	LocalAnno           func(ctx ILocalAnnoContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	DocAnno             func(ctx IDocAnnoContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	StructOrUnion       func(ctx IStructOrUnionContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TypeOrNewtype       func(ctx ITypeOrNewtypeContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	ModuleAnnotation    func(ctx IModuleAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	DeclAnnotation      func(ctx IDeclAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	FieldAnnotation     func(ctx IFieldAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TypeParameter       func(ctx ITypeParameterContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TypeExprPrimOrParam func(ctx ITypeExprPrimOrParamContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TypeExprTypeExpr    func(ctx ITypeExprTypeExprContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TypeExpressionElem  func(ctx ITypeExpressionElemContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	FieldStatement      func(ctx IFieldStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	StringStatement     func(ctx IStringStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TrueFalseNull       func(ctx ITrueFalseNullContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	NumberStatement     func(ctx INumberStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	FloatStatement      func(ctx IFloatStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	ArrayStatement      func(ctx IArrayStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	ObjStatement        func(ctx IObjStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	Adl              func(ctx IAdlContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	ModuleStatement  func(ctx IModuleStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	ImportScopedName func(ctx IImportScopedNameContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	ImportModuleName func(ctx IImportModuleNameContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	LocalAnno        func(ctx ILocalAnnoContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	DocAnno          func(ctx IDocAnnoContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	StructOrUnion    func(ctx IStructOrUnionContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	TypeOrNewtype    func(ctx ITypeOrNewtypeContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	ModuleAnnotation func(ctx IModuleAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	DeclAnnotation   func(ctx IDeclAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	FieldAnnotation  func(ctx IFieldAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	TypeParameter    func(ctx ITypeParameterContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	TypeExprSimple   func(ctx ITypeExprSimpleContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	TypeExprGeneric  func(ctx ITypeExprGenericContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	FieldStatement   func(ctx IFieldStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	StringStatement  func(ctx IStringStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	TrueFalseNull    func(ctx ITrueFalseNullContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	NumberStatement  func(ctx INumberStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	FloatStatement   func(ctx IFloatStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	ArrayStatement   func(ctx IArrayStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	ObjStatement     func(ctx IObjStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 }
 
 // A complete Visitor for a parse tree produced by AdlP.
@@ -47,9 +46,8 @@ type AdlPVisitor interface {
 	DeclAnnotationContextVisitor
 	FieldAnnotationContextVisitor
 	TypeParameterContextVisitor
-	TypeExprPrimOrParamContextVisitor
-	TypeExprTypeExprContextVisitor
-	TypeExpressionElemContextVisitor
+	TypeExprSimpleContextVisitor
+	TypeExprGenericContextVisitor
 	FieldStatementContextVisitor
 	StringStatementContextVisitor
 	TrueFalseNullContextVisitor
@@ -95,14 +93,11 @@ type FieldAnnotationContextVisitor interface {
 type TypeParameterContextVisitor interface {
 	VisitTypeParameter(ctx ITypeParameterContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
-type TypeExprPrimOrParamContextVisitor interface {
-	VisitTypeExprPrimOrParam(ctx ITypeExprPrimOrParamContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+type TypeExprSimpleContextVisitor interface {
+	VisitTypeExprSimple(ctx ITypeExprSimpleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
-type TypeExprTypeExprContextVisitor interface {
-	VisitTypeExprTypeExpr(ctx ITypeExprTypeExprContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
-}
-type TypeExpressionElemContextVisitor interface {
-	VisitTypeExpressionElem(ctx ITypeExpressionElemContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+type TypeExprGenericContextVisitor interface {
+	VisitTypeExprGeneric(ctx ITypeExprGenericContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
 type FieldStatementContextVisitor interface {
 	VisitFieldStatement(ctx IFieldStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})

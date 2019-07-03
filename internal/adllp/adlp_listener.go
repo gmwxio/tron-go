@@ -43,14 +43,11 @@ type AdlPListener interface {
 	TypeParameterEntryListener
 	TypeParameterExitListener
 
-	TypeExprPrimOrParamEntryListener
-	TypeExprPrimOrParamExitListener
+	TypeExprSimpleEntryListener
+	TypeExprSimpleExitListener
 
-	TypeExprTypeExprEntryListener
-	TypeExprTypeExprExitListener
-
-	TypeExpressionElemEntryListener
-	TypeExpressionElemExitListener
+	TypeExprGenericEntryListener
+	TypeExprGenericExitListener
 
 	FieldStatementEntryListener
 	FieldStatementExitListener
@@ -177,27 +174,19 @@ type TypeParameterExitListener interface {
 }
 
 // From Rule 'typeExpr'
-type TypeExprPrimOrParamEntryListener interface {
-	EnterTypeExprPrimOrParam(c *TypeExprPrimOrParamContext)
+type TypeExprSimpleEntryListener interface {
+	EnterTypeExprSimple(c *TypeExprSimpleContext)
 }
-type TypeExprPrimOrParamExitListener interface {
-	ExitTypeExprPrimOrParam(c *TypeExprPrimOrParamContext)
+type TypeExprSimpleExitListener interface {
+	ExitTypeExprSimple(c *TypeExprSimpleContext)
 }
 
 // From Rule 'typeExpr'
-type TypeExprTypeExprEntryListener interface {
-	EnterTypeExprTypeExpr(c *TypeExprTypeExprContext)
+type TypeExprGenericEntryListener interface {
+	EnterTypeExprGeneric(c *TypeExprGenericContext)
 }
-type TypeExprTypeExprExitListener interface {
-	ExitTypeExprTypeExpr(c *TypeExprTypeExprContext)
-}
-
-// From Rule 'typeExprElem'
-type TypeExpressionElemEntryListener interface {
-	EnterTypeExpressionElem(c *TypeExpressionElemContext)
-}
-type TypeExpressionElemExitListener interface {
-	ExitTypeExpressionElem(c *TypeExpressionElemContext)
+type TypeExprGenericExitListener interface {
+	ExitTypeExprGeneric(c *TypeExprGenericContext)
 }
 
 // From Rule 'soruBody'

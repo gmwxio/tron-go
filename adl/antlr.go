@@ -7,6 +7,7 @@ import (
 	"github.com/golangq/q"
 	antlr "github.com/wxio/goantlr"
 	walker "github.com/wxio/tron-go/internal/adlwi"
+	"github.com/wxio/tron-go/internal/ctree"
 )
 
 type TTType struct{}
@@ -63,12 +64,14 @@ type DiagMessage interface {
 }
 
 type Error struct {
-	Start, Stop antlr.Token
-	Expected    []string
-	Received    string
-	Annotations `json:"annotations"`
+	ctree.TreeNode `json:"-"`
+	Start, Stop    antlr.Token
+	Expected       []string
+	Received       string
+	Annotations    `json:"annotations"`
 }
 
+func (er *Error) SetTreeNode(t ctree.TreeNode) { er.TreeNode = t }
 func (er Error) Line() int {
 	return er.Start.GetLine() - 1
 }

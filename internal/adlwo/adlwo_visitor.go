@@ -23,7 +23,6 @@ type AdlWoHandlers struct {
 	Field              func(ctx IFieldContext, this *AdlWoHandlers, args ...interface{}) (result interface{})
 	Annotation         func(ctx IAnnotationContext, this *AdlWoHandlers, args ...interface{}) (result interface{})
 	TypeExpr_          func(ctx ITypeExpr_Context, this *AdlWoHandlers, args ...interface{}) (result interface{})
-	TypeParams         func(ctx ITypeParamsContext, this *AdlWoHandlers, args ...interface{}) (result interface{})
 	JsonStr            func(ctx IJsonStrContext, this *AdlWoHandlers, args ...interface{}) (result interface{})
 	JsonBool           func(ctx IJsonBoolContext, this *AdlWoHandlers, args ...interface{}) (result interface{})
 	JsonNull           func(ctx IJsonNullContext, this *AdlWoHandlers, args ...interface{}) (result interface{})
@@ -51,7 +50,6 @@ type AdlWoVisitor interface {
 	FieldContextVisitor
 	AnnotationContextVisitor
 	TypeExpr_ContextVisitor
-	TypeParamsContextVisitor
 	JsonStrContextVisitor
 	JsonBoolContextVisitor
 	JsonNullContextVisitor
@@ -105,9 +103,6 @@ type AnnotationContextVisitor interface {
 }
 type TypeExpr_ContextVisitor interface {
 	VisitTypeExpr_(ctx ITypeExpr_Context, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
-}
-type TypeParamsContextVisitor interface {
-	VisitTypeParams(ctx ITypeParamsContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
 type JsonStrContextVisitor interface {
 	VisitJsonStr(ctx IJsonStrContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})

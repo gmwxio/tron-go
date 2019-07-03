@@ -90,11 +90,11 @@ package adlwi // AdlWi
 //var _ adlwi.AnnotationEntryListener = &AdlWiListener{}
 //var _ adlwi.AnnotationExitListener = &AdlWiListener{}
 
-//var _ adlwi.TypeExpr_EntryListener = &AdlWiListener{}
-//var _ adlwi.TypeExpr_ExitListener = &AdlWiListener{}
+//var _ adlwi.TypeExprSimpleEntryListener = &AdlWiListener{}
+//var _ adlwi.TypeExprSimpleExitListener = &AdlWiListener{}
 
-//var _ adlwi.TypeParamsEntryListener = &AdlWiListener{}
-//var _ adlwi.TypeParamsExitListener = &AdlWiListener{}
+//var _ adlwi.TypeExprGenericEntryListener = &AdlWiListener{}
+//var _ adlwi.TypeExprGenericExitListener = &AdlWiListener{}
 
 //var _ adlwi.JsonStrEntryListener = &AdlWiListener{}
 //var _ adlwi.JsonStrExitListener = &AdlWiListener{}
@@ -217,11 +217,11 @@ package adlwi // AdlWi
 //func (s *AdlWiListener) EnterAnnotation(ctx adlwi.*adlwi.AnnotationContext) {}
 //func (s *AdlWiListener) ExitAnnotation(ctx adlwi.*adlwi.AnnotationContext) {}
 
-//func (s *AdlWiListener) EnterTypeExpr_(ctx adlwi.*adlwi.TypeExpr_Context) {}
-//func (s *AdlWiListener) ExitTypeExpr_(ctx adlwi.*adlwi.TypeExpr_Context) {}
+//func (s *AdlWiListener) EnterTypeExprSimple(ctx adlwi.*adlwi.TypeExprSimpleContext) {}
+//func (s *AdlWiListener) ExitTypeExprSimple(ctx adlwi.*adlwi.TypeExprSimpleContext) {}
 
-//func (s *AdlWiListener) EnterTypeParams(ctx adlwi.*adlwi.TypeParamsContext) {}
-//func (s *AdlWiListener) ExitTypeParams(ctx adlwi.*adlwi.TypeParamsContext) {}
+//func (s *AdlWiListener) EnterTypeExprGeneric(ctx adlwi.*adlwi.TypeExprGenericContext) {}
+//func (s *AdlWiListener) ExitTypeExprGeneric(ctx adlwi.*adlwi.TypeExprGenericContext) {}
 
 //func (s *AdlWiListener) EnterJsonStr(ctx adlwi.*adlwi.JsonStrContext) {}
 //func (s *AdlWiListener) ExitJsonStr(ctx adlwi.*adlwi.JsonStrContext) {}

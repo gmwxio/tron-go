@@ -19,9 +19,6 @@ type AdlWiListener interface {
 	AnnotationEntryListener
 	AnnotationExitListener
 
-	TypeExpr_EntryListener
-	TypeExpr_ExitListener
-
 	ImportModuleEntryListener
 	ImportModuleExitListener
 
@@ -61,8 +58,11 @@ type AdlWiListener interface {
 	FieldEntryListener
 	FieldExitListener
 
-	TypeParamsEntryListener
-	TypeParamsExitListener
+	TypeExprSimpleEntryListener
+	TypeExprSimpleExitListener
+
+	TypeExprGenericEntryListener
+	TypeExprGenericExitListener
 
 	JsonStrEntryListener
 	JsonStrExitListener
@@ -118,13 +118,6 @@ type AnnotationEntryListener interface {
 }
 type AnnotationExitListener interface {
 	ExitAnnotation(c *AnnotationContext)
-}
-
-type TypeExpr_EntryListener interface {
-	EnterTypeExpr_(c *TypeExpr_Context)
-}
-type TypeExpr_ExitListener interface {
-	ExitTypeExpr_(c *TypeExpr_Context)
 }
 
 //
@@ -235,12 +228,20 @@ type FieldExitListener interface {
 	ExitField(c *FieldContext)
 }
 
-// From Rule 'typeExprElem_'
-type TypeParamsEntryListener interface {
-	EnterTypeParams(c *TypeParamsContext)
+// From Rule 'typeExpr_'
+type TypeExprSimpleEntryListener interface {
+	EnterTypeExprSimple(c *TypeExprSimpleContext)
 }
-type TypeParamsExitListener interface {
-	ExitTypeParams(c *TypeParamsContext)
+type TypeExprSimpleExitListener interface {
+	ExitTypeExprSimple(c *TypeExprSimpleContext)
+}
+
+// From Rule 'typeExpr_'
+type TypeExprGenericEntryListener interface {
+	EnterTypeExprGeneric(c *TypeExprGenericContext)
+}
+type TypeExprGenericExitListener interface {
+	ExitTypeExprGeneric(c *TypeExprGenericContext)
 }
 
 // From Rule 'jsonVal'

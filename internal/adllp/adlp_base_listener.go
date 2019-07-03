@@ -75,14 +75,11 @@ package adllp // AdlP
 //var _ adllp.TypeParameterEntryListener = &AdlPListener{}
 //var _ adllp.TypeParameterExitListener = &AdlPListener{}
 
-//var _ adllp.TypeExprPrimOrParamEntryListener = &AdlPListener{}
-//var _ adllp.TypeExprPrimOrParamExitListener = &AdlPListener{}
+//var _ adllp.TypeExprSimpleEntryListener = &AdlPListener{}
+//var _ adllp.TypeExprSimpleExitListener = &AdlPListener{}
 
-//var _ adllp.TypeExprTypeExprEntryListener = &AdlPListener{}
-//var _ adllp.TypeExprTypeExprExitListener = &AdlPListener{}
-
-//var _ adllp.TypeExpressionElemEntryListener = &AdlPListener{}
-//var _ adllp.TypeExpressionElemExitListener = &AdlPListener{}
+//var _ adllp.TypeExprGenericEntryListener = &AdlPListener{}
+//var _ adllp.TypeExprGenericExitListener = &AdlPListener{}
 
 //var _ adllp.FieldStatementEntryListener = &AdlPListener{}
 //var _ adllp.FieldStatementExitListener = &AdlPListener{}
@@ -187,14 +184,11 @@ package adllp // AdlP
 //func (s *AdlPListener) EnterTypeParameter(ctx adllp.*adllp.TypeParameterContext) {}
 //func (s *AdlPListener) ExitTypeParameter(ctx adllp.*adllp.TypeParameterContext) {}
 
-//func (s *AdlPListener) EnterTypeExprPrimOrParam(ctx adllp.*adllp.TypeExprPrimOrParamContext) {}
-//func (s *AdlPListener) ExitTypeExprPrimOrParam(ctx adllp.*adllp.TypeExprPrimOrParamContext) {}
+//func (s *AdlPListener) EnterTypeExprSimple(ctx adllp.*adllp.TypeExprSimpleContext) {}
+//func (s *AdlPListener) ExitTypeExprSimple(ctx adllp.*adllp.TypeExprSimpleContext) {}
 
-//func (s *AdlPListener) EnterTypeExprTypeExpr(ctx adllp.*adllp.TypeExprTypeExprContext) {}
-//func (s *AdlPListener) ExitTypeExprTypeExpr(ctx adllp.*adllp.TypeExprTypeExprContext) {}
-
-//func (s *AdlPListener) EnterTypeExpressionElem(ctx adllp.*adllp.TypeExpressionElemContext) {}
-//func (s *AdlPListener) ExitTypeExpressionElem(ctx adllp.*adllp.TypeExpressionElemContext) {}
+//func (s *AdlPListener) EnterTypeExprGeneric(ctx adllp.*adllp.TypeExprGenericContext) {}
+//func (s *AdlPListener) ExitTypeExprGeneric(ctx adllp.*adllp.TypeExprGenericContext) {}
 
 //func (s *AdlPListener) EnterFieldStatement(ctx adllp.*adllp.FieldStatementContext) {}
 //func (s *AdlPListener) ExitFieldStatement(ctx adllp.*adllp.FieldStatementContext) {}

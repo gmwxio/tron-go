@@ -52,9 +52,6 @@ type AdlWoListener interface {
 	FieldEntryListener
 	FieldExitListener
 
-	TypeParamsEntryListener
-	TypeParamsExitListener
-
 	JsonStrEntryListener
 	JsonStrExitListener
 
@@ -197,14 +194,6 @@ type FieldEntryListener interface {
 }
 type FieldExitListener interface {
 	ExitField(c *FieldContext)
-}
-
-// From Rule 'typeExprElem_'
-type TypeParamsEntryListener interface {
-	EnterTypeParams(c *TypeParamsContext)
-}
-type TypeParamsExitListener interface {
-	ExitTypeParams(c *TypeParamsContext)
 }
 
 // From Rule 'jsonVal'

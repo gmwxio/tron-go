@@ -84,9 +84,6 @@ package adlwo // AdlWo
 //var _ adlwo.TypeExpr_EntryListener = &AdlWoListener{}
 //var _ adlwo.TypeExpr_ExitListener = &AdlWoListener{}
 
-//var _ adlwo.TypeParamsEntryListener = &AdlWoListener{}
-//var _ adlwo.TypeParamsExitListener = &AdlWoListener{}
-
 //var _ adlwo.JsonStrEntryListener = &AdlWoListener{}
 //var _ adlwo.JsonStrExitListener = &AdlWoListener{}
 
@@ -198,9 +195,6 @@ package adlwo // AdlWo
 
 //func (s *AdlWoListener) EnterTypeExpr_(ctx adlwo.*adlwo.TypeExpr_Context) {}
 //func (s *AdlWoListener) ExitTypeExpr_(ctx adlwo.*adlwo.TypeExpr_Context) {}
-
-//func (s *AdlWoListener) EnterTypeParams(ctx adlwo.*adlwo.TypeParamsContext) {}
-//func (s *AdlWoListener) ExitTypeParams(ctx adlwo.*adlwo.TypeParamsContext) {}
 
 //func (s *AdlWoListener) EnterJsonStr(ctx adlwo.*adlwo.JsonStrContext) {}
 //func (s *AdlWoListener) ExitJsonStr(ctx adlwo.*adlwo.JsonStrContext) {}

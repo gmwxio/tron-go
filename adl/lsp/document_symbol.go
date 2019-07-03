@@ -193,10 +193,6 @@ func (v *docSym) VisitTypeExpr_(ctx adlwo.ITypeExpr_Context, delegate antlr.Pars
 	result = v.VisitChildren(ctx, delegate, args...)
 	return
 }
-func (v *docSym) VisitTypeParams(ctx adlwo.ITypeParamsContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
 func (v *docSym) VisitJson(ctx adlwo.IJsonContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
 	result = v.VisitChildren(ctx, delegate, args...)
 	return

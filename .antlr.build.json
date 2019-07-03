@@ -1,0 +1,59 @@
+{
+    "jar"           : "/home/garym/devel/wxio/antlr4/tool/target/antlr4-4.7.1-SNAPSHOT-complete.jar",
+    "antlr" : [
+        {
+            "language"      : "Go",
+            "outputdir"     : "internal/adllp",
+            "package"       : "adllp",
+            "visitor"       : true,
+            "srcdir"        : "../antlr",
+            "files"         : ["AdlL.g4", "AdlP.g4"],
+            "regexp" : {
+                "match"         : "github.com/antlr/antlr4/runtime/Go/antlr",
+                "replace"       : "github.com/wxio/goantlr"
+            }
+        }
+        ,
+        {
+            "language"      : "Go",
+            "libdir"        : "internal/adllp",
+            "outputdir"     : "internal/adlast",
+            "package"       : "adlast",
+            "visitor"       : true,
+            "srcdir"        : "../antlr",
+            "files"         : ["AdlAst.g4"],
+            "regexp" : {
+                "match"         : "github.com/antlr/antlr4/runtime/Go/antlr",
+                "replace"       : "github.com/wxio/goantlr"
+            }
+        }
+        ,
+        {
+            "language"      : "Go",
+            "libdir"        : "internal/adllp",
+            "outputdir"     : "internal/adlwi",
+            "package"       : "adlwi",
+            "visitor"       : true,
+            "srcdir"        : "../antlr",
+            "files"         : ["AdlWi.g4"],
+            "regexp" : {
+                "match"         : "github.com/antlr/antlr4/runtime/Go/antlr",
+                "replace"       : "github.com/wxio/goantlr"
+            }
+        }
+        ,
+        {
+            "language"      : "Go",
+            "libdir"        : "internal/adllp",
+            "outputdir"     : "internal/adlwo",
+            "package"       : "adlwo",
+            "visitor"       : true,
+            "srcdir"        : "../antlr",
+            "files"         : ["AdlWo.g4"],
+            "regexp" : {
+                "match"         : "github.com/antlr/antlr4/runtime/Go/antlr",
+                "replace"       : "github.com/wxio/goantlr"
+            }
+        }
+    ]
+}
