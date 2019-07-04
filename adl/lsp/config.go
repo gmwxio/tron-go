@@ -9,9 +9,19 @@ type TronCfg struct {
 }
 
 type TronExtCfg struct {
-	Includes    []string `json:"includes"`
-	MaxIssues   float64  `json:"maxIssues"`
-	TraceServer string   `json:"trace.server"`
+	Includes     []string `json:"includes"`
+	MaxIssues    float64  `json:"maxIssues"`
+	AdlcPath     string   `json:"adlc.path"`
+	TraceServer  string   `json:"trace.server"`
+	TronLspServe struct {
+		Port       int    `json:"port"`
+		AdlAstPath string `json:"adlast.path"`
+		Roots      []struct {
+			Dir_Template string `json:"root"`
+			Prefix       string `json:"prefix"`
+		} `json:"roots"`
+	} `json:"lspserve"`
+
 	DevFeatures struct {
 		Format       bool `json:"format"`
 		AutoComplete bool `json:"autoComplete"`

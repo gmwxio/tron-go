@@ -129,6 +129,46 @@
 					"description": "Include paths for stand and thirdparty libraries",
 					"scope": "resource"
 				},
+				"tron.lspserve": {
+					"type": "object",
+					"description": "LSP webserver properties",
+					"scope": "resource",
+					"properties": {
+						"adlast.path": {
+							"type": "string",
+							"description": "http path to ADL Ast endpoint ie http://localhost:<port>/<adlast.path>/<base64 fileuri>",
+							"default": "/adlast"
+						},
+						"roots": {
+							"description": "Directory to serve static content from",
+							"type": [
+								"array",
+								"null"
+							],
+							"items": {
+								"type": "object",
+								"properties": {
+									"root": {
+										"type": "string",
+										"default": "{{.WorkspaceRoot}}/static"
+									},
+									"prefix": {
+										"type": "string",
+										"default": "static"
+									}
+								}
+							}
+						},
+						"port": {
+							"type": "integer",
+							"description": "http port, 0 means auto"
+						}
+					}
+				},
+				"tron.adlc.path": {
+					"scope": "resource",
+					"type": "string"
+				},
 				"tron.maxIssues": {
 					"scope": "resource",
 					"type": "number",

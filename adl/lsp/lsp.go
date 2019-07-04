@@ -15,17 +15,19 @@ import (
 )
 
 type server struct {
-	version     string
-	adlcPath    string
-	tempDir     string
-	lastFileUri string
-	webAddr     net.Addr
-	extConfig   TronExtCfg
-	langCfg     TronLangCfg
-	client      protocol.Client
-	conn        *jsonrpc2.Conn
-	initParams  *protocol.InitializeParams
-	cancel      context.CancelFunc
+	version          string
+	adlcPath         string
+	tempDir          string
+	lastFileUri      string
+	webAddr          net.Addr
+	extConfig        TronExtCfg
+	langCfg          TronLangCfg
+	workspaceFolders []protocol.WorkspaceFolder
+	workspaceFolder  protocol.WorkspaceFolder
+	client           protocol.Client
+	conn             *jsonrpc2.Conn
+	initParams       *protocol.InitializeParams
+	cancel           context.CancelFunc
 	// tcpConn    net.Conn
 	fileCache filecache
 	astCache  astcache
@@ -178,6 +180,7 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 		q.Q(err)
 		// return err // TODO what does returning an error do
 	}
+	q.Q(wfs)
 
 	if len(wfs) == 0 {
 		q.Q("empty WorkspaceFolder root:", svr.initParams.RootURI)
@@ -186,6 +189,7 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 				URI:  svr.initParams.RootURI,
 				Name: path.Base(svr.initParams.RootURI),
 			}}
+			q.Q(wfs)
 		} else {
 			// no folders and no root, single file mode
 			//TODO(iancottrell): not sure how to do single file mode yet
@@ -193,16 +197,20 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 			q.Q(fmt.Errorf("single file mode not supported yet"))
 		}
 	}
+	svr.workspaceFolders = wfs
 
 	var items []protocol.ConfigurationItem
 	for _, wf := range wfs {
-		// q.Q(wf)
+		q.Q(wf)
 		items = append(items, []protocol.ConfigurationItem{
 			{ScopeURI: wf.URI, Section: "tron"},
 			{ScopeURI: wf.URI, Section: "[tron]"},
 		}...,
 		)
 	}
+	var xx interface{}
+	svr.conn.Call(ctx2, "workspace/configuration", &protocol.ConfigurationParams{Items: items}, &xx)
+	q.Q(xx)
 	var result []TronCfg
 	if err := svr.conn.Call(ctx2, "workspace/configuration", &protocol.ConfigurationParams{Items: items}, &result); err != nil {
 		q.Q(err)
@@ -211,9 +219,11 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 	for _, x := range result {
 		if x.TronExtCfg != nil {
 			svr.extConfig = *x.TronExtCfg
+			q.Q(svr.extConfig.TronLspServe.Roots)
 		}
 		if x.TronLangCfg != nil {
 			svr.langCfg = *x.TronLangCfg
+			q.Q(svr.langCfg)
 		}
 	}
 	return nil
