@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"path"
 	"strings"
@@ -14,15 +15,17 @@ import (
 )
 
 type server struct {
-	version    string
-	adlcPath   string
-	tempDir    string
-	extConfig  TronExtCfg
-	langCfg    TronLangCfg
-	client     protocol.Client
-	conn       *jsonrpc2.Conn
-	initParams *protocol.InitializeParams
-	cancel     context.CancelFunc
+	version     string
+	adlcPath    string
+	tempDir     string
+	lastFileUri string
+	webAddr     net.Addr
+	extConfig   TronExtCfg
+	langCfg     TronLangCfg
+	client      protocol.Client
+	conn        *jsonrpc2.Conn
+	initParams  *protocol.InitializeParams
+	cancel      context.CancelFunc
 	// tcpConn    net.Conn
 	fileCache filecache
 	astCache  astcache
@@ -127,6 +130,8 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 	// 		}
 	// 	}
 	// }()
+
+	svr.serverBrowser()
 
 	defer func() {
 		svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
@@ -242,6 +247,29 @@ func (svr *server) Symbols(ctx context.Context, req *protocol.WorkspaceSymbolPar
 }
 func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteCommandParams) (interface{}, error) {
 	q.Q(req)
+	switch req.Command {
+	case "tron.browse":
+		if svr.lastFileUri != "" {
+			err := svr.openbrowser()
+			if err != nil {
+				svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+					Message: "Error launching browser",
+					Type:    protocol.Warning,
+				})
+			}
+		} else {
+			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+				Message: "No file selected",
+				Type:    protocol.Info,
+			})
+		}
+	default:
+		svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+			Message: "unhandled command '" + req.Command + "'",
+			Type:    protocol.Warning,
+		})
+	}
+
 	return nil, nil
 }
 func (svr *server) DidOpen(ctx context.Context, req *protocol.DidOpenTextDocumentParams) error {
@@ -281,6 +309,7 @@ func (svr *server) DidSave(ctx context.Context, req *protocol.DidSaveTextDocumen
 }
 func (svr *server) DidClose(ctx context.Context, req *protocol.DidCloseTextDocumentParams) error {
 	q.Q(req)
+	svr.lastFileUri = req.TextDocument.URI
 	if strings.HasSuffix(req.TextDocument.URI, ".mod") {
 		return nil
 	}
@@ -349,6 +378,10 @@ func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSym
 
 func (svr *server) CodeAction(ctx context.Context, req *protocol.CodeActionParams) ([]protocol.CodeAction, error) {
 	q.Q(req)
+	if strings.HasSuffix(req.TextDocument.URI, ".mod") {
+		return nil, nil
+	}
+	svr.lastFileUri = req.TextDocument.URI
 	return nil, nil
 }
 func (svr *server) CodeLens(ctx context.Context, req *protocol.CodeLensParams) ([]protocol.CodeLens, error) {

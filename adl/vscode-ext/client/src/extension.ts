@@ -59,8 +59,9 @@ export function activate(ctx: ExtensionContext) {
 			command: serverModuleRun, 
 			transport: TransportKind.stdio,
 			options: {
-				detached: true,
-				env: {"ADLC":adlc}
+				// detached: true
+				// ,
+				// env: {"ADLC":adlc}
 			},
 			args: ["stdio", "--adlc-path", adlc],
 		},
@@ -68,8 +69,9 @@ export function activate(ctx: ExtensionContext) {
 			command: serverModuleDebug, 
 			transport: TransportKind.stdio, 
 			options: {
-				detached: true,
-				env: {"ADLC":adlc}
+				// detached: true
+				// ,
+				// env: {"ADLC":adlc}
 			},
 			args: ["stdio", "--adlc-path", adlc]
 			// args: ["tcp", "client", "--reconnect"]
