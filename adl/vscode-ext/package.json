@@ -163,6 +163,16 @@
 							"type": "integer",
 							"description": "http port, 0 means auto"
 						}
+					},
+					"default": {
+						"adlast.path": "/adlast",
+						"roots": [
+							{
+								"root": "{{.WorkspaceRoot}}/static",
+								"prefix": "static"
+							}
+						],
+						"port": 0
 					}
 				},
 				"tron.adlc.path": {
@@ -209,6 +219,11 @@
 			}
 		},
 		"commands": [
+			{
+				"command": "tron.lsp.readconfig",
+				"title": "Tron: lsp re-read the config",
+				"description": "Tell lsp to re-read the config - needed till this can be automated"
+			},
 			{
 				"command": "tron.includes",
 				"title": "Tron: Set 'tron.includes' setting",

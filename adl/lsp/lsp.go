@@ -2,11 +2,9 @@ package lsp
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"net"
 	"os"
-	"path"
 	"strings"
 
 	"github.com/golangq/q"
@@ -69,7 +67,7 @@ func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParam
 				DocumentRangeFormattingProvider: true,
 				DocumentSymbolProvider:          true,
 				ExecuteCommandProvider: &protocol.ExecuteCommandOptions{
-					Commands: []string{"tron.compile", "tron.browse"},
+					Commands: []string{"tron.compile", "tron.browse", "tron.lsp.readconfig"},
 				},
 				HoverProvider:             true,
 				DocumentHighlightProvider: true,
@@ -117,24 +115,6 @@ func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParam
 }
 func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedParams) error {
 	q.Q(req)
-
-	// go func() {
-	// 	for {
-	// 		select {
-	// 		case <-time.After(10 * time.Second):
-	// 			svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
-	// 				Message: "TRON LSP (version" + svr.version + ")",
-	// 				Type:    protocol.Info,
-	// 			})
-	// 		case <-ctx.Done():
-	// 			q.Q("log message exit")
-	// 			return
-	// 		}
-	// 	}
-	// }()
-
-	svr.serverBrowser()
-
 	defer func() {
 		svr.conn.Notify(ctx, "window/logMessage", protocol.LogMessageParams{
 			Message: "TRON LSP (version " + svr.version + ")",
@@ -174,58 +154,9 @@ func (svr *server) Initialized(ctx context.Context, req *protocol.InitializedPar
 	// 	// return err // TODO what does returning an error do
 	// }
 
-	ctx2 := context.Background()
-	wfs, err := svr.client.WorkspaceFolders(ctx2)
-	if err != nil {
-		q.Q(err)
-		// return err // TODO what does returning an error do
-	}
-	q.Q(wfs)
+	svr.config()
+	svr.serverBrowser()
 
-	if len(wfs) == 0 {
-		q.Q("empty WorkspaceFolder root:", svr.initParams.RootURI)
-		if svr.initParams.RootURI != "" {
-			wfs = []protocol.WorkspaceFolder{{
-				URI:  svr.initParams.RootURI,
-				Name: path.Base(svr.initParams.RootURI),
-			}}
-			q.Q(wfs)
-		} else {
-			// no folders and no root, single file mode
-			//TODO(iancottrell): not sure how to do single file mode yet
-			//issue: golang.org/issue/31168
-			q.Q(fmt.Errorf("single file mode not supported yet"))
-		}
-	}
-	svr.workspaceFolders = wfs
-
-	var items []protocol.ConfigurationItem
-	for _, wf := range wfs {
-		q.Q(wf)
-		items = append(items, []protocol.ConfigurationItem{
-			{ScopeURI: wf.URI, Section: "tron"},
-			{ScopeURI: wf.URI, Section: "[tron]"},
-		}...,
-		)
-	}
-	var xx interface{}
-	svr.conn.Call(ctx2, "workspace/configuration", &protocol.ConfigurationParams{Items: items}, &xx)
-	q.Q(xx)
-	var result []TronCfg
-	if err := svr.conn.Call(ctx2, "workspace/configuration", &protocol.ConfigurationParams{Items: items}, &result); err != nil {
-		q.Q(err)
-		return err
-	}
-	for _, x := range result {
-		if x.TronExtCfg != nil {
-			svr.extConfig = *x.TronExtCfg
-			q.Q(svr.extConfig.TronLspServe.Roots)
-		}
-		if x.TronLangCfg != nil {
-			svr.langCfg = *x.TronLangCfg
-			q.Q(svr.langCfg)
-		}
-	}
 	return nil
 }
 func (svr *server) Shutdown(context.Context) error {
@@ -273,6 +204,8 @@ func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteComm
 				Type:    protocol.Info,
 			})
 		}
+	case "tron.lsp.readconfig":
+		svr.config()
 	default:
 		svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
 			Message: "unhandled command '" + req.Command + "'",

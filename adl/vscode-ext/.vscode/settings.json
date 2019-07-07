@@ -4,4 +4,5 @@
 	"typescript.tsc.autoDetect": "off",
 	"typescript.preferences.quoteStyle": "single",
 	"go.formatTool": "goimports"
+
 }
