@@ -206,6 +206,15 @@ func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteComm
 		}
 	case "tron.lsp.readconfig":
 		svr.config()
+	case "tron.compile":
+		if svr.lastFileUri != "" {
+			q.Q("compile " + svr.lastFileUri)
+		} else {
+			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+				Message: "No file selected",
+				Type:    protocol.Info,
+			})
+		}
 	default:
 		svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
 			Message: "unhandled command '" + req.Command + "'",

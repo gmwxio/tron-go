@@ -53,7 +53,7 @@ func (svr *server) config() {
 		// return err // TODO what does returning an error do
 	}
 	q.Q(wfs)
-
+	q.Q(svr.initParams.RootURI)
 	if len(wfs) == 0 {
 		q.Q("empty WorkspaceFolder root:", svr.initParams.RootURI)
 		if svr.initParams.RootURI != "" {
