@@ -18,142 +18,141 @@ import (
 	"golang.org/x/tools/lsp/protocol"
 )
 
-func (svr *server) compile(ctx context.Context) {
+type f_clientMsgLog func(ctx context.Context, ptype protocol.MessageType, msg ...string)
+
+func (svr *server) client_msg_log(ctx context.Context, ptype protocol.MessageType, msg ...string) {
+	smsg := msg[0]
+	lmsg := msg[0]
+	if len(msg) > 1 {
+		lmsg = msg[1]
+	}
+	svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+		Message: smsg,
+		Type:    ptype,
+	})
+	svr.client.LogMessage(ctx, &protocol.LogMessageParams{
+		Message: lmsg,
+		Type:    ptype,
+	})
+}
+func (svr *server) client_log(ctx context.Context, ptype protocol.MessageType, msg ...string) {
+	smsg := strings.Join(msg, " ")
+	svr.client.LogMessage(ctx, &protocol.LogMessageParams{
+		Message: smsg,
+		Type:    ptype,
+	})
+}
+func (svr *server) null_msg_log(ctx context.Context, ptype protocol.MessageType, msg ...string) {
+}
+
+func (svr *server) lastFileStable(ctx context.Context, clientMsgLog f_clientMsgLog) (bool, error) {
+	fname := svr.lastFileUri
+	if strings.HasPrefix(fname, "file://") {
+		fname = fname[len("file://"):]
+	}
+	root := svr.initParams.RootURI
+	if strings.HasPrefix(root, "file://") {
+		root = root[len("file://"):]
+	}
+	fby, err := ioutil.ReadFile(fname)
+	if err != nil {
+		clientMsgLog(ctx, protocol.Warning, "LSP  internal error, file not found", err.Error())
+		q.Q(err)
+		return false, err
+	}
+	cur, err := svr.fileCache.get(svr.lastFileUri)
+	if err != nil {
+		clientMsgLog(ctx, protocol.Warning, "LSP  internal error, unknown file", err.Error())
+		q.Q(err)
+		return false, err
+	}
+	if string(fby) != cur {
+		clientMsgLog(ctx, protocol.Warning, "Can't compile as file is not saved")
+		return false, nil
+	}
+	return true, nil
+}
+
+func (svr *server) adl2ast(ctx context.Context, text string, clientMsgLog f_clientMsgLog) (map[string]adl.Module, error) {
+	root := svr.initParams.RootURI
+	if strings.HasPrefix(root, "file://") {
+		root = root[len("file://"):]
+	}
+	name := svr.lastFileUri
+	if strings.HasPrefix(name, "file://") {
+		name = name[len("file://"):]
+	}
+	temp := filepath.Join(svr.tempDir, filepath.Base(name))
+	err := ioutil.WriteFile(temp, []byte(text), os.ModePerm)
+	if err != nil {
+		clientMsgLog(ctx, protocol.Warning, "File write error", err.Error())
+		return nil, err
+	}
+	args := []string{"ast", "--verbose"}
+	combile_adl := ""
+	{
+		// combile adl
+		combile_adl, err = filepath.Abs(filepath.Join(svr.tempDir, "ald.json"))
+		if err != nil {
+			clientMsgLog(ctx, protocol.Warning, "File path error. See TRON LSP log", err.Error())
+			q.Q(err)
+			return nil, err
+		}
+		args = append(args, "--combined-output="+combile_adl)
+	}
+	for _, inc := range svr.extConfig.Includes {
+		abs, err := filepath.Abs(filepath.Join(root, inc))
+		if err != nil {
+			clientMsgLog(ctx, protocol.Warning, "file path error. See TRON LSP log", err.Error())
+			q.Q(err)
+			return nil, err
+		}
+		args = append(args, "-I"+abs)
+	}
+	args = append(args, temp)
+	q.Q("adlc", args)
+	cmd := exec.Command("adlc", args...)
+	q.Q(svr.tempDir)
+	cmd.Dir = svr.tempDir
+	by, err := cmd.CombinedOutput()
+	q.Q(string(by))
+	if err != nil {
+		clientMsgLog(ctx, protocol.Warning, "ADL error. See TRON LSP log", string(by))
+		q.Q(err)
+		return nil, err
+	}
+
+	astby, err := ioutil.ReadFile(combile_adl)
+	if err != nil {
+		clientMsgLog(ctx, protocol.Warning, "File error. See TRON LSP log", err.Error())
+		q.Q(err)
+		return nil, err
+	}
+	allmod := map[string]adl.Module{}
+	err = json.Unmarshal(astby, &allmod)
+	if err != nil {
+		clientMsgLog(ctx, protocol.Warning, "JSON error. See TRON LSP log", err.Error())
+		q.Q(err)
+		return nil, err
+	}
+	return allmod, nil
+}
+
+func (svr *server) compile(ctx context.Context, text string, allmod map[string]adl.Module, clientMsgLog f_clientMsgLog) {
 	if svr.lastFileUri != "" {
 		q.Q("compile " + svr.lastFileUri)
-		fname := svr.lastFileUri
-		if strings.HasPrefix(fname, "file://") {
-			fname = fname[len("file://"):]
-		}
-		root := svr.initParams.RootURI
-		if strings.HasPrefix(root, "file://") {
-			root = root[len("file://"):]
-		}
-		fby, err := ioutil.ReadFile(fname)
-		if err != nil {
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
-			q.Q(err)
-			return
-		}
-		cur, err := svr.fileCache.get(svr.lastFileUri)
-		if err != nil {
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
-			q.Q(err)
-			return
-		}
-		if string(fby) != cur {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "Can't compile as file is not saved",
-				Type:    protocol.Warning,
-			})
-			return
-		}
-		args := []string{"ast", "--verbose"}
-		combile_adl := ""
-		{
-			// combile adl
-			combile_adl, err = filepath.Abs(filepath.Join(svr.tempDir, "ald.json"))
-			if err != nil {
-				svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-					Message: "File path error. See TRON LSP log",
-					Type:    protocol.Warning,
-				})
-				svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-					Message: err.Error(),
-					Type:    protocol.Warning,
-				})
-				q.Q(err)
-				return
-			}
-			args = append(args, "--combined-output="+combile_adl)
-		}
-		for _, inc := range svr.extConfig.Includes {
-			abs, err := filepath.Abs(filepath.Join(root, inc))
-			if err != nil {
-				svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-					Message: "file path error. See TRON LSP log",
-					Type:    protocol.Warning,
-				})
-				svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-					Message: err.Error(),
-					Type:    protocol.Warning,
-				})
-				q.Q(err)
-				return
-			}
-			args = append(args, "-I"+abs)
-		}
-		args = append(args, fname)
-		q.Q("adlc", args)
-		cmd := exec.Command("adlc", args...)
-		q.Q(svr.tempDir)
-		cmd.Dir = svr.tempDir
-		by, err := cmd.CombinedOutput()
-		q.Q(string(by))
-		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "ADL error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: string(by),
-				Type:    protocol.Warning,
-			})
-			q.Q(err)
-			return
-		}
-		q.Q(combile_adl)
-		tr, atr, bl, ts, err1 := adl.BuildAdlAST(string(fby))
+		var err error
+		tr, atr, bl, ts, err1 := adl.BuildAdlAST(text)
 		_, _, _, _ = tr, atr, bl, ts
 		// adl.QTreeToken(ts, bl)
 		if err1.Error() != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "ADL AST error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "ADL AST error. See TRON LSP log", err.Error())
 			q.Q(err)
 			return
 		}
 		cv := &compileV{}
 		adl.VisitADL(tr, cv)
 		q.Q(cv.name)
-		astby, err := ioutil.ReadFile(combile_adl)
-		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "File error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
-			q.Q(err)
-			return
-		}
-		allmod := map[string]adl.Module{}
-		err = json.Unmarshal(astby, &allmod)
-		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "JSON error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
-			q.Q(err)
-			return
-		}
 		cma := struct {
 			scope      adl.ScopedName
 			outputFile string
@@ -162,15 +161,7 @@ func (svr *server) compile(ctx context.Context) {
 		found := false
 		mod, ex := allmod[cv.name]
 		if !ex {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "ADL processing error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: "Module name '" + cv.name + "' not found in '" + combile_adl + "'",
-				Type:    protocol.Warning,
-			})
-			q.Q("Module name '" + cv.name + "' not found in '" + combile_adl + "'")
+			clientMsgLog(ctx, protocol.Warning, "ADL processing error. See TRON LSP log", "Module name '"+cv.name+"'")
 			return
 		}
 		for _, an := range mod.Annotations {
@@ -185,10 +176,7 @@ func (svr *server) compile(ctx context.Context) {
 			}
 		}
 		if !found {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "No module annotation valuedriven.devmode.CompileModuleAnnotation found",
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "No module annotation valuedriven.devmode.CompileModuleAnnotation found")
 			return
 		}
 		q.Q(cma)
@@ -201,35 +189,18 @@ func (svr *server) compile(ctx context.Context) {
 			}
 		}
 		if !found {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "No module annotation " + cma.scope.ModuleName + "." + cma.scope.Name,
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "No module annotation "+cma.scope.ModuleName+"."+cma.scope.Name)
 			return
 		}
 		te, err := template.New("").Parse(cma.templateGo)
 		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "Template error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "Template error. See TRON LSP log", err.Error())
 			q.Q(err)
 			return
 		}
 		json, err := json.MarshalIndent(val, "", "  ")
 		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "JSON error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "JSON error. See TRON LSP log", err.Error())
 			q.Q(err)
 			return
 		}
@@ -238,55 +209,32 @@ func (svr *server) compile(ctx context.Context) {
 		}{
 			Json: string(json),
 		}
-		dname := filepath.Dir(fname)
+		name := svr.lastFileUri
+		if strings.HasPrefix(name, "file://") {
+			name = name[len("file://"):]
+		}
+		dname := filepath.Dir(name)
 		cma.outputFile, err = filepath.Abs(filepath.Join(dname, cma.outputFile))
 		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "File error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "File error. See TRON LSP log", err.Error())
 			q.Q(err)
 			return
 		}
 		f, err := os.OpenFile(cma.outputFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
 		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "File error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "File error. See TRON LSP log", err.Error())
 			q.Q(err)
 			return
 		}
 		err = te.Execute(f, data)
 		if err != nil {
-			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-				Message: "Template exec error. See TRON LSP log",
-				Type:    protocol.Warning,
-			})
-			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
-				Message: err.Error(),
-				Type:    protocol.Warning,
-			})
+			clientMsgLog(ctx, protocol.Warning, "Template exec error. See TRON LSP log", err.Error())
 			q.Q(err)
 			return
 		}
-		svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-			Message: "Compiled to " + cma.outputFile,
-			Type:    protocol.Info,
-		})
+		clientMsgLog(ctx, protocol.Info, "Compiled to "+cma.outputFile)
 	} else {
-		svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
-			Message: "No file selected",
-			Type:    protocol.Info,
-		})
+		clientMsgLog(ctx, protocol.Info, "No file selected")
 	}
 }
 

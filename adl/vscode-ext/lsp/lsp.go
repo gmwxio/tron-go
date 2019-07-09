@@ -207,7 +207,15 @@ func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteComm
 	case "tron.lsp.readconfig":
 		svr.config()
 	case "tron.compile":
-		svr.compile(ctx)
+		if ok, _ := svr.lastFileStable(ctx, svr.client_msg_log); ok {
+			cur, _ := svr.fileCache.get(svr.lastFileUri)
+			allmod, err := svr.adl2ast(ctx, cur, svr.client_msg_log)
+			if err != nil {
+				q.Q(err)
+				return nil, nil
+			}
+			svr.compile(ctx, cur, allmod, svr.client_msg_log)
+		}
 	default:
 		svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
 			Message: "unhandled command '" + req.Command + "'",
@@ -223,7 +231,22 @@ func (svr *server) DidOpen(ctx context.Context, req *protocol.DidOpenTextDocumen
 		return nil
 	}
 	svr.fileCache.put(req.TextDocument.URI, req.TextDocument.Text)
-	svr.diag(ctx, req.TextDocument.URI, req.TextDocument.Text)
+	dss := svr.diag(ctx, req.TextDocument.Text)
+	svr.client.PublishDiagnostics(ctx, &protocol.PublishDiagnosticsParams{
+		Diagnostics: dss,
+		URI:         req.TextDocument.URI,
+	})
+	//
+	if len(dss) == 0 {
+		cur, _ := svr.fileCache.get(svr.lastFileUri)
+		allmod, err := svr.adl2ast(ctx, cur, svr.client_log)
+		if err != nil {
+			q.Q(err)
+			return nil
+		}
+		svr.compile(ctx, cur, allmod, svr.client_log)
+	}
+
 	return nil
 }
 func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDocumentParams) error {
@@ -237,7 +260,22 @@ func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDoc
 	}
 	change := req.ContentChanges[0]
 	svr.fileCache.put(req.TextDocument.URI, change.Text)
-	svr.diag(ctx, req.TextDocument.URI, change.Text)
+	dss := svr.diag(ctx, change.Text)
+	svr.client.PublishDiagnostics(ctx, &protocol.PublishDiagnosticsParams{
+		Diagnostics: dss,
+		URI:         req.TextDocument.URI,
+	})
+	//
+	if len(dss) == 0 {
+		cur, _ := svr.fileCache.get(svr.lastFileUri)
+		allmod, err := svr.adl2ast(ctx, cur, svr.client_log)
+		if err != nil {
+			q.Q(err)
+			return nil
+		}
+		svr.compile(ctx, cur, allmod, svr.client_log)
+	}
+
 	return nil
 }
 func (svr *server) WillSave(ctx context.Context, req *protocol.WillSaveTextDocumentParams) error {

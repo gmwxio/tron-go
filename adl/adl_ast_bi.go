@@ -51,9 +51,9 @@ type ADLBuildListener struct {
 }
 
 type errs struct {
-	LexErr        []lexErrMsg
+	LexErr        []DiagMessage
 	LexWarning    []interface{}
-	ParseErr      []parseErrMsg
+	ParseErr      []DiagMessage
 	SyntaxErr     []DiagMessage
 	SyntaxWarning []interface{}
 }

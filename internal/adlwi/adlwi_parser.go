@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 )
-import "github.com/wxio/goantlr"
+import antlr "github.com/wxio/goantlr"
 
 // Suppress unused import errors
 var _ = fmt.Printf
@@ -5861,7 +5861,16 @@ func (p *AdlWi) JsonVal() (localctx IJsonValContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27)))) != 0) {
+			for ok := true; ok; ok = ((int32(_la-27)&-(0x1f+1)) == 0 &&
+				((1<<uint((_la-27)))&
+					((1<<(AdlWiERROR-27))|
+						(1<<(AdlWiJsonStr-27))|
+						(1<<(AdlWiJsonBool-27))|
+						(1<<(AdlWiJsonNull-27))|
+						(1<<(AdlWiJsonInt-27))|
+						(1<<(AdlWiJsonFloat-27))|
+						(1<<(AdlWiJsonArray-27))|
+						(1<<(AdlWiJsonObj-27)))) != 0) {
 				{
 					p.SetState(286)
 					p.JsonVal()

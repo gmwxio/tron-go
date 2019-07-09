@@ -124,7 +124,7 @@ func (lem *lexErrMsg) Text() string {
 }
 
 type lexErr struct {
-	err     []lexErrMsg
+	err     []DiagMessage
 	warning []interface{}
 }
 
@@ -133,7 +133,7 @@ func (d *lexErr) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interf
 	if e != nil {
 		t = e.GetOffendingToken()
 	}
-	d.err = append(d.err, lexErrMsg{
+	d.err = append(d.err, &lexErrMsg{
 		OffendingSymbol: offendingSymbol,
 		OffendingToken:  t,
 		line:            line,
@@ -192,7 +192,7 @@ func (er parseErrMsg) Text() string {
 }
 
 type parseErr struct {
-	ParseErr []parseErrMsg
+	ParseErr []DiagMessage
 	// SyntaxErr []interface{}
 	SyntaxWarning []interface{}
 }
