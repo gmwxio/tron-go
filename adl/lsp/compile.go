@@ -55,8 +55,39 @@ func (svr *server) compile(ctx context.Context) {
 			return
 		}
 		args := []string{"ast", "--verbose"}
+		combile_adl := ""
+		{
+			// combile adl
+			combile_adl, err = filepath.Abs(filepath.Join(svr.tempDir, "ald.json"))
+			if err != nil {
+				svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+					Message: "File path error. See TRON LSP log",
+					Type:    protocol.Warning,
+				})
+				svr.client.LogMessage(ctx, &protocol.LogMessageParams{
+					Message: err.Error(),
+					Type:    protocol.Warning,
+				})
+				q.Q(err)
+				return
+			}
+			args = append(args, "--combined-output="+combile_adl)
+		}
 		for _, inc := range svr.extConfig.Includes {
-			args = append(args, "-I"+root+"/"+inc)
+			abs, err := filepath.Abs(filepath.Join(root, inc))
+			if err != nil {
+				svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+					Message: "file path error. See TRON LSP log",
+					Type:    protocol.Warning,
+				})
+				svr.client.LogMessage(ctx, &protocol.LogMessageParams{
+					Message: err.Error(),
+					Type:    protocol.Warning,
+				})
+				q.Q(err)
+				return
+			}
+			args = append(args, "-I"+abs)
 		}
 		args = append(args, fname)
 		q.Q("adlc", args)
@@ -77,6 +108,7 @@ func (svr *server) compile(ctx context.Context) {
 			q.Q(err)
 			return
 		}
+		q.Q(combile_adl)
 		tr, atr, bl, ts, err1 := adl.BuildAdlAST(string(fby))
 		_, _, _, _ = tr, atr, bl, ts
 		// adl.QTreeToken(ts, bl)
@@ -95,7 +127,7 @@ func (svr *server) compile(ctx context.Context) {
 		cv := &compileV{}
 		adl.VisitADL(tr, cv)
 		q.Q(cv.name)
-		astby, err := ioutil.ReadFile(svr.tempDir + "/" + cv.name + ".json")
+		astby, err := ioutil.ReadFile(combile_adl)
 		if err != nil {
 			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
 				Message: "File error. See TRON LSP log",
@@ -108,8 +140,8 @@ func (svr *server) compile(ctx context.Context) {
 			q.Q(err)
 			return
 		}
-		mod := adl.Module{}
-		err = json.Unmarshal(astby, &mod)
+		allmod := map[string]adl.Module{}
+		err = json.Unmarshal(astby, &allmod)
 		if err != nil {
 			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
 				Message: "JSON error. See TRON LSP log",
@@ -128,6 +160,19 @@ func (svr *server) compile(ctx context.Context) {
 			templateGo string
 		}{}
 		found := false
+		mod, ex := allmod[cv.name]
+		if !ex {
+			svr.client.ShowMessage(ctx, &protocol.ShowMessageParams{
+				Message: "ADL processing error. See TRON LSP log",
+				Type:    protocol.Warning,
+			})
+			svr.client.LogMessage(ctx, &protocol.LogMessageParams{
+				Message: "Module name '" + cv.name + "' not found in '" + combile_adl + "'",
+				Type:    protocol.Warning,
+			})
+			q.Q("Module name '" + cv.name + "' not found in '" + combile_adl + "'")
+			return
+		}
 		for _, an := range mod.Annotations {
 			if an.Key.ModuleName == "valuedriven.devmode" && an.Key.Name == "CompileModuleAnnotation" {
 				sm := an.Val.(map[string]interface{})
