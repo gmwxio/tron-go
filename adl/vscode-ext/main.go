@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jpillora/opts"
-	"github.com/wxio/tron-go/adl/lsp"
+	"github.com/wxio/tron-go/adl/vscode-ext/lsp"
 )
 
 var (

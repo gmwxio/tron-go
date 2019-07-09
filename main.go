@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/jpillora/opts"
-	"github.com/wxio/tron-go/adl/lsp"
 	"github.com/wxio/tron-go/cmd"
 	"github.com/wxio/tron-go/tools"
 )
@@ -29,9 +28,7 @@ func main() {
 				ConfigPath(".antlr.build.json"))).
 		AddCommand(opts.New(&adl{}).
 			AddCommand(cmd.NewLoadAdlAst()).
-			AddCommand(cmd.BuildAdlAst()).
-			AddCommand(lsp.NewTcp(Version)).
-			AddCommand(lsp.NewConsole(Version))).
+			AddCommand(cmd.BuildAdlAst())).
 		Parse().
 		RunFatal()
 }
