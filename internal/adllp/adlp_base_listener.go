@@ -57,12 +57,6 @@ package adllp // AdlP
 //var _ adllp.DocAnnoEntryListener = &AdlPListener{}
 //var _ adllp.DocAnnoExitListener = &AdlPListener{}
 
-//var _ adllp.StructOrUnionEntryListener = &AdlPListener{}
-//var _ adllp.StructOrUnionExitListener = &AdlPListener{}
-
-//var _ adllp.TypeOrNewtypeEntryListener = &AdlPListener{}
-//var _ adllp.TypeOrNewtypeExitListener = &AdlPListener{}
-
 //var _ adllp.ModuleAnnotationEntryListener = &AdlPListener{}
 //var _ adllp.ModuleAnnotationExitListener = &AdlPListener{}
 
@@ -71,6 +65,12 @@ package adllp // AdlP
 
 //var _ adllp.FieldAnnotationEntryListener = &AdlPListener{}
 //var _ adllp.FieldAnnotationExitListener = &AdlPListener{}
+
+//var _ adllp.StructOrUnionEntryListener = &AdlPListener{}
+//var _ adllp.StructOrUnionExitListener = &AdlPListener{}
+
+//var _ adllp.TypeOrNewtypeEntryListener = &AdlPListener{}
+//var _ adllp.TypeOrNewtypeExitListener = &AdlPListener{}
 
 //var _ adllp.TypeParameterEntryListener = &AdlPListener{}
 //var _ adllp.TypeParameterExitListener = &AdlPListener{}
@@ -169,12 +169,6 @@ package adllp // AdlP
 //func (s *AdlPListener) EnterDocAnno(ctx adllp.*adllp.DocAnnoContext) {}
 //func (s *AdlPListener) ExitDocAnno(ctx adllp.*adllp.DocAnnoContext) {}
 
-//func (s *AdlPListener) EnterStructOrUnion(ctx adllp.*adllp.StructOrUnionContext) {}
-//func (s *AdlPListener) ExitStructOrUnion(ctx adllp.*adllp.StructOrUnionContext) {}
-
-//func (s *AdlPListener) EnterTypeOrNewtype(ctx adllp.*adllp.TypeOrNewtypeContext) {}
-//func (s *AdlPListener) ExitTypeOrNewtype(ctx adllp.*adllp.TypeOrNewtypeContext) {}
-
 //func (s *AdlPListener) EnterModuleAnnotation(ctx adllp.*adllp.ModuleAnnotationContext) {}
 //func (s *AdlPListener) ExitModuleAnnotation(ctx adllp.*adllp.ModuleAnnotationContext) {}
 
@@ -183,6 +177,12 @@ package adllp // AdlP
 
 //func (s *AdlPListener) EnterFieldAnnotation(ctx adllp.*adllp.FieldAnnotationContext) {}
 //func (s *AdlPListener) ExitFieldAnnotation(ctx adllp.*adllp.FieldAnnotationContext) {}
+
+//func (s *AdlPListener) EnterStructOrUnion(ctx adllp.*adllp.StructOrUnionContext) {}
+//func (s *AdlPListener) ExitStructOrUnion(ctx adllp.*adllp.StructOrUnionContext) {}
+
+//func (s *AdlPListener) EnterTypeOrNewtype(ctx adllp.*adllp.TypeOrNewtypeContext) {}
+//func (s *AdlPListener) ExitTypeOrNewtype(ctx adllp.*adllp.TypeOrNewtypeContext) {}
 
 //func (s *AdlPListener) EnterTypeParameter(ctx adllp.*adllp.TypeParameterContext) {}
 //func (s *AdlPListener) ExitTypeParameter(ctx adllp.*adllp.TypeParameterContext) {}

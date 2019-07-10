@@ -14,11 +14,11 @@ type AdlPHandlers struct {
 	ImportModuleName func(ctx IImportModuleNameContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	LocalAnno        func(ctx ILocalAnnoContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	DocAnno          func(ctx IDocAnnoContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	StructOrUnion    func(ctx IStructOrUnionContext, this *AdlPHandlers, args ...interface{}) (result interface{})
-	TypeOrNewtype    func(ctx ITypeOrNewtypeContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	ModuleAnnotation func(ctx IModuleAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	DeclAnnotation   func(ctx IDeclAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	FieldAnnotation  func(ctx IFieldAnnotationContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	StructOrUnion    func(ctx IStructOrUnionContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	TypeOrNewtype    func(ctx ITypeOrNewtypeContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	TypeParameter    func(ctx ITypeParameterContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	TypeExprSimple   func(ctx ITypeExprSimpleContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	TypeExprGeneric  func(ctx ITypeExprGenericContext, this *AdlPHandlers, args ...interface{}) (result interface{})
@@ -41,11 +41,11 @@ type AdlPVisitor interface {
 	ImportModuleNameContextVisitor
 	LocalAnnoContextVisitor
 	DocAnnoContextVisitor
-	StructOrUnionContextVisitor
-	TypeOrNewtypeContextVisitor
 	ModuleAnnotationContextVisitor
 	DeclAnnotationContextVisitor
 	FieldAnnotationContextVisitor
+	StructOrUnionContextVisitor
+	TypeOrNewtypeContextVisitor
 	TypeParameterContextVisitor
 	TypeExprSimpleContextVisitor
 	TypeExprGenericContextVisitor
@@ -77,12 +77,6 @@ type LocalAnnoContextVisitor interface {
 type DocAnnoContextVisitor interface {
 	VisitDocAnno(ctx IDocAnnoContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
-type StructOrUnionContextVisitor interface {
-	VisitStructOrUnion(ctx IStructOrUnionContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
-}
-type TypeOrNewtypeContextVisitor interface {
-	VisitTypeOrNewtype(ctx ITypeOrNewtypeContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
-}
 type ModuleAnnotationContextVisitor interface {
 	VisitModuleAnnotation(ctx IModuleAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
@@ -91,6 +85,12 @@ type DeclAnnotationContextVisitor interface {
 }
 type FieldAnnotationContextVisitor interface {
 	VisitFieldAnnotation(ctx IFieldAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+}
+type StructOrUnionContextVisitor interface {
+	VisitStructOrUnion(ctx IStructOrUnionContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+}
+type TypeOrNewtypeContextVisitor interface {
+	VisitTypeOrNewtype(ctx ITypeOrNewtypeContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
 type TypeParameterContextVisitor interface {
 	VisitTypeParameter(ctx ITypeParameterContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})

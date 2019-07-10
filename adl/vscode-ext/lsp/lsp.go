@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/wxio/tron-go/adl"
+
 	"github.com/golangq/q"
 	"golang.org/x/tools/jsonrpc2"
 	"golang.org/x/tools/lsp/protocol"
@@ -28,7 +30,8 @@ type server struct {
 	cancel           context.CancelFunc
 	// tcpConn    net.Conn
 	fileCache filecache
-	astCache  astcache
+	allmod    map[string]adl.Module
+	// astCache  astcache
 }
 
 func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParams) (*protocol.InitializeResult, error) {
@@ -41,7 +44,7 @@ func (svr *server) Initialize(ctx context.Context, req *protocol.InitializeParam
 	svr.tempDir = tempDir
 	q.Q(req)
 	svr.fileCache = newCache()
-	svr.astCache = newAstCache()
+	// svr.astCache = newAstCache()
 	svr.initParams = req
 	// type ServerCapabilities struct {
 	// 	InnerServerCapabilities
@@ -214,6 +217,7 @@ func (svr *server) ExecuteCommand(ctx context.Context, req *protocol.ExecuteComm
 				q.Q(err)
 				return nil, nil
 			}
+			svr.allmod = allmod
 			svr.compile(ctx, cur, allmod, svr.client_msg_log)
 		}
 	default:
@@ -244,13 +248,14 @@ func (svr *server) DidOpen(ctx context.Context, req *protocol.DidOpenTextDocumen
 			q.Q(err)
 			return nil
 		}
+		svr.allmod = allmod
 		svr.compile(ctx, cur, allmod, svr.client_log)
 	}
 
 	return nil
 }
 func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDocumentParams) error {
-	q.Q(req)
+	q.Q("didchange")
 	if strings.HasSuffix(req.TextDocument.URI, ".mod") {
 		return nil
 	}
@@ -273,6 +278,7 @@ func (svr *server) DidChange(ctx context.Context, req *protocol.DidChangeTextDoc
 			q.Q(err)
 			return nil
 		}
+		svr.allmod = allmod
 		svr.compile(ctx, cur, allmod, svr.client_log)
 	}
 

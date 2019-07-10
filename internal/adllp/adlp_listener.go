@@ -25,12 +25,6 @@ type AdlPListener interface {
 	DocAnnoEntryListener
 	DocAnnoExitListener
 
-	StructOrUnionEntryListener
-	StructOrUnionExitListener
-
-	TypeOrNewtypeEntryListener
-	TypeOrNewtypeExitListener
-
 	ModuleAnnotationEntryListener
 	ModuleAnnotationExitListener
 
@@ -39,6 +33,12 @@ type AdlPListener interface {
 
 	FieldAnnotationEntryListener
 	FieldAnnotationExitListener
+
+	StructOrUnionEntryListener
+	StructOrUnionExitListener
+
+	TypeOrNewtypeEntryListener
+	TypeOrNewtypeExitListener
 
 	TypeParameterEntryListener
 	TypeParameterExitListener
@@ -129,22 +129,6 @@ type DocAnnoExitListener interface {
 }
 
 // From Rule 'top_level_statement'
-type StructOrUnionEntryListener interface {
-	EnterStructOrUnion(c *StructOrUnionContext)
-}
-type StructOrUnionExitListener interface {
-	ExitStructOrUnion(c *StructOrUnionContext)
-}
-
-// From Rule 'top_level_statement'
-type TypeOrNewtypeEntryListener interface {
-	EnterTypeOrNewtype(c *TypeOrNewtypeContext)
-}
-type TypeOrNewtypeExitListener interface {
-	ExitTypeOrNewtype(c *TypeOrNewtypeContext)
-}
-
-// From Rule 'top_level_statement'
 type ModuleAnnotationEntryListener interface {
 	EnterModuleAnnotation(c *ModuleAnnotationContext)
 }
@@ -166,6 +150,22 @@ type FieldAnnotationEntryListener interface {
 }
 type FieldAnnotationExitListener interface {
 	ExitFieldAnnotation(c *FieldAnnotationContext)
+}
+
+// From Rule 'top_level_statement'
+type StructOrUnionEntryListener interface {
+	EnterStructOrUnion(c *StructOrUnionContext)
+}
+type StructOrUnionExitListener interface {
+	ExitStructOrUnion(c *StructOrUnionContext)
+}
+
+// From Rule 'top_level_statement'
+type TypeOrNewtypeEntryListener interface {
+	EnterTypeOrNewtype(c *TypeOrNewtypeContext)
+}
+type TypeOrNewtypeExitListener interface {
+	ExitTypeOrNewtype(c *TypeOrNewtypeContext)
 }
 
 // From Rule 'typeParam'

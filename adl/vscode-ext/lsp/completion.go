@@ -20,13 +20,12 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 			qstack()
 		}
 	}()
+	if req.Context.TriggerKind != protocol.Invoked {
+		return nil, nil
+	}
 	text, err := svr.fileCache.get(req.TextDocument.URI)
 	if err != nil {
 		q.Q(err)
-		return nil, nil
-	}
-	svr.astCache.get(req.TextDocument.URI)
-	if req.Context.TriggerKind != protocol.Invoked {
 		return nil, nil
 	}
 	col := req.TextDocumentPositionParams.Position.Character
@@ -40,13 +39,7 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 	q.Q(col)
 	q.Q(line + 1)
 	q.Q(req.TextDocumentPositionParams.Position)
-	// cc := &complColl{
-	// 	cl:   &protocol.CompletionList{},
-	// 	col:  int(col),
-	// 	line: int(line) + 1,
-	// }
 	ccl := &complCollList{
-		cl:   &protocol.CompletionList{},
 		col:  int(col),
 		line: int(line) + 1,
 	}
@@ -57,39 +50,154 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 	// antlr.ParseTreeWalkerDefault.Walk(ccl, atr)
 	debug := fmt.Sprintf("%d %v", ccl.size, ccl.treeNode)
 	q.Q(debug)
+
 	for _, x := range ccl.treeNode {
 		tn := pa.GetSymbolicNames()[x.GetTokenType()]
-		q.Q(fmt.Sprintf("%s %#+[1]v", tn, x))
+		q.Q(fmt.Sprintf("%s %T", tn, x.Val()))
 	}
-	// adl.VisitADLP(ts, cc)
-	// q.Q(cc.before, cc.after)
-	// cl := protocol.CompletionList{
-	// 	IsIncomplete: false,
-	// 	Items: []protocol.CompletionItem{
-	// 		{
-	// 			Label:         "test",
-	// 			Kind:          protocol.TextCompletion,
-	// 			Detail:        "This is a test",
-	// 			Documentation: "this is the docs",
-	// 		},
-	// 		{
-	// 			Label:         "test2",
-	// 			Kind:          protocol.TextCompletion,
-	// 			Detail:        "This is a test2",
-	// 			Documentation: "this is the docs2",
-	// 		},
-	// 	},
+	//
+	if len(ccl.treeNode) < 2 {
+		return nil, nil
+	}
+	tns := ccl.treeNode
+	// allmod, err := svr.adl2ast(ctx, text, svr.client_log)
+	// if err != nil {
+	// 	q.Q(err)
+	// 	return nil, nil
 	// }
-	return ccl.cl, nil
+	if svr.allmod == nil {
+		q.Q("no adl cache")
+		return nil, nil
+	}
+	mod, ex := svr.allmod[tns[1].Val().(adl.Module).Name]
+	_ = ex // adl is valid
+	cl := &protocol.CompletionList{}
+	var curAnn *adl.ScopedName
+	var curAnnMod adl.Module
+	var curDeclType *adl.DeclType
+	for i, tn := range tns[2:] {
+		switch tn.GetTokenType() {
+		case adlwi.AdlWiModuleAnno:
+			// TODO all wild card imports
+			for _, a := range mod.Imports {
+				if a.ScopedName != nil && a.ScopedName.Name == tn.Val() {
+					curAnn = a.ScopedName
+					break
+				}
+			}
+			if curAnn == nil {
+				q.Q("didn't find", tn.Val())
+				q.Q("in", mod.Annotations)
+				q.Q("of", tns[1].Val().(adl.Module).Name, mod)
+				return nil, nil
+			}
+			curAnnMod, ex = svr.allmod[curAnn.ModuleName]
+			_ = ex // adl is valid
+			curDecl := curAnnMod.Decls[curAnn.Name]
+			curDeclType = &curDecl.Type
+		case adlwi.AdlWiJsonObj:
+			// curDeclType.
+		case adlwi.AdlWiJsonObjKey:
+		case adlwi.AdlWiJsonArray:
+		case adlwi.AdlWiJsonBool:
+		case adlwi.AdlWiJsonFloat:
+		case adlwi.AdlWiJsonInt:
+		case adlwi.AdlWiJsonNull:
+		case adlwi.AdlWiJsonStr:
+		default:
+			q.Q("Unhandled completion", i, tn)
+			svr.client_log(ctx, protocol.Warning, fmt.Sprintf("Unhandled completion %v", tn))
+		}
+	}
+	if curDeclType == nil {
+		q.Q("keh", tns[2:])
+		return nil, nil
+	}
+	q.Q(curDeclType)
+	ci := declTypeComplete(*curDeclType).Complete(svr.allmod, req.TextDocumentPositionParams.Position)
+	if ci != nil {
+		cl.Items = append(cl.Items, *ci)
+	}
+	// if edit != nil {
+	// 	changes := map[string][]protocol.TextEdit{
+	// 		req.TextDocument.URI: []protocol.TextEdit{
+	// 			{
+	// 				Range: protocol.Range{
+	// 					Start: req.TextDocumentPositionParams.Position,
+	// 					End:   req.TextDocumentPositionParams.Position,
+	// 				},
+	// 				NewText: *edit,
+	// 			},
+	// 		},
+	// 	}
+	// 	wep := &protocol.ApplyWorkspaceEditParams{
+	// 		Label: "adl-completion",
+	// 		Edit: protocol.WorkspaceEdit{
+	// 			Changes: &changes,
+	// 		},
+	// 	}
+	// 	svr.client.ApplyEdit(ctx, wep)
+	// }
+	return cl, nil
+}
+
+type declTypeComplete adl.DeclType
+
+func (dt declTypeComplete) Complete(allmod map[string]adl.Module, pos protocol.Position) *protocol.CompletionItem {
+	if dt.Union != nil {
+		ci := &protocol.CompletionItem{
+			Label:  "union",
+			Kind:   protocol.TextCompletion,
+			Detail: "this is an adl completions",
+			// Documentation
+			// Deprecated
+			// Preselect
+			// SortText
+			// FilterText
+			// InsertText
+			// InsertTextFormat
+			// TextEdit
+			// AdditionalTextEdits
+			// CommitCharacters
+			// Command
+			// Data
+		}
+		return ci
+	}
+	if dt.Struct != nil {
+		te := protocol.TextEdit{
+			Range: protocol.Range{
+				Start: pos,
+				End:   pos,
+			},
+			NewText: "struct goes here",
+		}
+		ci := &protocol.CompletionItem{
+			Label:  "struct",
+			Kind:   protocol.TextCompletion,
+			Detail: "this is an adl completions",
+			// Documentation
+			// Deprecated
+			// Preselect
+			// SortText
+			// FilterText
+			// InsertText
+			// InsertTextFormat
+			TextEdit: &te,
+			// AdditionalTextEdits
+			// CommitCharacters
+			// Command
+			// Data
+		}
+		return ci
+	}
+	return nil
 }
 
 type complCollList struct {
-	cl        *protocol.CompletionList
 	line, col int
 	treeNode  []ctree.TreeNode
 	size      []int
-	// before, after     antlr.TerminalNode
-	// r_before, r_after antlr.RuleNode
 }
 
 func debug_(x string) {
@@ -105,12 +213,7 @@ func (v *complCollList) collection(tn ctree.TreeNode) {
 	// debug_(debug)
 	if ((b_line == v.line && b_col < v.col) || b_line < v.line) &&
 		((a_line == v.line && a_col >= v.col) || a_line > v.line) {
-
-		// tcount := tn.StopToken().GetTokenIndex() - tn.StartToken().GetTokenIndex()
-		// debug := fmt.Sprintf("rule     #%d b=%d:%d a:%d:%d pos=%d:%d start=%v stop=%v",
-		// 	tcount, b_line, b_col, a_line, a_col, v.line, v.col, tn.StartToken(), tn.StopToken())
 		q.Q(debug)
-		// debug_("   ---")
 		v.size = append(v.size, tcount)
 		v.treeNode = append(v.treeNode, tn)
 	}
@@ -129,157 +232,3 @@ func (v *complCollList) EnterEveryRule(ctx antlr.ParserRuleContext) {
 	// }
 }
 func (v *complCollList) ExitEveryRule(ctx antlr.ParserRuleContext) {}
-
-type complColl struct {
-	*antlr.BaseParseTreeVisitor
-	cl                *protocol.CompletionList
-	line, col         int
-	before, after     antlr.TerminalNode
-	r_before, r_after antlr.RuleNode
-}
-
-func (v *complColl) VisitTerminal(node antlr.TerminalNode) {
-	tok := node.GetSymbol()
-	if v.after == nil {
-		q.Q("terminal ", tok.GetLine(), tok.GetColumn(), v.col, v.line)
-		if tok.GetLine() == v.line {
-			if tok.GetColumn() >= v.col {
-				v.after = node
-			} else if v.after == nil {
-				v.before = node
-			} else {
-				v.before = node
-			}
-		}
-	}
-}
-
-// func (v *complColl) VisitErrorNode(node antlr.ErrorNode) {
-// }
-func (v *complColl) EnterEveryRule(ctx antlr.RuleNode) {
-	tok := ctx.GetPayload().(antlr.Token)
-	if v.after == nil {
-		q.Q("rule ", tok.GetLine(), tok.GetColumn(), v.col, v.line)
-		if tok.GetLine() == v.line && tok.GetColumn() >= v.col {
-			v.r_after = ctx
-		} else if v.r_after == nil {
-			v.r_before = ctx
-		} else {
-			v.r_before = ctx
-		}
-	}
-}
-
-// func (v *complColl) ExitEveryRule(ctx antlr.RuleNode) {
-//    v.indent = v.indent[:len(v.indent)-1]
-// }
-
-func (v *complColl) VisitAnnotation(ctx adlwi.IAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitModAnno(ctx adlwi.IModAnnoContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitDeclAnno(ctx adlwi.IDeclAnnoContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitFieldAnno(ctx adlwi.IFieldAnnoContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-
-func (v *complColl) VisitAdl(ctx adlwi.IAdlContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJson(ctx adlwi.IJsonContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitModule(ctx adlwi.IModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	n := ctx.GetTok().(ctree.TreeNode).Val().(adl.Module).Name
-	result = v.VisitChildren(ctx, delegate, []string{n})
-	return
-}
-func (v *complColl) VisitImportModule(ctx adlwi.IImportModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitImportScopedModule(ctx adlwi.IImportScopedModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitImportError(ctx adlwi.IImportErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitStruct(ctx adlwi.IStructContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	n := ctx.GetTok().(ctree.TreeNode).Val().(adl.Module).Name
-	q.Q(n)
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitUnion(ctx adlwi.IUnionContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitType(ctx adlwi.ITypeContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitNewtype(ctx adlwi.INewtypeContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitTypeParamError(ctx adlwi.ITypeParamErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitTLDError(ctx adlwi.ITLDErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitField(ctx adlwi.IFieldContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitTypeExpr_(ctx adlwi.ITypeExpr_Context, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonStr(ctx adlwi.IJsonStrContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonBool(ctx adlwi.IJsonBoolContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonNull(ctx adlwi.IJsonNullContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonInt(ctx adlwi.IJsonIntContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonFloat(ctx adlwi.IJsonFloatContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonArray(ctx adlwi.IJsonArrayContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonObj(ctx adlwi.IJsonObjContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
-func (v *complColl) VisitJsonError(ctx adlwi.IJsonErrorContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	result = v.VisitChildren(ctx, delegate, args...)
-	return
-}
