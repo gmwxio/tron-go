@@ -18,6 +18,7 @@ type TronCfg struct {
 }
 
 type TronExtCfg struct {
+	ApplyPTComp  bool     `json:"autoApplyStructCompletions"`
 	Includes     []string `json:"includes"`
 	MaxIssues    float64  `json:"maxIssues"`
 	AdlcPath     string   `json:"adlc.path"`

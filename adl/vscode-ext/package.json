@@ -117,6 +117,12 @@
 			"type": "object",
 			"title": "Tron configuration",
 			"properties": {
+				"tron.autoApplyStructCompletions": {
+					"type": "boolean",
+					"default": true,
+					"description": "If true, struct (aka product type) completions are auto applied, else provided as an option",
+					"scope": "resource"
+				},
 				"tron.includes": {
 					"type": [
 						"array",

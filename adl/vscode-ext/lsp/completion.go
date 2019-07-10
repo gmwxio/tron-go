@@ -1,6 +1,7 @@
 package lsp
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 
@@ -35,6 +36,10 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 	// adl.QTreeToken(ts, bl)
 	if err1.Error() != nil {
 		q.Q(err1)
+	}
+	if tr == nil {
+		q.Q("no tree created")
+		return nil, nil
 	}
 	q.Q(col)
 	q.Q(line + 1)
@@ -74,6 +79,7 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 	cl := &protocol.CompletionList{}
 	var curAnn *adl.ScopedName
 	var curAnnMod adl.Module
+	var curDecl *adl.Decl
 	var curDeclType *adl.DeclType
 	for i, tn := range tns[2:] {
 		switch tn.GetTokenType() {
@@ -93,7 +99,8 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 			}
 			curAnnMod, ex = svr.allmod[curAnn.ModuleName]
 			_ = ex // adl is valid
-			curDecl := curAnnMod.Decls[curAnn.Name]
+			x := curAnnMod.Decls[curAnn.Name]
+			curDecl = &x
 			curDeclType = &curDecl.Type
 		case adlwi.AdlWiJsonObj:
 			// curDeclType.
@@ -114,9 +121,9 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 		return nil, nil
 	}
 	q.Q(curDeclType)
-	ci := declTypeComplete(*curDeclType).Complete(svr.allmod, req.TextDocumentPositionParams.Position)
+	ci := declTypeComplete(*curDeclType).Complete(curDecl, svr.allmod, req.TextDocumentPositionParams.Position, req.TextDocument.URI, svr)
 	if ci != nil {
-		cl.Items = append(cl.Items, *ci)
+		cl.Items = append(cl.Items, ci...)
 	}
 	// if edit != nil {
 	// 	changes := map[string][]protocol.TextEdit{
@@ -143,53 +150,80 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 
 type declTypeComplete adl.DeclType
 
-func (dt declTypeComplete) Complete(allmod map[string]adl.Module, pos protocol.Position) *protocol.CompletionItem {
+func (dt declTypeComplete) Complete(curDecl *adl.Decl, allmod map[string]adl.Module, pos protocol.Position, uri string, svr *server) (items []protocol.CompletionItem) {
 	if dt.Union != nil {
-		ci := &protocol.CompletionItem{
-			Label:  "union",
-			Kind:   protocol.TextCompletion,
-			Detail: "this is an adl completions",
-			// Documentation
-			// Deprecated
-			// Preselect
-			// SortText
-			// FilterText
-			// InsertText
-			// InsertTextFormat
-			// TextEdit
-			// AdditionalTextEdits
-			// CommitCharacters
-			// Command
-			// Data
+		for _, f := range dt.Union.Field {
+			ci := protocol.CompletionItem{
+				Label:  `"` + f.Name + `" : _`,
+				Kind:   protocol.TextCompletion,
+				Detail: "Union, only one field allowed",
+				// Documentation
+				// Deprecated
+				// Preselect
+				// SortText
+				// FilterText
+				// InsertText
+				// InsertTextFormat
+				// TextEdit
+				// AdditionalTextEdits
+				// CommitCharacters
+				// Command
+				// Data
+			}
+			items = append(items, ci)
 		}
-		return ci
+		return
 	}
 	if dt.Struct != nil {
+		var buf bytes.Buffer
+		for i, f := range dt.Struct.Field {
+			if i != 0 {
+				buf.WriteString(`, `)
+			}
+			buf.WriteString(`"`)
+			buf.WriteString(f.Name)
+			buf.WriteString(fmt.Sprintf(`" : $%d`, i+1))
+		}
 		te := protocol.TextEdit{
 			Range: protocol.Range{
 				Start: pos,
 				End:   pos,
 			},
-			NewText: "struct goes here",
+			NewText: buf.String(),
 		}
-		ci := &protocol.CompletionItem{
-			Label:  "struct",
-			Kind:   protocol.TextCompletion,
-			Detail: "this is an adl completions",
-			// Documentation
-			// Deprecated
-			// Preselect
-			// SortText
-			// FilterText
-			// InsertText
-			// InsertTextFormat
-			TextEdit: &te,
-			// AdditionalTextEdits
-			// CommitCharacters
-			// Command
-			// Data
+		if svr.extConfig.ApplyPTComp {
+			changes := map[string][]protocol.TextEdit{
+				uri: []protocol.TextEdit{te},
+			}
+			wep := &protocol.ApplyWorkspaceEditParams{
+				Label: "adl-completion",
+				Edit: protocol.WorkspaceEdit{
+					Changes: &changes,
+					// DocumentChanges: []protocol.DocumentCh
+				},
+			}
+			svr.client.ApplyEdit(context.Background(), wep)
+		} else {
+			ci := protocol.CompletionItem{
+				Label:         curDecl.Name,
+				Kind:          protocol.SnippetCompletion,
+				Detail:        "Struct, all fields required",
+				Documentation: "The setting tron.autoApplyStructCompletions controls whether structs are auto applied, currently false",
+				// Deprecated
+				// Preselect
+				// SortText
+				// FilterText
+				// InsertText
+				// InsertTextFormat
+				TextEdit: &te,
+				// AdditionalTextEdits
+				// CommitCharacters
+				// Command
+				// Data
+			}
+			items = append(items, ci)
 		}
-		return ci
+		return
 	}
 	return nil
 }
