@@ -151,7 +151,7 @@ func (svr *server) compile(ctx context.Context, text string, allmod map[string]a
 			return
 		}
 		cv := &compileV{}
-		adl.VisitADL(tr, cv)
+		adl.VisitADLWi(tr, cv)
 		q.Q(cv.name)
 		cma := struct {
 			scope      adl.ScopedName
@@ -244,6 +244,6 @@ type compileV struct {
 }
 
 func (v *compileV) VisitModule(ctx adlwi.IModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	v.name = ctx.GetTok().(*ctree.TreeNode).Val.(adl.Module).Name
+	v.name = ctx.GetTok().(ctree.TreeNode).Val().(adl.Module).Name
 	return
 }

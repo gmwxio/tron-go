@@ -40,6 +40,7 @@ package adllp // AdlP
 //var _ adllp.FloatStatementContextVisitor = &AdlPVisitor{}
 //var _ adllp.ArrayStatementContextVisitor = &AdlPVisitor{}
 //var _ adllp.ObjStatementContextVisitor = &AdlPVisitor{}
+//var _ adllp.JsonObjStatementContextVisitor = &AdlPVisitor{}
 
 //func (v *AdlPVisitor) VisitNext(node antlr.Tree, current interface{}) bool {
 //    return true
@@ -87,6 +88,7 @@ package adllp // AdlP
 //FloatStatement: func(ctx *adllp.FloatStatementContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //ArrayStatement: func(ctx *adllp.ArrayStatementContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 //ObjStatement: func(ctx *adllp.ObjStatementContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
+//JsonObjStatement: func(ctx *adllp.JsonObjStatementContext, this *adllp.AdlPHandlers, args ...interface{}) (result interface{}) {fmt.Printf("%s%T\n", indent, ctx);ctx.VisitChildrenFunc(this, args...);return},
 
 //}
 
@@ -111,6 +113,7 @@ package adllp // AdlP
 //func (v *AdlPVisitor) VisitFloatStatement(ctx adllp.IFloatStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitArrayStatement(ctx adllp.IArrayStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 //func (v *AdlPVisitor) VisitObjStatement(ctx adllp.IObjStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
+//func (v *AdlPVisitor) VisitJsonObjStatement(ctx adllp.IJsonObjStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}){    result = v.VisitChildren(ctx, delegate, args...);return}
 
 //  TODO list rules here
 //  Visit rules manually

@@ -69,6 +69,9 @@ type AdlPListener interface {
 
 	ObjStatementEntryListener
 	ObjStatementExitListener
+
+	JsonObjStatementEntryListener
+	JsonObjStatementExitListener
 }
 
 //
@@ -243,4 +246,12 @@ type ObjStatementEntryListener interface {
 }
 type ObjStatementExitListener interface {
 	ExitObjStatement(c *ObjStatementContext)
+}
+
+// From Rule 'jsonObj'
+type JsonObjStatementEntryListener interface {
+	EnterJsonObjStatement(c *JsonObjStatementContext)
+}
+type JsonObjStatementExitListener interface {
+	ExitJsonObjStatement(c *JsonObjStatementContext)
 }

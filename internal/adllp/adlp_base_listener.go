@@ -102,6 +102,9 @@ package adllp // AdlP
 //var _ adllp.ObjStatementEntryListener = &AdlPListener{}
 //var _ adllp.ObjStatementExitListener = &AdlPListener{}
 
+//var _ adllp.JsonObjStatementEntryListener = &AdlPListener{}
+//var _ adllp.JsonObjStatementExitListener = &AdlPListener{}
+
 //type AdlPListener struct {
 //}
 
@@ -210,3 +213,6 @@ package adllp // AdlP
 
 //func (s *AdlPListener) EnterObjStatement(ctx adllp.*adllp.ObjStatementContext) {}
 //func (s *AdlPListener) ExitObjStatement(ctx adllp.*adllp.ObjStatementContext) {}
+
+//func (s *AdlPListener) EnterJsonObjStatement(ctx adllp.*adllp.JsonObjStatementContext) {}
+//func (s *AdlPListener) ExitJsonObjStatement(ctx adllp.*adllp.JsonObjStatementContext) {}

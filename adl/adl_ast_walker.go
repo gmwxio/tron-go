@@ -2,15 +2,15 @@ package adl
 
 import (
 	antlr "github.com/wxio/goantlr"
-	walker "github.com/wxio/tron-go/internal/adlwi"
+	walkerWi "github.com/wxio/tron-go/internal/adlwi"
 	walkerWo "github.com/wxio/tron-go/internal/adlwo"
 	"github.com/wxio/tron-go/internal/ctree"
 )
 
-func WalkADL(tr ctree.Tree, list antlr.ParseTreeListener) errs {
+func WalkADLWi(tr ctree.Tree, list antlr.ParseTreeListener) (antlr.Recognizer, errs) {
 	var tttype *TTType
 	var tts antlr.TokenStream = ctree.NewTreeTokenSource(tr, tttype)
-	p := walker.NewAdlWi(tts)
+	p := walkerWi.NewAdlWi(tts)
 	// debugTreeToken(tts, p)
 	p.SetTokenStream(tts)
 	p.RemoveErrorListeners()
@@ -24,10 +24,10 @@ func WalkADL(tr ctree.Tree, list antlr.ParseTreeListener) errs {
 		ParseErr:      el.ParseErr,
 		SyntaxWarning: el.SyntaxWarning,
 	}
-	return errs
+	return p, errs
 }
 
-func WalkADLWo(tr ctree.Tree, list antlr.ParseTreeListener) errs {
+func WalkADLWo(tr ctree.Tree, list antlr.ParseTreeListener) (antlr.Recognizer, errs) {
 	var tttype *TTType
 	var tts antlr.TokenStream = ctree.NewTreeTokenSource(tr, tttype)
 	p := walkerWo.NewAdlWo(tts)
@@ -44,13 +44,13 @@ func WalkADLWo(tr ctree.Tree, list antlr.ParseTreeListener) errs {
 		ParseErr:      el.ParseErr,
 		SyntaxWarning: el.SyntaxWarning,
 	}
-	return errs
+	return p, errs
 }
 
-func VisitADL(tr ctree.Tree, vi antlr.ParseTreeVisitor) errs {
+func VisitADLWi(tr ctree.Tree, vi antlr.ParseTreeVisitor) (antlr.Recognizer, errs) {
 	var tttype *TTType
 	var tts antlr.TokenStream = ctree.NewTreeTokenSource(tr, tttype)
-	p := walker.NewAdlWi(tts)
+	p := walkerWi.NewAdlWi(tts)
 	// debugTreeToken(tts, p)
 	p.SetTokenStream(tts)
 	p.RemoveErrorListeners()
@@ -63,10 +63,10 @@ func VisitADL(tr ctree.Tree, vi antlr.ParseTreeVisitor) errs {
 		ParseErr:      el.ParseErr,
 		SyntaxWarning: el.SyntaxWarning,
 	}
-	return errs
+	return p, errs
 }
 
-func VisitAdlWo(tr ctree.Tree, vi antlr.ParseTreeVisitor) errs {
+func VisitAdlWo(tr ctree.Tree, vi antlr.ParseTreeVisitor) (antlr.Recognizer, errs) {
 	var tttype *TTType
 	var tts antlr.TokenStream = ctree.NewTreeTokenSource(tr, tttype)
 	p := walkerWo.NewAdlWo(tts)
@@ -82,5 +82,5 @@ func VisitAdlWo(tr ctree.Tree, vi antlr.ParseTreeVisitor) errs {
 		ParseErr:      el.ParseErr,
 		SyntaxWarning: el.SyntaxWarning,
 	}
-	return errs
+	return p, errs
 }

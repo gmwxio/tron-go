@@ -343,6 +343,7 @@ func (svr *server) DocumentHighlight(ctx context.Context, req *protocol.TextDocu
 func (svr *server) DocumentSymbol(ctx context.Context, req *protocol.DocumentSymbolParams) ([]protocol.DocumentSymbol, error) {
 	defer func() {
 		if r := recover(); r != nil {
+			q.Q(r)
 			qstack()
 		}
 	}()

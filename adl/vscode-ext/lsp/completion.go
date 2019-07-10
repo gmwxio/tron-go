@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/wxio/tron-go/internal/ctree"
 
@@ -36,12 +37,32 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 	if err1.Error() != nil {
 		q.Q(err1)
 	}
-	cc := &complColl{
+	q.Q(col)
+	q.Q(line + 1)
+	q.Q(req.TextDocumentPositionParams.Position)
+	// cc := &complColl{
+	// 	cl:   &protocol.CompletionList{},
+	// 	col:  int(col),
+	// 	line: int(line) + 1,
+	// }
+	ccl := &complCollList{
 		cl:   &protocol.CompletionList{},
 		col:  int(col),
-		line: int(line),
+		line: int(line) + 1,
 	}
-	adl.VisitADL(tr, cc)
+	pa, errs := adl.WalkADLWo(tr, ccl)
+	if errs.Error() != nil {
+		q.Q(errs.Error())
+	}
+	// antlr.ParseTreeWalkerDefault.Walk(ccl, atr)
+	debug := fmt.Sprintf("%d %v", ccl.size, ccl.treeNode)
+	q.Q(debug)
+	for _, x := range ccl.treeNode {
+		tn := pa.GetSymbolicNames()[x.GetTokenType()]
+		q.Q(fmt.Sprintf("%s %#+[1]v", tn, x))
+	}
+	// adl.VisitADLP(ts, cc)
+	// q.Q(cc.before, cc.after)
 	// cl := protocol.CompletionList{
 	// 	IsIncomplete: false,
 	// 	Items: []protocol.CompletionItem{
@@ -59,14 +80,99 @@ func (svr *server) collect(ctx context.Context, req *protocol.CompletionParams) 
 	// 		},
 	// 	},
 	// }
-	return cc.cl, nil
+	return ccl.cl, nil
 }
+
+type complCollList struct {
+	cl        *protocol.CompletionList
+	line, col int
+	treeNode  []ctree.TreeNode
+	size      []int
+	// before, after     antlr.TerminalNode
+	// r_before, r_after antlr.RuleNode
+}
+
+func debug_(x string) {
+	q.Q(x)
+}
+
+func (v *complCollList) collection(tn ctree.TreeNode) {
+	b_line, b_col := tn.StartToken().GetLine(), tn.StartToken().GetColumn()
+	a_line, a_col := tn.StopToken().GetLine(), tn.StopToken().GetColumn()+len(tn.StopToken().GetText())
+	tcount := tn.StopToken().GetTokenIndex() - tn.StartToken().GetTokenIndex()
+	debug := fmt.Sprintf("#%d b=%d:%d a:%d:%d pos=%d:%d start=%v stop=%v",
+		tcount, b_line, b_col, a_line, a_col, v.line, v.col, tn.StartToken(), tn.StopToken())
+	// debug_(debug)
+	if ((b_line == v.line && b_col < v.col) || b_line < v.line) &&
+		((a_line == v.line && a_col >= v.col) || a_line > v.line) {
+
+		// tcount := tn.StopToken().GetTokenIndex() - tn.StartToken().GetTokenIndex()
+		// debug := fmt.Sprintf("rule     #%d b=%d:%d a:%d:%d pos=%d:%d start=%v stop=%v",
+		// 	tcount, b_line, b_col, a_line, a_col, v.line, v.col, tn.StartToken(), tn.StopToken())
+		q.Q(debug)
+		// debug_("   ---")
+		v.size = append(v.size, tcount)
+		v.treeNode = append(v.treeNode, tn)
+	}
+}
+
+func (v *complCollList) VisitTerminal(node antlr.TerminalNode) {
+	if tn, ok := node.GetSymbol().(ctree.TreeNode); ok {
+		v.collection(tn)
+	}
+}
+
+func (v *complCollList) VisitErrorNode(node antlr.ErrorNode) {}
+func (v *complCollList) EnterEveryRule(ctx antlr.ParserRuleContext) {
+	// if tn, ok := ctx.GetStart().(ctree.TreeNode); ok {
+	// 	v.collection(tn)
+	// }
+}
+func (v *complCollList) ExitEveryRule(ctx antlr.ParserRuleContext) {}
 
 type complColl struct {
 	*antlr.BaseParseTreeVisitor
-	cl        *protocol.CompletionList
-	line, col int
+	cl                *protocol.CompletionList
+	line, col         int
+	before, after     antlr.TerminalNode
+	r_before, r_after antlr.RuleNode
 }
+
+func (v *complColl) VisitTerminal(node antlr.TerminalNode) {
+	tok := node.GetSymbol()
+	if v.after == nil {
+		q.Q("terminal ", tok.GetLine(), tok.GetColumn(), v.col, v.line)
+		if tok.GetLine() == v.line {
+			if tok.GetColumn() >= v.col {
+				v.after = node
+			} else if v.after == nil {
+				v.before = node
+			} else {
+				v.before = node
+			}
+		}
+	}
+}
+
+// func (v *complColl) VisitErrorNode(node antlr.ErrorNode) {
+// }
+func (v *complColl) EnterEveryRule(ctx antlr.RuleNode) {
+	tok := ctx.GetPayload().(antlr.Token)
+	if v.after == nil {
+		q.Q("rule ", tok.GetLine(), tok.GetColumn(), v.col, v.line)
+		if tok.GetLine() == v.line && tok.GetColumn() >= v.col {
+			v.r_after = ctx
+		} else if v.r_after == nil {
+			v.r_before = ctx
+		} else {
+			v.r_before = ctx
+		}
+	}
+}
+
+// func (v *complColl) ExitEveryRule(ctx antlr.RuleNode) {
+//    v.indent = v.indent[:len(v.indent)-1]
+// }
 
 func (v *complColl) VisitAnnotation(ctx adlwi.IAnnotationContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
 
@@ -95,7 +201,7 @@ func (v *complColl) VisitJson(ctx adlwi.IJsonContext, delegate antlr.ParseTreeVi
 	return
 }
 func (v *complColl) VisitModule(ctx adlwi.IModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	n := ctx.GetTok().(*ctree.TreeNode).Val.(adl.Module).Name
+	n := ctx.GetTok().(ctree.TreeNode).Val().(adl.Module).Name
 	result = v.VisitChildren(ctx, delegate, []string{n})
 	return
 }
@@ -112,7 +218,7 @@ func (v *complColl) VisitImportError(ctx adlwi.IImportErrorContext, delegate ant
 	return
 }
 func (v *complColl) VisitStruct(ctx adlwi.IStructContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
-	n := ctx.GetTok().(*ctree.TreeNode).Val.(adl.Module).Name
+	n := ctx.GetTok().(ctree.TreeNode).Val().(adl.Module).Name
 	q.Q(n)
 	result = v.VisitChildren(ctx, delegate, args...)
 	return

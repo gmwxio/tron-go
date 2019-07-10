@@ -115,7 +115,7 @@ func (svr *server) diag(ctx context.Context, text string) []protocol.Diagnostic 
 		collectionDiag(errC.errs, "ADL-WALK", -9, &dss)
 		if tr != nil {
 			errC = &errColl{}
-			err3 := adl.WalkADLWo(tr, errC)
+			_, err3 := adl.WalkADLWo(tr, errC)
 			collectionDiag(err3.ParseErr, "ADL-TREE-PARSER", -1, &dss)
 			collectionDiag(err3.SyntaxErr, "ADL-TREE-SYNTAX", -1, &dss)
 			collectionDiag(errC.errs, "ADL-TREE-WALK", 9, &dss)

@@ -3,6 +3,7 @@ package lsp
 import (
 	"fmt"
 
+	"github.com/golangq/q"
 	"github.com/wxio/tron-go/adl"
 	"github.com/wxio/tron-go/internal/ctree"
 
@@ -25,7 +26,7 @@ func buildDocSym(by string, furi string) ([]protocol.DocumentSymbol, error) {
 			lexStream: ts,
 			furi:      furi,
 		}
-		err := adl.VisitAdlWo(tr, ds)
+		_, err := adl.VisitAdlWo(tr, ds)
 		if err.Error() != nil {
 			return dsa, nil
 		}
@@ -49,7 +50,8 @@ func (v *docSym) VisitAdl(ctx adlwo.IAdlContext, delegate antlr.ParseTreeVisitor
 }
 func (v *docSym) VisitModule(ctx adlwo.IModuleContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
 	// adl.QTreeToken(v.lexStream, ctx.GetParser())
-	sym := ctx.Module().GetSymbol().(*ctree.TreeNode)
+	q.Q(ctx.Module().GetSymbol())
+	sym := ctx.Module().GetSymbol().(ctree.TreeNode)
 	sidx := sym.GetStop()
 	// q.Q(sidx)
 	stok := v.lexStream.Get(sidx)
@@ -121,7 +123,7 @@ func (v *docSym) VisitImportScopedModule(ctx adlwo.IImportScopedModuleContext, d
 func (v *docSym) VisitStruct(ctx adlwo.IStructContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{}) {
 	// q.Q("struct")
 	arr := args[0].(*[]protocol.DocumentSymbol)
-	sym := ctx.Struct().GetSymbol().(*ctree.TreeNode)
+	sym := ctx.Struct().GetSymbol().(ctree.TreeNode)
 	sidx := sym.GetStop()
 	stok := v.lexStream.Get(sidx)
 	start := protocol.Position{

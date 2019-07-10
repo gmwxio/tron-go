@@ -20,16 +20,30 @@ type walkerbuilder struct {
 	last antlr.Token
 }
 
-type TreeNode struct {
+type TreeNode interface {
+	StartToken() antlr.Token
+	StopToken() antlr.Token
+	GetTokenType() int
+	String() string
+	GetStop() int
+	Val() interface{}
+}
+
+type treeNode struct {
 	antlr.Token
 	stop  antlr.Token
 	TType int
-	Val   interface{}
+	val   interface{}
 }
 
-func (t *TreeNode) GetTokenType() int { return t.TType }
-func (tn TreeNode) String() string    { return fmt.Sprintf("%v", tn.Val) }
-func (tn TreeNode) GetStop() int      { return tn.stop.GetTokenIndex() }
+var _ TreeNode = &treeNode{}
+
+func (t *treeNode) StartToken() antlr.Token { return t.Token }
+func (t *treeNode) StopToken() antlr.Token  { return t.stop }
+func (t *treeNode) Val() interface{}        { return t.val }
+func (t *treeNode) GetTokenType() int       { return t.TType }
+func (t *treeNode) String() string          { return fmt.Sprintf("%v", t.val) }
+func (t *treeNode) GetStop() int            { return t.stop.GetTokenIndex() }
 
 func NewWalkableBuild(name string, root antlr.Token) WalkableBuilder {
 	t := NewTree(name, root)
@@ -45,11 +59,11 @@ func (b *walkerbuilder) Add(n antlr.Token) WalkableBuilder {
 	return b
 }
 
-func NewBuild(tree_name string, n antlr.Token, ttype int, val interface{}) WalkableBuilder {
+func NewBuild(tree_name string, n antlr.Token, stop antlr.Token, ttype int, val interface{}) WalkableBuilder {
 	if _, ok := val.(antlr.Token); ok {
 		panic("trying to add a token as a node - this is just to confusing to be allowed")
 	}
-	tn := &TreeNode{Token: n, TType: ttype, Val: val}
+	tn := &treeNode{Token: n, stop: stop, TType: ttype, val: val}
 	t := NewTree(tree_name, tn)
 	b := &walkerbuilder{t, tn, nil}
 	return b
@@ -58,7 +72,7 @@ func (b *walkerbuilder) AddNode(an antlr.Token, stop antlr.Token, ttype int, val
 	if _, ok := val.(antlr.Token); ok {
 		panic("trying to add a token as a node - this is just to confusing to be allowed")
 	}
-	tn := &TreeNode{Token: an, stop: stop, TType: ttype, Val: val}
+	tn := &treeNode{Token: an, stop: stop, TType: ttype, val: val}
 	b.tree.Add(b.curr, tn)
 	b.last = tn
 	return b

@@ -29,6 +29,7 @@ type AdlPHandlers struct {
 	FloatStatement   func(ctx IFloatStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	ArrayStatement   func(ctx IArrayStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 	ObjStatement     func(ctx IObjStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
+	JsonObjStatement func(ctx IJsonObjStatementContext, this *AdlPHandlers, args ...interface{}) (result interface{})
 }
 
 // A complete Visitor for a parse tree produced by AdlP.
@@ -55,6 +56,7 @@ type AdlPVisitor interface {
 	FloatStatementContextVisitor
 	ArrayStatementContextVisitor
 	ObjStatementContextVisitor
+	JsonObjStatementContextVisitor
 }
 
 type AdlContextVisitor interface {
@@ -119,4 +121,7 @@ type ArrayStatementContextVisitor interface {
 }
 type ObjStatementContextVisitor interface {
 	VisitObjStatement(ctx IObjStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
+}
+type JsonObjStatementContextVisitor interface {
+	VisitJsonObjStatement(ctx IJsonObjStatementContext, delegate antlr.ParseTreeVisitor, args ...interface{}) (result interface{})
 }
