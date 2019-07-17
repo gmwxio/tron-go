@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -12,15 +13,29 @@ import (
 )
 
 type antlrs struct {
-	Jar   string  `opts:"env=ANTLR_JAR"`
-	Antlr []antlr `opts:"-"`
+	Jar                 string `opts:"env=ANTLR_JAR"`
+	PrefixJarFromModule bool
+	Antlr               []antlr `opts:"-"`
 }
 
 func NewAntlrs() opts.Opts {
-	return opts.New(&antlrs{}).Name("antlrs")
+	return opts.New(&antlrs{
+		Jar:                 "lib/wxio/antlr4-4.7.1-SNAPSHOT-complete.jar",
+		PrefixJarFromModule: true,
+	}).Name("antlrs")
 }
 
 func (ans *antlrs) Run() error {
+	if ans.PrefixJarFromModule {
+		cmd := exec.Command("go", "list", "-m", "-f", "{{.Dir}}", "github.com/wxio/goantlr")
+		by, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%v\n", string(by))
+			return err
+		}
+		ans.Jar = filepath.Join(strings.Trim(string(by), "\n"), ans.Jar)
+		fmt.Fprintf(os.Stderr, "jar %v\n", ans.Jar)
+	}
 	for _, an := range ans.Antlr {
 		if an.Jar == "" {
 			an.Jar = ans.Jar

@@ -1256,6 +1256,7 @@ func (p *AdlAst) Decl() (localctx IDeclContext) {
 	}
 	p.SetState(69)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlAstINT {
@@ -1981,6 +1982,7 @@ func (p *AdlAst) Struct_() (localctx IStruct_Context) {
 	}
 	p.SetState(113)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlAstDOWN {
@@ -2257,6 +2259,7 @@ func (p *AdlAst) Union_() (localctx IUnion_Context) {
 	}
 	p.SetState(130)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlAstDOWN {
@@ -2777,9 +2780,10 @@ func (p *AdlAst) NewType() (localctx INewTypeContext) {
 	}
 	p.SetState(153)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
-	if ((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27)))) != 0 {
+	if ((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27))))) != 0 {
 		{
 			p.SetState(152)
 
@@ -3075,9 +3079,10 @@ func (p *AdlAst) Field() (localctx IFieldContext) {
 	}
 	p.SetState(163)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
-	if ((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27)))) != 0 {
+	if ((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27))))) != 0 {
 		{
 			p.SetState(162)
 
@@ -4700,6 +4705,7 @@ func (p *AdlAst) Json() (localctx IJsonContext) {
 		}
 		p.SetState(207)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlAstDOWN {
@@ -4711,7 +4717,7 @@ func (p *AdlAst) Json() (localctx IJsonContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27)))) != 0) {
+			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27))))) != 0) {
 				{
 					p.SetState(200)
 					p.Json()
@@ -4739,6 +4745,7 @@ func (p *AdlAst) Json() (localctx IJsonContext) {
 		}
 		p.SetState(218)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlAstDOWN {
@@ -4750,7 +4757,7 @@ func (p *AdlAst) Json() (localctx IJsonContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27)))) != 0) {
+			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlAstERROR-27))|(1<<(AdlAstJsonStr-27))|(1<<(AdlAstJsonBool-27))|(1<<(AdlAstJsonNull-27))|(1<<(AdlAstJsonInt-27))|(1<<(AdlAstJsonFloat-27))|(1<<(AdlAstJsonArray-27))|(1<<(AdlAstJsonObj-27))))) != 0) {
 				{
 					p.SetState(211)
 					p.Json()

@@ -974,6 +974,7 @@ func (p *AdlWi) Module() (localctx IModuleContext) {
 		}
 		p.SetState(52)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -985,7 +986,7 @@ func (p *AdlWi) Module() (localctx IModuleContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+			for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 				{
 					p.SetState(33)
 					p.Annotation()
@@ -1015,7 +1016,7 @@ func (p *AdlWi) Module() (localctx IModuleContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for _la == AdlWiERROR || (((_la-43)&-(0x1f+1)) == 0 && ((1<<uint((_la-43)))&((1<<(AdlWiStruct-43))|(1<<(AdlWiUnion-43))|(1<<(AdlWiNewtype-43))|(1<<(AdlWiType-43))|(1<<(AdlWiModuleAnno-43))|(1<<(AdlWiDeclAnno-43))|(1<<(AdlWiFieldAnno-43)))) != 0) {
+			for _la == AdlWiERROR || (((_la-43)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-43)))&((1<<(AdlWiStruct-43))|(1<<(AdlWiUnion-43))|(1<<(AdlWiNewtype-43))|(1<<(AdlWiType-43))|(1<<(AdlWiModuleAnno-43))|(1<<(AdlWiDeclAnno-43))|(1<<(AdlWiFieldAnno-43))))) != 0) {
 				{
 					p.SetState(45)
 					p.Tld()
@@ -1040,6 +1041,7 @@ func (p *AdlWi) Module() (localctx IModuleContext) {
 		}
 		p.SetState(62)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -3141,6 +3143,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		}
 		p.SetState(89)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -3152,7 +3155,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+			for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 				{
 					p.SetState(73)
 					p.Annotation()
@@ -3164,6 +3167,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			}
 			p.SetState(80)
 			p.GetErrorHandler().Sync(p)
+
 			_la = p.GetTokenStream().LA(1)
 
 			if _la == AdlWiTypeParam {
@@ -3205,6 +3209,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		}
 		p.SetState(109)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -3216,7 +3221,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+			for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 				{
 					p.SetState(93)
 					p.Annotation()
@@ -3228,6 +3233,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			}
 			p.SetState(100)
 			p.GetErrorHandler().Sync(p)
+
 			_la = p.GetTokenStream().LA(1)
 
 			if _la == AdlWiTypeParam {
@@ -3269,6 +3275,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		}
 		p.SetState(132)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -3280,7 +3287,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+			for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 				{
 					p.SetState(113)
 					p.Annotation()
@@ -3292,6 +3299,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			}
 			p.SetState(120)
 			p.GetErrorHandler().Sync(p)
+
 			_la = p.GetTokenStream().LA(1)
 
 			if _la == AdlWiTypeParam {
@@ -3303,6 +3311,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			}
 			p.SetState(123)
 			p.GetErrorHandler().Sync(p)
+
 			_la = p.GetTokenStream().LA(1)
 
 			if _la == AdlWiTypeExprSimple || _la == AdlWiTypeExprGeneric {
@@ -3316,7 +3325,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27)))) != 0 {
+			for ((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27))))) != 0 {
 				{
 					p.SetState(125)
 					p.JsonVal()
@@ -3344,6 +3353,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		}
 		p.SetState(155)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -3355,7 +3365,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+			for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 				{
 					p.SetState(136)
 					p.Annotation()
@@ -3367,6 +3377,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			}
 			p.SetState(143)
 			p.GetErrorHandler().Sync(p)
+
 			_la = p.GetTokenStream().LA(1)
 
 			if _la == AdlWiTypeParam {
@@ -3378,6 +3389,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			}
 			p.SetState(146)
 			p.GetErrorHandler().Sync(p)
+
 			_la = p.GetTokenStream().LA(1)
 
 			if _la == AdlWiTypeExprSimple || _la == AdlWiTypeExprGeneric {
@@ -3391,7 +3403,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27)))) != 0 {
+			for ((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27))))) != 0 {
 				{
 					p.SetState(148)
 					p.JsonVal()
@@ -3508,7 +3520,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+		for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 			{
 				p.SetState(177)
 				p.Annotation()
@@ -3575,7 +3587,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+		for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 			{
 				p.SetState(196)
 				p.Annotation()
@@ -3591,6 +3603,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		}
 		p.SetState(204)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiTypeExprSimple || _la == AdlWiTypeExprGeneric {
@@ -3636,6 +3649,7 @@ func (p *AdlWi) Tld() (localctx ITldContext) {
 		}
 		p.SetState(223)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -3963,6 +3977,7 @@ func (p *AdlWi) NameBody() (localctx INameBodyContext) {
 	}
 	p.SetState(242)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlWiDOWN {
@@ -3974,7 +3989,7 @@ func (p *AdlWi) NameBody() (localctx INameBodyContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ((_la-39)&-(0x1f+1)) == 0 && ((1<<uint((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39)))) != 0 {
+		for ((_la-39)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-39)))&((1<<(AdlWiAnnotation-39))|(1<<(AdlWiAnnotationNotScoped-39))|(1<<(AdlWiAnnotationScoped-39))))) != 0 {
 			{
 				p.SetState(229)
 				p.Annotation()
@@ -3986,6 +4001,7 @@ func (p *AdlWi) NameBody() (localctx INameBodyContext) {
 		}
 		p.SetState(236)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiTypeExprSimple || _la == AdlWiTypeExprGeneric {
@@ -3997,9 +4013,10 @@ func (p *AdlWi) NameBody() (localctx INameBodyContext) {
 		}
 		p.SetState(239)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
-		if ((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27)))) != 0 {
+		if ((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27))))) != 0 {
 			{
 				p.SetState(238)
 				p.JsonVal()
@@ -4216,6 +4233,7 @@ func (p *AdlWi) Annotation() (localctx IAnnotationContext) {
 		}
 		p.SetState(249)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -4244,6 +4262,7 @@ func (p *AdlWi) Annotation() (localctx IAnnotationContext) {
 		}
 		p.SetState(256)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -4272,6 +4291,7 @@ func (p *AdlWi) Annotation() (localctx IAnnotationContext) {
 		}
 		p.SetState(263)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -5862,6 +5882,7 @@ func (p *AdlWi) JsonVal() (localctx IJsonValContext) {
 		}
 		p.SetState(293)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {
@@ -5873,7 +5894,7 @@ func (p *AdlWi) JsonVal() (localctx IJsonValContext) {
 			p.GetErrorHandler().Sync(p)
 			_la = p.GetTokenStream().LA(1)
 
-			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && ((1<<uint((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27)))) != 0) {
+			for ok := true; ok; ok = (((_la-27)&-(0x1f+1)) == 0 && int64(((1<<uint32((_la-27)))&((1<<(AdlWiERROR-27))|(1<<(AdlWiJsonStr-27))|(1<<(AdlWiJsonBool-27))|(1<<(AdlWiJsonNull-27))|(1<<(AdlWiJsonInt-27))|(1<<(AdlWiJsonFloat-27))|(1<<(AdlWiJsonArray-27))|(1<<(AdlWiJsonObj-27))))) != 0) {
 				{
 					p.SetState(286)
 					p.JsonVal()
@@ -5901,6 +5922,7 @@ func (p *AdlWi) JsonVal() (localctx IJsonValContext) {
 		}
 		p.SetState(305)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlWiDOWN {

@@ -3,7 +3,7 @@
 	"description": "VSCode part of a language server",
 	"author": "Late Bound",
 	"license": "MIT",
-	"version": "1.0.7",
+	"version": "1.0.9",
 	"publisher": "wxio-tron-lsp",
 	"repository": {
 		"type": "git",

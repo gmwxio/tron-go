@@ -832,7 +832,7 @@ func (p *AdlP) Module() (localctx IModuleContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AdlPAT)|(1<<AdlPID)|(1<<AdlPLINE_DOC))) != 0 {
+	for ((_la)&-(0x1f+1)) == 0 && int64(((1<<uint32(_la))&((1<<AdlPAT)|(1<<AdlPID)|(1<<AdlPLINE_DOC)))) != 0 {
 		{
 			p.SetState(45)
 			p.Top_level_statement()
@@ -2823,6 +2823,7 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		}
 		p.SetState(113)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPLCHEVR {
@@ -2840,7 +2841,7 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AdlPAT)|(1<<AdlPID)|(1<<AdlPLINE_DOC))) != 0 {
+		for ((_la)&-(0x1f+1)) == 0 && int64(((1<<uint32(_la))&((1<<AdlPAT)|(1<<AdlPID)|(1<<AdlPLINE_DOC)))) != 0 {
 			{
 				p.SetState(116)
 				p.SoruBody()
@@ -2890,6 +2891,7 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		}
 		p.SetState(133)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPLCHEVR {
@@ -2909,6 +2911,7 @@ func (p *AdlP) Top_level_statement() (localctx ITop_level_statementContext) {
 		}
 		p.SetState(139)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPEQ {
@@ -3994,6 +3997,7 @@ func (p *AdlP) SoruBody() (localctx ISoruBodyContext) {
 	}
 	p.SetState(181)
 	p.GetErrorHandler().Sync(p)
+
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == AdlPEQ {
@@ -4927,9 +4931,10 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		}
 		p.SetState(198)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
-		if ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AdlPLCUR)|(1<<AdlPLSQ)|(1<<AdlPSTR)|(1<<AdlPID)|(1<<AdlPINT)|(1<<AdlPFLT))) != 0 {
+		if ((_la)&-(0x1f+1)) == 0 && int64(((1<<uint32(_la))&((1<<AdlPLCUR)|(1<<AdlPLSQ)|(1<<AdlPSTR)|(1<<AdlPID)|(1<<AdlPINT)|(1<<AdlPFLT)))) != 0 {
 			{
 				p.SetState(190)
 
@@ -4978,6 +4983,7 @@ func (p *AdlP) JsonValue() (localctx IJsonValueContext) {
 		}
 		p.SetState(210)
 		p.GetErrorHandler().Sync(p)
+
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == AdlPSTR {

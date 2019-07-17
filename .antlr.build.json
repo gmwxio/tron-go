@@ -1,5 +1,4 @@
 {
-    "jar"           : "/home/garym/devel/wxio/antlr4/tool/target/antlr4-4.7.1-SNAPSHOT-complete.jar",
     "antlr" : [
         {
             "language"      : "Go",
