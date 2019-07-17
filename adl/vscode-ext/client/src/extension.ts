@@ -27,7 +27,7 @@ export function activate(ctx: ExtensionContext) {
 	let arch = process.arch;
 	let exte = "";
 	switch (process.platform.toString()) {
-		case "win32":
+		case "win32": 
 			plat = "windows"
 			exte = ".exe"
 			break;

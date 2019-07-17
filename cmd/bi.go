@@ -55,7 +55,7 @@ func (cm *buildAdlAst) Run() error {
 	// 	return err
 	// }
 	// fmt.Printf("%v\n", tr.TreeString())
-	err2 := adl.WalkADL(tr, &AdlWiListener{})
+	_, err2 := adl.WalkADLWi(tr, &AdlWiListener{})
 	// fmt.Printf("%v\n", bl)
 	// fmt.Printf("%v\n", ts)
 	if err2.Error() != nil {

@@ -165,7 +165,7 @@ func (svr *server) compile(ctx context.Context, text string, allmod map[string]a
 			return
 		}
 		for _, an := range mod.Annotations {
-			if an.Key.ModuleName == "valuedriven.devmode" && an.Key.Name == "CompileModuleAnnotation" {
+			if an.Key.ModuleName == "schemas.valuedriven.devmode" && an.Key.Name == "CompileModuleAnnotation" {
 				sm := an.Val.(map[string]interface{})
 				sma := sm["annotation"].(map[string]interface{})
 				cma.scope.ModuleName = sma["moduleName"].(string)
@@ -176,7 +176,7 @@ func (svr *server) compile(ctx context.Context, text string, allmod map[string]a
 			}
 		}
 		if !found {
-			clientMsgLog(ctx, protocol.Warning, "No module annotation valuedriven.devmode.CompileModuleAnnotation found")
+			clientMsgLog(ctx, protocol.Warning, "No module annotation schemas.valuedriven.devmode.CompileModuleAnnotation found")
 			return
 		}
 		q.Q(cma)
